@@ -17,11 +17,12 @@ html, body {
     width: 100%; 
 }
 
-#overview {
+img {
 	background-color: white;
+	
 }
 
-#overview:hover {
+img:hover {
 	background-color: black;
 }
 
