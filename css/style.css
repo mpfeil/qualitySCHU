@@ -17,6 +17,15 @@ html, body {
     width: 100%; 
 }
 
+#overview {
+	background-color: white;
+}
+
+#overview:hover {
+	background-color: black;
+}
+
+
 .leaflet-top .leaflet-control {
 	margin-top: 50px;
 }
