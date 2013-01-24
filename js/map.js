@@ -1,4 +1,16 @@
 var map = L.map('map').setView([51.966667, 7.633333], 6);
+var data;
+
+var myIcon = L.icon({
+    iconUrl: 'img/egg.png',
+    iconSize: [41, 41],
+    iconAnchor: [25, 40],
+    popupAnchor: [-3, -40],
+});
+var marker = new L.Marker([50,7],{icon:myIcon});
+
+
+
 
 L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -7,10 +19,7 @@ L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/
 
 function onLocationFound(e) 
 {
-	var radius = e.accuracy / 2;
-
-	L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
-	L.circle(e.latlng, radius).addTo(map);
+	map.setView(e.latlng,10);
 }
 
 function onLocationError(e) 
@@ -20,12 +29,34 @@ function onLocationError(e)
 
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
+marker.on('click', function(e){
+	console.log(e);
+});
 
-/* map.locate({setView: true, maxZoom: 16}); */
 
 function locateMe()
 {
-	$('#locateMe').popover('hide');
+	//Request Bohrungen from GeoServer
+	var geoJsonUrl = "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=aqe&callback=myCallbackFunction";
+	$.ajax({
+		url: geoJsonUrl,
+		dataType: 'jsonp'
+	});
+	/*
+$('#locateMe').popover('hide');
 	map.locate({setView: true});
+*/
 	
+}
+
+function myCallbackFunction(results)
+{
+	data = results.results;
+	
+	for(var i = 0; i < data.length; i++)
+	{
+		marker.setLatLng(new L.LatLng(data[i].location.lat,data[i].location.lon))
+		marker.bindPopup('<p>ID:'+data[i].id+'</p>');
+		marker.addTo(map);
+	}
 }
