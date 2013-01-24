@@ -37,9 +37,9 @@ marker.on('click', function(e){
 function locateMe()
 {
 	//Request Bohrungen from GeoServer
-	var geoJsonUrl = "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=aqe&callback=myCallbackFunction";
+	var cosmJsonUrl = "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=aqe&callback=myCallbackFunction";
 	$.ajax({
-		url: geoJsonUrl,
+		url: cosmJsonUrl,
 		dataType: 'jsonp'
 	});
 	/*
@@ -49,14 +49,19 @@ $('#locateMe').popover('hide');
 	
 }
 
+var clusters = new L.MarkerClusterGroup({showCoverageOnHover: false});
+map.addLayer(clusters);
+
 function myCallbackFunction(results)
 {
 	data = results.results;
 	
 	for(var i = 0; i < data.length; i++)
 	{
-		marker.setLatLng(new L.LatLng(data[i].location.lat,data[i].location.lon))
+		marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:myIcon});
+/* 		marker.setLatLng(new L.LatLng(data[i].location.lat,data[i].location.lon)) */
 		marker.bindPopup('<p>ID:'+data[i].id+'</p>');
-		marker.addTo(map);
+		/* marker.addTo(map); */
+		clusters.addLayer(marker);
 	}
 }
