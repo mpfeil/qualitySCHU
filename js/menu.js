@@ -1,9 +1,5 @@
 $('#about').popover({placement:'bottom', trigger:'hover'})
 
-$('#locateMe').popover({placement:'bottom', trigger:'hover'})
-
-$('#locateMe').click("onclick",locateMe)
-
 $(".img-rounded").hover(
 	function(){
 		switch(this.getAttribute("id"))

@@ -37,7 +37,6 @@
 		        	<a class="brand" href="#">qualitySCHU</a>
 		        	<div class="nav-collapse collapse">
 			        	<ul class="nav">
-			        		<li><a href="#locateMe" id="locateMe" rel="popover" data-content="Locates your actual position">Locate Me</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content="Geosoftware II is a course at ifgi 2012-2013">About</a></li>
 						</ul>
 					</div>
@@ -59,7 +58,7 @@
 						    		<h2>Overview</h2>
 						    	</div>
 						    	<div class="span6">
-							    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="tempHumForm"> 21.1°C / 44.3%</h4>
+							    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
 							    	<h3>Temperature / Humidity</h3>
 							    </div>
 							</div>
@@ -67,12 +66,13 @@
 						<div class="span6">
 							<div class="row-fluid">
 								<div class="span6">
-									<img id="no2" class="img-rounded" src="img/no2.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="no2Form"> 22286.00 ppm</h4>
+									<img id="no2" class="img-rounded" src="img/no2.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
 									<h3>Nitrogen Dioxide</h3>
 								</div>
-							<div class="span6">
-								<img id="co" class="img-rounded" src="img/co.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="coForm"> 67734.00 ppm</h4>
-								<h3>Carbon Monoxide</h3>
+								<div class="span6">
+									<img id="co" class="img-rounded" src="img/co.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+									<h3>Carbon Monoxide</h3>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -97,10 +97,34 @@
 		    			<p>home</p>
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
-		    			<p>table</p>
+		    			<table class="table table-hover">
+			    			<thead>
+			    				<tr>
+			    					<th>Datum</th>
+			    					<th>CO (ppm)</th>
+			    					<th>NO<sub>2</sub> (ppm)</th>
+			    					<th>Temperatur (°C)</th>
+			    					<th>Luftfeutchtigkeit (%)</th>
+			    				</tr>
+			    			</thead> 
+			    			<tbody>
+			    				<tr>  
+						        	<td></td>  
+						            <td></td>  
+						            <td></td>  
+						            <td></td> 
+						            <td></td> 
+						        </tr>
+			    			</tbody>
+		    			</table>
 		    		</div>
 		    		<div class="tab-pane fade in" id="diagram">
-		    			<p>diagram</p>
+			    		<ul id="myTab" class="nav nav-tabs">
+				    		<li><a href="#tempDiagram" data-toggle="tab">Temperature</a></li>
+				    		<li><a href="#humDiagram" data-toggle="tab">Humidity</a></li>
+				    		<li><a href="#coDiagram" data-toggle="tab">CO</a></li>
+				    		<li><a href="#no2Diagram" data-toggle="tab">NO</a></li>
+				    	</ul>
 		    		</div>
 		    	</div>
 		    </div>
@@ -130,6 +154,7 @@
     	<script src="js/bootstrap/js/bootstrap.js"></script>
     	<script src="js/leaflet/dist/leaflet.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
+    	<script src="http://d23cj0cdvyoxg0.cloudfront.net/cosmjs-1.0.0.min.js"></script> 
     	<script src="js/map.js"></script>
     	<script src="js/menu.js"></script>
 	</body>
