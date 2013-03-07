@@ -29,3 +29,7 @@ img.img-rounded:hover {
 #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
 #map:-moz-full-screen { width: 100% !important; height: 100% !important; }
 #map:full-screen { width: 100% !important; height: 100% !important; }
+
+.carousel {
+	margin-top: -65px;
+}

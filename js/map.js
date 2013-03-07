@@ -1,5 +1,6 @@
 var map = L.map('map').setView([51.966667, 7.633333], 6);
 var data;
+var checked;
 
 var myIcon = L.icon({
     iconUrl: 'img/tower.png',
@@ -40,6 +41,8 @@ marker.on('click', function(e){
 	console.log(e);
 });
 clusters.on('click', function(e){
+	$('#myCarousel').carousel('next');
+	checked = e.layer.options.title;
 	$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
 	$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
 	$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});

@@ -46,41 +46,97 @@
     
 		<div id="map">
 		</div>
-    
+		
 		<div class="container">
-    		<div class="row-fluid">
-	    		<div class="span12">
-		    		<div class="row-fluid">
-			    		<div class="span6">
+			<div id="myCarousel" class="carousel slide">
+			  <ol class="carousel-inner">
+			    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			    <li data-target="#myCarousel" data-slide-to="1"></li>
+			  </ol>
+			  <!-- Carousel items -->
+			  <div class="carousel-inner">
+			  	<div class="active item">
+					<div class="row-fluid" id="aqe">
+			    		<div class="span12">
 				    		<div class="row-fluid">
 					    		<div class="span6">
-						    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="overviewForm"></h4>
-						    		<h2>Overview</h2>
-						    	</div>
-						    	<div class="span6">
-							    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
-							    	<h3>Temperature / Humidity</h3>
-							    </div>
-							</div>
-						</div>
-						<div class="span6">
-							<div class="row-fluid">
-								<div class="span6">
-									<img id="no2" class="img-rounded" src="img/no2.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
-									<h3>Nitrogen Dioxide</h3>
+						    		<div class="row-fluid">
+							    		<div class="span6">
+								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<h2>Overview</h2>
+								    	</div>
+								    	<div class="span6">
+									    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
+									    	<h3>Temperature / Humidity</h3>
+									    </div>
+									</div>
 								</div>
 								<div class="span6">
-									<img id="co" class="img-rounded" src="img/co.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
-									<h3>Carbon Monoxide</h3>
+									<div class="row-fluid">
+										<div class="span6">
+											<img id="no2" class="img-rounded" src="img/no2.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<h3>Nitrogen Dioxide</h3>
+										</div>
+										<div class="span6">
+											<img id="co" class="img-rounded" src="img/co.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<h3>Carbon Monoxide</h3>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+					</div>    
+			    </div>
+			    <div class="item">
+					<div class="row-fluid" id="lanuv">
+			    		<div class="span12 offset1">
+				    		<div class="row-fluid">
+					    		<div class="span4">
+						    		<div class="row-fluid">
+							    		<div class="span4">
+								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    	</div>
+								    	<div class="span4">
+									    	<img id="lanuvO3" class="img-rounded" src="img/o3.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    </div>
+									    <div class="span4">
+									    	<img id="lanuvNO" class="img-rounded" src="img/no.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    </div>
+									</div>
+								</div>
+								<div class="span4">
+						    		<div class="row-fluid">
+						    			<div class="span4">
+									    	<img id="lanuvTempHum" class="img-rounded" src="img/temphum.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    </div>
+							    		<div class="span4">
+								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    	</div>
+								    	<div class="span4">
+									    	<img id="lanuvDust" class="img-rounded" src="img/dust.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    </div>
+									</div>
+								</div>
+								<div class="span4">
+									<div class="row-fluid">
+										<div class="span4">
+									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>    
+			    </div>
+			  </div>
+			  <!-- Carousel nav -->
+			 <!--
+ <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+-->
 			</div>
 		</div>
 		
-		<!-- Modal -->
 		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

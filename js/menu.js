@@ -43,6 +43,7 @@ $(".img-rounded").click(function(){
 	{
 		case "overview":
 			capture = "Overview";
+			console.log(checked);
 			break;
 		case "tempHum":
 			capture = "Temperature / Humidity";
@@ -58,3 +59,6 @@ $(".img-rounded").click(function(){
 	$('#myTab a:first').tab('show');
 	$('#myModal').modal("show");
 })
+
+$('#myCarousel').carousel({interval:false});
+
