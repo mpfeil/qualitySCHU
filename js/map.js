@@ -9,21 +9,22 @@ var myIcon = L.icon({
     popupAnchor: [-3, -40],
 });
 var marker = new L.Marker([50,7],{icon:myIcon});
-
-$(document).ready(function($){
-	console.log("ready");
-	cosm.setKey("tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g");
-	
-	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: myCallbackFunction});
-});
+var clusters = new L.MarkerClusterGroup({showCoverageOnHover: false});
 
 L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
 	maxZoom: 18,
 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
 }).addTo(map);
 
-var clusters = new L.MarkerClusterGroup({showCoverageOnHover: false});
 map.addLayer(clusters);
+
+$(document).ready(function($){
+	console.log("ready");
+	cosm.setKey("tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g");
+
+	clusters.fire('data:loading');
+	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: myCallbackFunction});
+});
 
 function onLocationFound(e) 
 {
@@ -37,9 +38,13 @@ function onLocationError(e)
 
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
+clusters.on('beforeDataLoad',   function() { layer.fire('data:loading'); });
+clusters.on('dataLoadComplete', function() { layer.fire('data:loaded'); });
+
 marker.on('click', function(e){
 	console.log(e);
 });
+
 clusters.on('click', function(e){
 	$('#myCarousel').carousel('next');
 	checked = e.layer.options.title;
@@ -60,4 +65,6 @@ function myCallbackFunction(results)
 		marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:myIcon, title:data[i].id});
 		clusters.addLayer(marker);
 	}
+	
+	clusters.fire('data:loaded');
 }
