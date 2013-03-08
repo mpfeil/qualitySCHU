@@ -32,3 +32,7 @@ img.img-rounded:hover {
 .carousel {
 	margin-top: -65px;
 }
+
+.daterangepicker {
+	z-index:1151;
+}

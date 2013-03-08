@@ -62,3 +62,6 @@ $(".img-rounded").click(function(){
 
 $('#myCarousel').carousel({interval:false});
 
+$('#myModal').on('shown', function(){
+	$('#reservation').daterangepicker();
+})
