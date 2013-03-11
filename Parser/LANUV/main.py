@@ -48,7 +48,7 @@ def getStationsOfSOS():
     return stations
 
 def insertObservation():
-    print "asdf"
+    return "asdf"
 
 if __name__ == '__main__':
     logger.info("Parse process started")
