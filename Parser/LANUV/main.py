@@ -5,20 +5,25 @@ Created on 30.12.2012
 '''
 import urllib2
 import logging
-#import re
+import re
 #import httplib
 #import psycopg2
 #import sys
 import time
 from bs4 import BeautifulSoup
+from StdSuites.Table_Suite import row
+
+sos_url = "http://giv-geosoft2d.uni-muenster.de/istsos/qualityschu"
+getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
 hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
+station = ""
 ozon = ""
 no = ""
 no2 = ""
@@ -29,9 +34,28 @@ rfeu = ""
 so2 = ""
 staub = ""
 
+def getStationsOfSOS():
+    stations = []
+    response = urllib2.urlopen(sos_url+getCapabilities).read()
+    soup = BeautifulSoup(response)
+    
+    procedures = soup.find('ows:operationsmetadata').find('ows:parameter', attrs = {'name' : 'procedure'}).find('ows:allowedvalues').find_all('ows:value')
+    
+    for procedure in procedures:
+        print re.findall('[A-Z][A-Z][A-Z][A-Z0-9]',procedure.get_text())
+        #station = stations.append(re.findall('[A-Z][A-Z][A-Z][A-Z0-9]',procedure.get_text()))
+        #print station
+    
+    #return stations
+
 if __name__ == '__main__':
     logger.info("Parse process started")
-    sos_url = "http://giv-geosoft2d.uni-muenster.de/istsos/test/"
+    
+    stations = getStationsOfSOS()
+    
+    #print stations
+    #a = stations[0]
+    #print a.encode('utf-8')
     
     register_sensor = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:RegisterSensor service="SOS"\n\
@@ -144,33 +168,30 @@ if __name__ == '__main__':
   </ObservationTemplate>\n\
 </sos:RegisterSensor>'
     
-    response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/BORG.htm#jetzt').read()
+    response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/AABU.htm#jetzt').read()
     
     soup = BeautifulSoup(response)
     
-    rows = soup.find('table').find('tbody').findAll('tr')
-    
     localtime = time.localtime(time.time())
     
-    for row in rows:
-        cells = row.findAll('td')
-        
-        if str(localtime[3]) +":00" == cells[0].get_text():
-            ozon = cells[2].get_text()
-            no = cells[3].get_text()
-            no2 = cells[4].get_text()
-            ltem = cells[5].get_text()
-            wri = cells[6].get_text()
-            wges = cells[7].get_text()
-            rfeu = cells[8].get_text()
-            so2 = cells[9].get_text()
-            staub = cells[10].get_text()
-            logger.info("Successfully parsed values for Station ... for "+str(localtime[3]) +":00 : "+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub)
-        else:
-            logger.error("No values for LANUV Station at "+str(localtime[3])+":00"+" available!")
+    station = "BORG"
     
-    print ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub
+    try:
+        rows = soup.find('td', text = re.compile(str(localtime[3]) +":00" ), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
         
+        ozon = rows[2].get_text()
+        no = rows[3].get_text()
+        no2 = rows[4].get_text()
+        ltem = rows[5].get_text()
+        wri = rows[6].get_text()
+        wges = rows[7].get_text()
+        rfeu = rows[8].get_text()
+        so2 = rows[9].get_text()
+        staub = rows[10].get_text()
+        
+        logger.info("Successfully parsed values for Station "+str(station)+" for "+str(localtime[3]) +":00 : "+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub)
+    except AttributeError:
+        logger.error("No values for LANUV Station "+str(station)+" at "+str(localtime[3])+":00"+" available!")
     
     #headers = {"Content-type": "application/raw", "Accept": "text/plain"}
 
