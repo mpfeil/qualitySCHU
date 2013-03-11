@@ -42,20 +42,41 @@ def getStationsOfSOS():
     procedures = soup.find('ows:operationsmetadata').find('ows:parameter', attrs = {'name' : 'procedure'}).find('ows:allowedvalues').find_all('ows:value')
     
     for procedure in procedures:
-        print re.findall('[A-Z][A-Z][A-Z][A-Z0-9]',procedure.get_text())
-        #station = stations.append(re.findall('[A-Z][A-Z][A-Z][A-Z0-9]',procedure.get_text()))
-        #print station
+        station = re.findall('[A-Z][A-Z][A-Z][A-Z0-9]',procedure.get_text())
+        stations.append(station[0])
     
-    #return stations
+    return stations
+
+def insertObservation():
+    print "asdf"
 
 if __name__ == '__main__':
     logger.info("Parse process started")
     
     stations = getStationsOfSOS()
     
-    #print stations
-    #a = stations[0]
-    #print a.encode('utf-8')
+    for i in range(len(stations)):
+        response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i]+'.htm#jetzt').read()
+        soup = BeautifulSoup(response)
+    
+        localtime = time.localtime(time.time())
+    
+        try:
+            rows = soup.find('td', text = re.compile(str(localtime[3]) +":00" ), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
+        
+            ozon = rows[2].get_text()
+            no = rows[3].get_text()
+            no2 = rows[4].get_text()
+            ltem = rows[5].get_text()
+            wri = rows[6].get_text()
+            wges = rows[7].get_text()
+            rfeu = rows[8].get_text()
+            so2 = rows[9].get_text()
+            staub = rows[10].get_text()
+            
+            logger.info("Successfully parsed values for Station "+str(stations[i])+" for "+str(localtime[3]) +":00 : "+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub)
+        except AttributeError:
+            logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
     
     register_sensor = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:RegisterSensor service="SOS"\n\
@@ -168,30 +189,9 @@ if __name__ == '__main__':
   </ObservationTemplate>\n\
 </sos:RegisterSensor>'
     
-    response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/AABU.htm#jetzt').read()
     
-    soup = BeautifulSoup(response)
     
-    localtime = time.localtime(time.time())
     
-    station = "BORG"
-    
-    try:
-        rows = soup.find('td', text = re.compile(str(localtime[3]) +":00" ), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
-        
-        ozon = rows[2].get_text()
-        no = rows[3].get_text()
-        no2 = rows[4].get_text()
-        ltem = rows[5].get_text()
-        wri = rows[6].get_text()
-        wges = rows[7].get_text()
-        rfeu = rows[8].get_text()
-        so2 = rows[9].get_text()
-        staub = rows[10].get_text()
-        
-        logger.info("Successfully parsed values for Station "+str(station)+" for "+str(localtime[3]) +":00 : "+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub)
-    except AttributeError:
-        logger.error("No values for LANUV Station "+str(station)+" at "+str(localtime[3])+":00"+" available!")
     
     #headers = {"Content-type": "application/raw", "Accept": "text/plain"}
 
