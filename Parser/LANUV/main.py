@@ -11,7 +11,6 @@ import re
 #import sys
 import time
 from bs4 import BeautifulSoup
-from StdSuites.Table_Suite import row
 
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsos/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
