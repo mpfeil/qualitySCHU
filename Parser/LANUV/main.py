@@ -33,9 +33,7 @@ staub = ""
 def getStationsOfSOS():
     stations = []
     
-    #response = urllib2.urlopen(sos_url+getCapabilities).read()
     response = urllib2.urlopen('http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist?_dc=1363089212183').read()
-    #response = urllib2.urlopen('http://giv-geosoft2d.uni-muenster.de/istsosold/wa/istsos/services/qualityschu/procedures/operations/getlist?_dc=1363089212183').read()
     decoded_data = json.loads(response)
     
     for data in decoded_data["data"]:
@@ -145,14 +143,11 @@ def insertObservation(station,values,local):
   </om:Observation>\n\
 </sos:InsertObservation>'
     
-    print insert_Observation
+    #print insert_Observation
     
     headers = {"Content-type": "application/raw", "Accept": "text/plain"}
-
     request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/lanuv",insert_Observation,headers)
-    
     handler = urllib2.urlopen(request)
-    
     print handler.read()
     
 
@@ -180,13 +175,7 @@ if __name__ == '__main__':
             so2 = rows[9].get_text().lstrip()
             staub = rows[10].get_text().lstrip()
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
-            hour = localtime[3]+2
-            iso_time = time.strftime("%Y-%m-%dT"+str(localtime[3]+2)+":00:00", localtime)
-            print iso_time
-            values = iso_time+","+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub
-            
+            values = str(time.strftime("%Y-%m-%dT%H:00:00", localtime))+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
             insertObservation(stations[i],values, localtime)
         except AttributeError:
             logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
-    
-    
