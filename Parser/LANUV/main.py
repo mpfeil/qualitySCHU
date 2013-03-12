@@ -65,7 +65,7 @@ def insertObservation(station,values,local):
     <om:samplingTime>\n\
       <gml:TimePeriod>\n\
         <gml:beginPosition>'+time.strftime("%Y-%m-%dT%H:00:00", local)+'</gml:beginPosition>\n\
-        <gml:endPosition>'+time.strftime("%Y-%m-%dT%H:00:00", local)+'</gml:endPosition>\n\
+        <gml:endPosition>'+time.strftime("%Y-%m-%dT"+str(local[3]+2)+":00:00", local)+'</gml:endPosition>\n\
       </gml:TimePeriod>\n\
     </om:samplingTime>\n\
     <om:observedProperty xlink:href="">\n\
@@ -180,9 +180,9 @@ if __name__ == '__main__':
             so2 = rows[9].get_text().lstrip()
             staub = rows[10].get_text().lstrip()
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
-            
-            iso_time = time.strftime("%Y-%m-%dT%H:00:00", localtime)
-            
+            hour = localtime[3]+2
+            iso_time = time.strftime("%Y-%m-%dT"+str(localtime[3]+2)+":00:00", localtime)
+            print iso_time
             values = iso_time+","+ozon+","+no+","+no2+","+ltem+","+wri+","+wges+","+rfeu+","+so2+","+staub
             
             insertObservation(stations[i],values, localtime)
