@@ -33,7 +33,7 @@ staub = ""
 def getStationsOfSOS():
     stations = []
     
-    response = urllib2.urlopen('http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist?_dc=1363089212183').read()
+    response = urllib2.urlopen('http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist').read()
     decoded_data = json.loads(response)
     
     for data in decoded_data["data"]:
@@ -62,8 +62,8 @@ def insertObservation(station,values,local):
     <om:procedure xlink:href="urn:ogc:def:procedure:x-istsos:1.0:'+station[0]+'"/>\n\
     <om:samplingTime>\n\
       <gml:TimePeriod>\n\
-        <gml:beginPosition>'+time.strftime("%Y-%m-%dT%H:00:00", local)+'</gml:beginPosition>\n\
-        <gml:endPosition>'+time.strftime("%Y-%m-%dT"+str(local[3]+2)+":00:00", local)+'</gml:endPosition>\n\
+        <gml:beginPosition>'+str(time.strftime("%Y-%m-%dT%H:00:00+01", local))+'</gml:beginPosition>\n\
+        <gml:endPosition>'+str(time.strftime("%Y-%m-%dT%"+str(local[3]+1)+":30:00+01", local))+'</gml:endPosition>\n\
       </gml:TimePeriod>\n\
     </om:samplingTime>\n\
     <om:observedProperty xlink:href="">\n\
@@ -143,7 +143,7 @@ def insertObservation(station,values,local):
   </om:Observation>\n\
 </sos:InsertObservation>'
     
-    #print insert_Observation
+    print insert_Observation
     
     headers = {"Content-type": "application/raw", "Accept": "text/plain"}
     request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/lanuv",insert_Observation,headers)
@@ -161,7 +161,11 @@ if __name__ == '__main__':
         soup = BeautifulSoup(response)
     
         localtime = time.localtime(time.time())
-    
+        starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
+        endtime = str(time.strftime("%Y-%m-%dT%"+str(localtime[3]+1)+":30:00+01", localtime))
+        print localtime
+        print starttime
+        print endtime
         try:
             rows = soup.find('td', text = re.compile(str(localtime[3]) +":00" ), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
             
@@ -174,8 +178,10 @@ if __name__ == '__main__':
             rfeu = rows[8].get_text().lstrip()
             so2 = rows[9].get_text().lstrip()
             staub = rows[10].get_text().lstrip()
+            iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime)) 
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
-            values = str(time.strftime("%Y-%m-%dT%H:00:00", localtime))+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
+            values = iso_datetime+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
+            print values
             insertObservation(stations[i],values, localtime)
         except AttributeError:
             logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
