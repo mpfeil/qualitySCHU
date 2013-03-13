@@ -63,7 +63,7 @@ def insertObservation(station,values,local):
     <om:samplingTime>\n\
       <gml:TimePeriod>\n\
         <gml:beginPosition>'+str(time.strftime("%Y-%m-%dT%H:00:00+01", local))+'</gml:beginPosition>\n\
-        <gml:endPosition>'+str(time.strftime("%Y-%m-%dT%"+str(local[3]+1)+":30:00+01", local))+'</gml:endPosition>\n\
+        <gml:endPosition>'+str(time.strftime("%Y-%m-%dT"+str(local[3]+1)+":30:00+01", local))+'</gml:endPosition>\n\
       </gml:TimePeriod>\n\
     </om:samplingTime>\n\
     <om:observedProperty xlink:href="">\n\
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     
         localtime = time.localtime(time.time())
         starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
-        endtime = str(time.strftime("%Y-%m-%dT%"+str(localtime[3]+1)+":30:00+01", localtime))
+        endtime = str(time.strftime("%Y-%m-%dT"+str(localtime[3]+1)+":30:00+01", localtime))
         print localtime
         print starttime
         print endtime
@@ -182,6 +182,7 @@ if __name__ == '__main__':
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
             values = iso_datetime+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
             print values
-            insertObservation(stations[i],values, localtime)
-        except AttributeError:
+            #insertObservation(stations[i],values, localtime)
+        except AttributeError as aE:
+            print aE
             logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
