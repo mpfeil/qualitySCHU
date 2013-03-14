@@ -8,14 +8,14 @@ import logging
 import re
 import json
 import time
-from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
 from datetime import datetime, timedelta
 
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
-hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
+hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
@@ -45,13 +45,11 @@ def getStationsOfSOS():
     
     return stations
 
-def insertObservation(station,values,local):
+def insertObservation(station,values):
     
     one_hour_from_now = datetime.now() + timedelta(hours=1)
-    #print one_hour_from_now
     starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
     endtime = '{:%Y-%m-%dT%H:30:00+01}'.format(one_hour_from_now)
-    #print endtime
     
     insert_Observation = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:InsertObservation\n\
@@ -79,7 +77,7 @@ def insertObservation(station,values,local):
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2" />\n\
-        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv" />\n\
+        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10" />\n\
@@ -115,7 +113,7 @@ def insertObservation(station,values,local):
                   </swe:Quantity>\n\
                   </swe:field>\n\
                   <swe:field name="wind velocity">\n\
-                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv">\n\
+                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv">\n\
                     <swe:uom code="m/s"/>\n\
                   </swe:Quantity>\n\
                   </swe:field>\n\
@@ -161,41 +159,14 @@ def insertObservation(station,values,local):
 if __name__ == '__main__':
     logger.info("Parse process started")
     
-    #print datetime.now()
-    starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
-    #print starttime
-    #one_and_a_half_hours_from_now = datetime.now() + timedelta(hours=1,minutes=30)
-    #print one_and_a_half_hours_from_now
-    #endtime = '{:%Y-%m-%dT%H:%M:%S+01}'.format(one_and_a_half_hours_from_now)
-    #print endtime
-    #print datetime.now()
-    #nine_hours_from_now = datetime.now() + timedelta(hours=1,minutes=30)
-    #print nine_hours_from_now
-    #print '{:%Y-%m-%dT%H:%M:%S+01}'.format(nine_hours_from_now)
-    
-    localtime = time.localtime(time.time())
-    #starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
-    #print starttime
-    #endtime = str(time.strftime("%Y-%m-%dT"+str(localtime[3]+1)+":30:00+01", localtime))
-    #print str(localtime[3]) +":00"
     stations = getStationsOfSOS()
     
     for i in range(len(stations)):
-        response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()
-        
+        response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()    
         soup = BeautifulSoup(response, "lxml")
         
         localtime = time.localtime(time.time())
-        #print localtime
-        starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
-        endtime = str(time.strftime("%Y-%m-%dT"+str(localtime[3]+1)+":30:00+01", localtime))
         
-        #print time.time()
-        #print str(time.strftime("%Y-%m-%dT%H:00:00+01", time.time()))
-        #print localtime
-        #print starttime
-        #print endtime
-        #print localtime[3]+13
         if str(localtime[3]) == '00':
             search = "24:00"
         else:
@@ -204,19 +175,19 @@ if __name__ == '__main__':
         try:
             rows = soup.find('td', text = re.compile(search), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
             
-            ozon = rows[2].get_text().lstrip()
-            no = rows[3].get_text().lstrip()
-            no2 = rows[4].get_text().lstrip()
-            ltem = rows[5].get_text().lstrip()
-            wri = rows[6].get_text().lstrip()
-            wges = rows[7].get_text().lstrip()
-            rfeu = rows[8].get_text().lstrip()
-            so2 = rows[9].get_text().lstrip()
-            staub = rows[10].get_text().lstrip()
+            ozon = rows[2].getText().lstrip()
+            no = rows[3].getText().lstrip()
+            no2 = rows[4].getText().lstrip()
+            ltem = rows[5].getText().lstrip()
+            wri = rows[6].getText().lstrip()
+            wges = rows[7].getText().lstrip()
+            rfeu = rows[8].getText().lstrip()
+            so2 = rows[9].getText().lstrip()
+            staub = rows[10].getText().lstrip()
             iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime)) 
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
-            values = iso_datetime+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
-            
+            values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
+            print values
             insertObservation(stations[i],values, localtime)
         except AttributeError as aE:
             print aE
