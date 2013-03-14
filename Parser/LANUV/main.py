@@ -163,7 +163,7 @@ if __name__ == '__main__':
     
     for i in range(len(stations)):
         response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()    
-        soup = BeautifulSoup(response, "lxml")
+        soup = BeautifulSoup(response)
         
         localtime = time.localtime(time.time())
         
