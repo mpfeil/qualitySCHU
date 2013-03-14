@@ -188,7 +188,7 @@ if __name__ == '__main__':
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
             values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
             print values
-            insertObservation(stations[i],values, localtime)
+            insertObservation(stations[i],values)
         except AttributeError as aE:
             print aE
             logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
