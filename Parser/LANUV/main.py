@@ -9,6 +9,7 @@ import re
 import json
 import time
 from bs4 import BeautifulSoup
+from datetime import datetime, timedelta
 
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
@@ -46,6 +47,12 @@ def getStationsOfSOS():
 
 def insertObservation(station,values,local):
     
+    one_hour_from_now = datetime.now() + timedelta(hours=1)
+    #print one_hour_from_now
+    starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
+    endtime = '{:%Y-%m-%dT%H:30:00+01}'.format(one_hour_from_now)
+    #print endtime
+    
     insert_Observation = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:InsertObservation\n\
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n\
@@ -62,8 +69,8 @@ def insertObservation(station,values,local):
     <om:procedure xlink:href="urn:ogc:def:procedure:x-istsos:1.0:'+station[0]+'"/>\n\
     <om:samplingTime>\n\
       <gml:TimePeriod>\n\
-        <gml:beginPosition>'+str(time.strftime("%Y-%m-%dT%H:00:00+01", local))+'</gml:beginPosition>\n\
-        <gml:endPosition>'+str(time.strftime("%Y-%m-%dT"+str(local[3]+1)+":30:00+01", local))+'</gml:endPosition>\n\
+        <gml:beginPosition>'+starttime+'</gml:beginPosition>\n\
+        <gml:endPosition>'+endtime+'</gml:endPosition>\n\
       </gml:TimePeriod>\n\
     </om:samplingTime>\n\
     <om:observedProperty xlink:href="">\n\
@@ -154,20 +161,48 @@ def insertObservation(station,values,local):
 if __name__ == '__main__':
     logger.info("Parse process started")
     
+    #print datetime.now()
+    starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
+    #print starttime
+    #one_and_a_half_hours_from_now = datetime.now() + timedelta(hours=1,minutes=30)
+    #print one_and_a_half_hours_from_now
+    #endtime = '{:%Y-%m-%dT%H:%M:%S+01}'.format(one_and_a_half_hours_from_now)
+    #print endtime
+    #print datetime.now()
+    #nine_hours_from_now = datetime.now() + timedelta(hours=1,minutes=30)
+    #print nine_hours_from_now
+    #print '{:%Y-%m-%dT%H:%M:%S+01}'.format(nine_hours_from_now)
+    
+    localtime = time.localtime(time.time())
+    #starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
+    #print starttime
+    #endtime = str(time.strftime("%Y-%m-%dT"+str(localtime[3]+1)+":30:00+01", localtime))
+    #print str(localtime[3]) +":00"
     stations = getStationsOfSOS()
     
     for i in range(len(stations)):
-        response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm#jetzt').read()
-        soup = BeautifulSoup(response)
-    
+        response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()
+        
+        soup = BeautifulSoup(response, "lxml")
+        
         localtime = time.localtime(time.time())
+        #print localtime
         starttime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime))
         endtime = str(time.strftime("%Y-%m-%dT"+str(localtime[3]+1)+":30:00+01", localtime))
-        print localtime
-        print starttime
-        print endtime
+        
+        #print time.time()
+        #print str(time.strftime("%Y-%m-%dT%H:00:00+01", time.time()))
+        #print localtime
+        #print starttime
+        #print endtime
+        #print localtime[3]+13
+        if str(localtime[3]) == '00':
+            search = "24:00"
+        else:
+            search = str(localtime[3])+":00"
+        print search
         try:
-            rows = soup.find('td', text = re.compile(str(localtime[3]) +":00" ), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
+            rows = soup.find('td', text = re.compile(search), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
             
             ozon = rows[2].get_text().lstrip()
             no = rows[3].get_text().lstrip()
@@ -181,8 +216,8 @@ if __name__ == '__main__':
             iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime)) 
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
             values = iso_datetime+","+ozon+","+no+","+no2+","+ltem+","+wges+","+rfeu+","+so2+","+staub
-            print values
-            #insertObservation(stations[i],values, localtime)
+            
+            insertObservation(stations[i],values, localtime)
         except AttributeError as aE:
             print aE
             logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")

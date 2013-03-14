@@ -24,6 +24,12 @@ $(document).ready(function($){
 
 	clusters.fire('data:loading');
 	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: myCallbackFunction});
+	
+	//Request Bohrungen from GeoServer
+	var lanuvURL = "http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist&format_options=callback:loadLANUV";
+	$.get("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist", function(data){
+		console.log("hallo");
+	});
 });
 
 function onLocationFound(e) 
@@ -67,6 +73,13 @@ function myCallbackFunction(results)
 	}
 	
 	clusters.fire('data:loaded');
+}
+
+//Callback Function
+function loadLANUV(data)
+{
+	console.log(data)
+
 }
 
 window.onload = function () {
