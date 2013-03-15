@@ -29,7 +29,7 @@
     <body>
 		<div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
       		<div class="navbar-inner">
-        		<div class="container">
+        		<div class="container-fluid">
 	        		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 		        		<span class="icon-bar"></span>
 		        		<span class="icon-bar"></span>
@@ -38,6 +38,7 @@
 		        	<a class="brand" href="#">qualitySCHU</a>
 		        	<div class="nav-collapse collapse">
 			        	<ul class="nav">
+			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content="Geosoftware II is a course at ifgi 2012-2013">About</a></li>
 						</ul>
 					</div>
@@ -63,24 +64,24 @@
 					    		<div class="span6">
 						    		<div class="row-fluid">
 							    		<div class="span6">
-								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="overviewForm"></h4>
-								    		<h2>Overview</h2>
+								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<h4>Overview</h4>
 								    	</div>
 								    	<div class="span6">
-									    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
-									    	<h3>Temperature / Humidity</h3>
+									    	<img id="tempHum" class="img-rounded" src="img/temphum.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
+									    	<h4>Temperature / Humidity</h4>
 									    </div>
 									</div>
 								</div>
 								<div class="span6">
 									<div class="row-fluid">
 										<div class="span6">
-											<img id="no2" class="img-rounded" src="img/no2.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
-											<h3>Nitrogen Dioxide</h3>
+											<img id="no2" class="img-rounded" src="img/no2.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<h4>Nitrogen Dioxide</h4>
 										</div>
 										<div class="span6">
-											<img id="co" class="img-rounded" src="img/co.svg" style="width:140px; height:140px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
-											<h3>Carbon Monoxide</h3>
+											<img id="co" class="img-rounded" src="img/co.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<h4>Carbon Monoxide</h4>
 										</div>
 									</div>
 								</div>
@@ -95,33 +96,33 @@
 					    		<div class="span4">
 						    		<div class="row-fluid">
 							    		<div class="span4">
-								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<img id="overview" class="img-rounded" src="img/info.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
 								    	</div>
 								    	<div class="span4">
-									    	<img id="lanuvO3" class="img-rounded" src="img/o3.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<img id="lanuvO3" class="img-rounded" src="img/o3.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
 									    </div>
 									    <div class="span4">
-									    	<img id="lanuvNO" class="img-rounded" src="img/no.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<img id="lanuvNO" class="img-rounded" src="img/no.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
 									    </div>
 									</div>
 								</div>
 								<div class="span4">
 						    		<div class="row-fluid">
 						    			<div class="span4">
-									    	<img id="lanuvTempHum" class="img-rounded" src="img/temphum.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<img id="lanuvTempHum" class="img-rounded" src="img/temphum.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
 									    </div>
 							    		<div class="span4">
-								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
 								    	</div>
 								    	<div class="span4">
-									    	<img id="lanuvDust" class="img-rounded" src="img/dust.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<img id="lanuvDust" class="img-rounded" src="img/dust.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
 									    </div>
 									</div>
 								</div>
 								<div class="span4">
 									<div class="row-fluid">
 										<div class="span4">
-									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.svg" style="width:100px; height:100px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
 									    </div>
 									</div>
 								</div>
@@ -136,6 +137,38 @@
 			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 -->
 			</div>
+		</div>
+		
+		<!-- FAQ Modal -->
+		<div id="faqModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
+	    	<div class="modal-header">
+	    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    		<h3 id="faqModalLabel">FAQ</h3>
+	    	</div>
+	    	<div class="modal-body">
+		    	<div class="accordion" id="accordion2">
+			    	<div class="accordion-group">
+				    	<div class="accordion-heading">
+					    	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Was ist ein Air Quality Egg?</a>
+					    </div>
+					    <div id="collapseOne" class="accordion-body collapse">
+						    <div class="accordion-inner">
+	
+							</div>
+						</div>
+					</div>
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">LANUV? WTF!</a>
+						</div>
+						<div id="collapseTwo" class="accordion-body collapse">
+							<div class="accordion-inner">
+	
+							</div>
+						</div>
+					</div>
+				</div>
+		    </div>
 		</div>
 		
 		<div id="myModal" class="modal height hide fade" tabindex="-1" data-width="760" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -163,6 +196,19 @@
 						</div>
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
+		    			<form class="form-horizontal">
+			            	<fieldset>
+			                	<div class="control-group">
+			                    	<label class="control-label" for="reservation">Zeitraum:</label>
+			                    	<div class="controls">
+			                    		<div class="input-append">
+			                    			<input type="text" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" /><span class="add-on"><i class="icon-calendar"></i></span>
+			                    		</div>
+			                    	</div>
+			                    </div>
+			                </fieldset>
+			            </form>
+			            <hr>
 		    			<table class="table table-hover">
 			    			<thead>
 			    				<tr>

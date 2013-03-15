@@ -1,14 +1,19 @@
 var map = L.map('map').setView([51.966667, 7.633333], 6);
 var data;
 var checked;
-
-var myIcon = L.icon({
+var lanuv = L.icon({
     iconUrl: 'img/tower.png',
     iconSize: [41, 41],
     iconAnchor: [25, 40],
     popupAnchor: [-3, -40],
 });
-var marker = new L.Marker([50,7],{icon:myIcon});
+var aqe = L.icon({
+    iconUrl: 'img/egg.png',
+    iconSize: [41, 41],
+    iconAnchor: [25, 40],
+    popupAnchor: [-3, -40],
+});
+var marker = new L.Marker([50,7]);
 var clusters = new L.MarkerClusterGroup({showCoverageOnHover: false});
 
 L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
@@ -23,12 +28,19 @@ $(document).ready(function($){
 	cosm.setKey("tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g");
 
 	clusters.fire('data:loading');
-	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: myCallbackFunction});
-	
-	$.get("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/procedures/operations/getlist", function(data){
-		console.log(data);
-	});
+	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: addAQE});
 });
+
+function addLANUV()
+{
+	for(station in stationen)
+	{
+		marker = new L.Marker(new L.LatLng(stationen[station].latitude,stationen[station].longitude),{icon:lanuv, title:station});
+		clusters.addLayer(marker);
+	}
+
+	clusters.fire('data:loaded');
+}
 
 function onLocationFound(e) 
 {
@@ -50,15 +62,25 @@ marker.on('click', function(e){
 });
 
 clusters.on('click', function(e){
-	$('#myCarousel').carousel('next');
-	checked = e.layer.options.title;
-	$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
-	$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
-	$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});
-	$('#coForm').cosm('live', {feed: e.layer.options.title, datastream:'CO'});
+
+	if(isNaN(e.layer.options.title))
+	{
+		console.log("is not number:"+e.layer.options.title)
+		$('.carousel').carousel(1);
+	}
+	else
+	{
+		console.log("is a number:"+e.layer.options.title);
+		$('.carousel').carousel(0);
+		checked = e.layer.options.title;
+		$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
+		$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
+		$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});
+		$('#coForm').cosm('live', {feed: e.layer.options.title, datastream:'CO'});
+	}
 })
 
-function myCallbackFunction(results)
+function addAQE(results)
 {
 	data = results.results;
 	
@@ -66,17 +88,16 @@ function myCallbackFunction(results)
 	
 	for(var i = 0; i < data.length; i++)
 	{
-		marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:myIcon, title:data[i].id});
+		marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:aqe, title:data[i].id});
 		clusters.addLayer(marker);
 	}
 	
-	clusters.fire('data:loaded');
-}
-
-//Callback Function
-function loadLANUV(data)
-{
-	console.log(data)
+	jQuery.ajax({
+        url: 'http://www.lanuv.nrw.de/luft/temes/stationen.js',
+        type: 'get',
+        dataType: 'script',
+        success:addLANUV
+     });
 }
 
 window.onload = function () {

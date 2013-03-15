@@ -47,7 +47,7 @@ def getStationsOfSOS():
 
 def insertObservation(station,values):
     
-    one_hour_from_now = datetime.now() + timedelta(hours=1)
+    one_hour_from_now = datetime.now() + timedelta(hours=3)
     starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
     endtime = '{:%Y-%m-%dT%H:30:00+01}'.format(one_hour_from_now)
     
