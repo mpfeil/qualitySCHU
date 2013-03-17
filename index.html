@@ -14,7 +14,9 @@
     	<link href="css/style.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.css" />
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.Default.css" />
-    	
+    	<link href="js/select2/select2.css" rel="stylesheet"/>
+<!--     	<link href="js/bootstrap-modal/bootstrap-modal.css" rel="stylesheet"/> -->
+
     	<!--[if lte IE 8]><link rel="stylesheet" href="../dist/leaflet.ie.css" /><![endif]-->
 	
     	<!-- Fav and touch icons -->
@@ -171,7 +173,7 @@
 		    </div>
 		</div>
 		
-		<div id="myModal" class="modal height hide fade" tabindex="-1" data-width="760" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="myModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     			<h3 id="myModalLabel"></h3>
@@ -196,18 +198,22 @@
 						</div>
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
-		    			<form class="form-horizontal">
-			            	<fieldset>
-			                	<div class="control-group">
-			                    	<label class="control-label" for="reservation">Zeitraum:</label>
-			                    	<div class="controls">
-			                    		<div class="input-append">
-			                    			<input type="text" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" /><span class="add-on"><i class="icon-calendar"></i></span>
-			                    		</div>
-			                    	</div>
-			                    </div>
-			                </fieldset>
-			            </form>
+		    			<div class="row-fluid">
+			    			<div class="span6">
+			    				<h4>Zeitraum</h4>
+			    				<div id="reportrangetable" class="pull-left">
+								    <i class="icon-calendar icon-large"></i>
+								    <span></span> <b class="caret"></b>
+								</div>
+						    </div>
+						    <div class="span6">
+							    <h4>Attribute</h4>
+						        <select multiple="multiple" name="e9" id="e9" style="width:100%;" class="populate">
+				                	<option value="temperature">Temperatur</option>
+				                    <option value="humidity">Luftfeuchtigkeit</option>
+			                    </select>
+							</div>
+						</div>
 			            <hr>
 		    			<table class="table table-hover">
 			    			<thead>
@@ -230,19 +236,23 @@
 			    			</tbody>
 		    			</table>
 		    		</div>
-		    		<div class="tab-pane fade-in" id="diagram">
-						<form class="form-horizontal">
-			            	<fieldset>
-			                	<div class="control-group">
-			                    	<label class="control-label" for="reservation">Zeitraum:</label>
-			                    	<div class="controls">
-			                    		<div class="input-append">
-			                    			<input type="text" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" /><span class="add-on"><i class="icon-calendar"></i></span>
-			                    		</div>
-			                    	</div>
-			                    </div>
-			                </fieldset>
-			            </form>
+		    		<div class="tab-pane fade-in" id="diagram">	
+		    			<div class="row-fluid">
+			    			<div class="span6">
+			    				<h4>Zeitraum</h4>
+			    				<div id="reportrangediagram" class="pull-left">
+								    <i class="icon-calendar icon-large"></i>
+								    <span></span> <b class="caret"></b>
+								</div>
+						    </div>
+						    <div class="span6">
+							    <h4>Attribute</h4>
+						        <select multiple="multiple" name="e10" id="e10" style="width:100%;" class="populate">
+				                	<option value="temperature">Temperatur</option>
+				                    <option value="humidity">Luftfeuchtigkeit</option>
+			                    </select>
+							</div>
+						</div>	    			
 			            <hr>
 			            <div class="row-fluid">
 			    			<div class="span12">
@@ -290,8 +300,7 @@
 			</div>
 		    <div class="modal-footer">
 		    </div>
-		</div>
-	      
+		</div>  
         <!-- FOOTER -->
 <!--
       <footer>
@@ -313,11 +322,16 @@
     	<script src="http://code.jquery.com/jquery-latest.js"></script>
     	<script src="js/bootstrap/js/bootstrap.js"></script>
     	<script src="js/daterangepicker/date.js"></script>
+<!--
+    	<script src="js/bootstrap-modal/bootstrap-modal.js"></script>
+    	<script src="js/bootstrap-modal/bootstrap-modalmanager.js"></script>
+-->
  	    <script src="js/daterangepicker/daterangepicker.js"></script>
     	<script src="js/leaflet/dist/leaflet.js"></script>
     	<script src="js/canvasjs/canvasjs.min.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
     	<script src="http://d23cj0cdvyoxg0.cloudfront.net/cosmjs-1.0.0.min.js"></script> 
+    	<script src="js/select2/select2.js"></script>
     	<script src="js/spin.js"></script>
     	<script src="js/leaflet.spin.js"></script>
     	<script src="js/map.js"></script>

@@ -17,6 +17,12 @@ html, body {
     width: 100%; 
 }
 
+/*
+#myModal .modal-body {
+	max-height: 500px;
+}
+*/
+
 img.img-rounded:hover {
 	background-color: black;
 }

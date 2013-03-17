@@ -1,5 +1,6 @@
 var map = L.map('map').setView([51.966667, 7.633333], 6);
 var data;
+var data2;
 var checked;
 var lanuv = L.icon({
     iconUrl: 'img/tower.png',
@@ -65,7 +66,8 @@ clusters.on('click', function(e){
 
 	if(isNaN(e.layer.options.title))
 	{
-		console.log("is not number:"+e.layer.options.title)
+		console.log("is not number:"+e.layer.options.title);
+		checked = e.layer.options.title;
 		$('.carousel').carousel(1);
 	}
 	else
@@ -100,9 +102,36 @@ function addAQE(results)
      });
 }
 
+function updateTable()
+{
+	jQuery.ajax({
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/lanuv?service=SOS&request=GetObservation&offering=temporary&procedure=AABU&eventTime=2013-03-15T00:00:00+01/2013-03-15T23:00:00+01&observedProperty=humidity&responseFormat=text/xml;subtype=sensorML/1.0.0&service=SOS&version=1.0.0',
+        type: 'get',
+        dataType: "xml",
+        contentType: "text/xml;",
+        success:function(data3){
+        	data2 = data3;
+        	values = $(data2).find('values').text();
+        	split = values.split("@");
+        	for(var i = 0; i < split.length; i++)
+        	{
+        		temp = split[i].split(',');
+        		for(var j = 0; j < temp.length; j++)
+        		{
+	        		console.log(temp[j]);	
+        		}
+        	}
+        }
+    });
+	
+}
+
+function updateDiagram()
+{
+	alert("Diagram update");
+}
+
 window.onload = function () {
-    
-   
     var chart = new CanvasJS.Chart("chartContainer",
     {
       zoomEnabled: true,

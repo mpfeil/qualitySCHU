@@ -63,5 +63,48 @@ $(".img-rounded").click(function(){
 $('#myCarousel').carousel({interval:false});
 
 $('#myModal').on('shown', function(){
-	$('#reservation').daterangepicker();
+
+	$('#reportrangetable').daterangepicker(
+    {
+        ranges: {
+            'Today': ['today', 'today'],
+            'Yesterday': ['yesterday', 'yesterday'],
+            'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
+            'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
+            'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
+            'Last Month': [Date.today().moveToFirstDayOfMonth().add({ months: -1 }), Date.today().moveToFirstDayOfMonth().add({ days: -1 })]
+        }
+    },
+    function(start, end) {
+        $('#reportrangetable span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
+        updateTable();
+    });
+    
+    $('#reportrangediagram').daterangepicker(
+    {
+        ranges: {
+            'Today': ['today', 'today'],
+            'Yesterday': ['yesterday', 'yesterday'],
+            'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
+            'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
+            'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
+            'Last Month': [Date.today().moveToFirstDayOfMonth().add({ months: -1 }), Date.today().moveToFirstDayOfMonth().add({ days: -1 })]
+        }
+    },
+    function(start, end) {
+        $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
+        updateDiagram();
+    });
+    
+    $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
+    $('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
 })
+
+$('#myModal').on('hidden', function(){
+	//TODO:Clear settings
+});
+
+$("#e9").select2({ width: 'resolve' });
+$('#e9').bind("change", updateTable);
+$("#e10").select2({ width: 'resolve' });
+$('#e10').bind("change", updateDiagram);
