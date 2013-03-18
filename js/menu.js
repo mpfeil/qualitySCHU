@@ -1,3 +1,5 @@
+var chart;
+
 $('#about').popover({placement:'bottom', trigger:'hover'})
 
 $(".img-rounded").hover(
@@ -77,7 +79,8 @@ $('#myModal').on('shown', function(){
     },
     function(start, end) {
         $('#reportrangetable span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
-        updateTable();
+        $('.trbody').empty();
+        updateTable(start,end);
     });
     
     $('#reportrangediagram').daterangepicker(
@@ -93,6 +96,7 @@ $('#myModal').on('shown', function(){
     },
     function(start, end) {
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
+        $("td").empty();
         updateDiagram();
     });
     
@@ -104,7 +108,9 @@ $('#myModal').on('hidden', function(){
 	//TODO:Clear settings
 });
 
-$("#e9").select2({ width: 'resolve' });
-$('#e9').bind("change", updateTable);
-$("#e10").select2({ width: 'resolve' });
-$('#e10').bind("change", updateDiagram);
+$('#example1').multiselect({
+	buttonClass: 'btn btn-small',
+	onChange:function(element, checked){
+        updateDiagram();
+    }
+});

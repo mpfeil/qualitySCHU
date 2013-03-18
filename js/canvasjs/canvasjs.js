@@ -1,5 +1,5 @@
 ﻿/*
-* CanvasJS v1.0.0 Beta - canvasjs.com
+* CanvasJS v1.0.0 Beta 2 - canvasjs.com
 * Copyright 2013 fenopix
 * 
 * CanvasJS follows Dual Licensing Model as mentioned below. 
@@ -1579,6 +1579,9 @@
 
         for (var i = 0; i < this.data.length; i++) {
             dataSeries = this.data[i]
+            if (!dataSeries.dataPoints || dataSeries.dataPoints.length === 0)
+                continue;
+
             if (Chart._supportedChartTypes.indexOf(dataSeries.type) >= 0) {
 
                 var plotType = null;
@@ -8210,7 +8213,7 @@
 
     }
 
-    CanvasJS.Chart.version = "1.0.0 Beta";
+    CanvasJS.Chart.version = "1.0.0 Beta 2";
     window.CanvasJS = CanvasJS;
     //#endregion Public API
 

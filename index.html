@@ -14,8 +14,6 @@
     	<link href="css/style.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.css" />
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.Default.css" />
-    	<link href="js/select2/select2.css" rel="stylesheet"/>
-<!--     	<link href="js/bootstrap-modal/bootstrap-modal.css" rel="stylesheet"/> -->
 
     	<!--[if lte IE 8]><link rel="stylesheet" href="../dist/leaflet.ie.css" /><![endif]-->
 	
@@ -198,41 +196,33 @@
 						</div>
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
-		    			<div class="row-fluid">
-			    			<div class="span6">
-			    				<h4>Zeitraum</h4>
-			    				<div id="reportrangetable" class="pull-left">
-								    <i class="icon-calendar icon-large"></i>
-								    <span></span> <b class="caret"></b>
+		    			<form class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label" for="reportrangetable">Zeitraum:</label>
+								<div class="controls">
+									<div id="reportrangetable">
+										<i class="icon-calendar icon-large"></i>
+										<span></span> <b class="caret"></b>
+									</div>
 								</div>
-						    </div>
-						    <div class="span6">
-							    <h4>Attribute</h4>
-						        <select multiple="multiple" name="e9" id="e9" style="width:100%;" class="populate">
-				                	<option value="temperature">Temperatur</option>
-				                    <option value="humidity">Luftfeuchtigkeit</option>
-			                    </select>
 							</div>
-						</div>
-			            <hr>
-		    			<table class="table table-hover">
+						</form>
+			            
+		    			<table class="table">
 			    			<thead>
 			    				<tr>
 			    					<th>Datum</th>
-			    					<th>CO (ppm)</th>
-			    					<th>NO<sub>2</sub> (ppm)</th>
+			    					<th>Luftfeuchtigkeit (%)</th>
+			    					<th>NO (µg/m<sup>3</sup>)</th>
+			    					<th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th>
+			    					<th>Ozon (µg/m<sup>3</sup>)</th>
+			    					<th>PM10 (µg/m<sup>3</sup>)</th>
+			    					<th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th>
 			    					<th>Temperatur (°C)</th>
-			    					<th>Luftfeutchtigkeit (%)</th>
+			    					<th>Windgeschwindigkeit (m/s)</th>
 			    				</tr>
 			    			</thead> 
-			    			<tbody>
-			    				<tr>  
-						        	<td></td>  
-						            <td></td>  
-						            <td></td>  
-						            <td></td> 
-						            <td></td> 
-						        </tr>
+			    			<tbody id="tablebody">
 			    			</tbody>
 		    			</table>
 		    		</div>
@@ -247,55 +237,22 @@
 						    </div>
 						    <div class="span6">
 							    <h4>Attribute</h4>
-						        <select multiple="multiple" name="e10" id="e10" style="width:100%;" class="populate">
-				                	<option value="temperature">Temperatur</option>
-				                    <option value="humidity">Luftfeuchtigkeit</option>
-			                    </select>
+							    <select id="example1">
+							        <option value="temperature">Temperatur</option>
+							        <option value="humidity">Luftfeuchtigkeit</option>
+							        <option value="no">NO</option>
+							        <option value="no2">NO<sub>2</sub></option>
+							        <option value="wv">Windgeschwindigkeit</option>
+							        <option value="so2">SO<sub>2</sub></option>
+							        <option value="ozone">Ozon</option>
+							        <option value="pm10">PM10</option>
+							    </select>
 							</div>
 						</div>	    			
 			            <hr>
-			            <div class="row-fluid">
-			    			<div class="span12">
-			    				<div id="chartContainer" style="height: 400px; width: 150px">
-			    				</div>
-			    			</div>
-						</div>
+			            <div id="chartContainer" style="width: 500px; height: 400px">
+			            </div>
 		    		</div>
-		    		<!--
-<div class="tab-pane fade in" id="diagram">
-			    		<ul id="diagramTab" class="nav nav-tabs">
-				    		<li><a href="#tempDiagram" data-toggle="tab">Temperature</a></li>
-				    		<li><a href="#humDiagram" data-toggle="tab">Humidity</a></li>
-				    		<li><a href="#coDiagram" data-toggle="tab">CO</a></li>
-				    		<li><a href="#no2Diagram" data-toggle="tab">NO</a></li>
-				    	</ul>
-				    	<div id="diagramTabContent" class="tab-content">
-			    			<div class="tab-pane fade-in" id="tempDiagram">
-			    				<form class="form-horizontal">
-					            	<fieldset>
-					                	<div class="control-group">
-					                    	<label class="control-label" for="reservation">Zeitraum:</label>
-					                    	<div class="controls">
-					                    		<div class="input-prepend">
-					                    			<span class="add-on"><i class="icon-calendar"></i></span><input type="text" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" />
-					                    		</div>
-					                    	</div>
-					                    </div>
-					                </fieldset>
-					            </form>
-							</div>
-							<div class="tab-pane fade-in" id="humDigram">
-								<p>home</p>
-							</div>
-							<div class="tab-pane fade-in" id="coDigram">
-								<p>home</p>
-							</div>
-							<div class="tab-pane fade-in" id="no2Digram">
-								<p>home</p>
-							</div>  
-			    		</div>
-		    		</div>
--->
 		    	</div>
 			</div>
 		    <div class="modal-footer">
@@ -322,16 +279,12 @@
     	<script src="http://code.jquery.com/jquery-latest.js"></script>
     	<script src="js/bootstrap/js/bootstrap.js"></script>
     	<script src="js/daterangepicker/date.js"></script>
-<!--
-    	<script src="js/bootstrap-modal/bootstrap-modal.js"></script>
-    	<script src="js/bootstrap-modal/bootstrap-modalmanager.js"></script>
--->
  	    <script src="js/daterangepicker/daterangepicker.js"></script>
     	<script src="js/leaflet/dist/leaflet.js"></script>
     	<script src="js/canvasjs/canvasjs.min.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
     	<script src="http://d23cj0cdvyoxg0.cloudfront.net/cosmjs-1.0.0.min.js"></script> 
-    	<script src="js/select2/select2.js"></script>
+    	<script src="js/bootstrap-multiselect/bootstrap-multiselect.js"></script>
     	<script src="js/spin.js"></script>
     	<script src="js/leaflet.spin.js"></script>
     	<script src="js/map.js"></script>

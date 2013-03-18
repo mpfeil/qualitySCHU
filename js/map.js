@@ -102,24 +102,49 @@ function addAQE(results)
      });
 }
 
-function updateTable()
+function updateTable(start,end)
 {
+	console.log(start);
+	console.log(end);
+	eventtime_start = start.toString('yyyy-MM-ddT00:00:00+01:00');
+	eventtime_end = end.toString('yyyy-MM-ddT23:00:00+01:00');
+	var td = new Array();
 	jQuery.ajax({
-        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/lanuv?service=SOS&request=GetObservation&offering=temporary&procedure=AABU&eventTime=2013-03-15T00:00:00+01/2013-03-15T23:00:00+01&observedProperty=humidity&responseFormat=text/xml;subtype=sensorML/1.0.0&service=SOS&version=1.0.0',
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/operations/getobservation/offerings/temporary/procedures/'+checked+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
         type: 'get',
-        dataType: "xml",
-        contentType: "text/xml;",
+        dataType: "json",
         success:function(data3){
         	data2 = data3;
-        	values = $(data2).find('values').text();
-        	split = values.split("@");
-        	for(var i = 0; i < split.length; i++)
+        	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
         	{
-        		temp = split[i].split(',');
-        		for(var j = 0; j < temp.length; j++)
-        		{
-	        		console.log(temp[j]);	
-        		}
+        		newtablerow = "";
+        		td = data2.data[0].result.DataArray.values[i];
+	        	date = new Date(td[0]).toString('d.MM.yyyy HH:mm:ss');
+	        	console.log(date.toString('d.MM.yyyy '));
+	        	for(var j = 2; j < td.length; j = j + 2)
+	        	{
+		        	if(td[j]=="100")
+		        	{
+			        	console.log("raw");
+			        	newtablerow = newtablerow + '<td class="tdwarning">'+td[j-1]+'</td>';
+		        	}
+		        	else if(td[j]=="101")
+		        	{
+			        	console.log("validated and outlier");
+			        	newtablerow = newtablerow + '<td class="tderror">'+td[j-1]+'</td>';
+		        	}
+		        	else if(td[j]=="102")
+		        	{
+			        	console.log("validated and not outlier");
+			        	newtablerow = newtablerow + '<td class="tdsuccess">'+td[j-1]+'</td>';
+		        	}
+		        	else
+		        	{
+			        	console.log("NaN");
+			        	newtablerow = newtablerow + '<td>'+td[j-1]+'</td>';
+		        	}
+	        	}
+	        	$('#tablebody').append('<tr class="trbody"><td>'+date+'</td>'+newtablerow+'</tr>');
         	}
         }
     });
@@ -127,12 +152,26 @@ function updateTable()
 }
 
 function updateDiagram()
-{
-	alert("Diagram update");
-}
-
-window.onload = function () {
-    var chart = new CanvasJS.Chart("chartContainer",
+{	
+	var limit = 100000;    //increase number of dataPoints by increasing this
+   
+	var y = 0;
+	var data5 = []; 
+	var dataSeries = { type: "line" };
+	var dataPoints = [];
+	/*
+for (var i = 0; i < limit; i += 1) {
+    	y += (Math.random() * 10 - 5);
+    	dataPoints.push({
+	    	x: i - limit / 2,
+	    	y: y,                
+	    });
+	}
+*/
+	dataSeries.dataPoints = dataPoints;
+	data5.push(dataSeries);
+	
+	chart = new CanvasJS.Chart("chartContainer",
     {
       zoomEnabled: true,
       title:{
@@ -146,24 +185,9 @@ window.onload = function () {
         includeZero:false
       },
       
-      data: data,  // random generator below
+      data: data5,  // random generator below
       
     });
 
-    chart.render();
-  }
-  
-   var limit = 100000;    //increase number of dataPoints by increasing this
-   
-   var y = 0;
-   var data = []; var dataSeries = { type: "line" };
-   var dataPoints = [];
-   for (var i = 0; i < limit; i += 1) {
-    y += (Math.random() * 10 - 5);
-    dataPoints.push({
-      x: i - limit / 2,
-      y: y,                
-    });
-  }
-  dataSeries.dataPoints = dataPoints;
-  data.push(dataSeries);   
+    chart.render();	 
+}

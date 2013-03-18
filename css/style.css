@@ -17,11 +17,10 @@ html, body {
     width: 100%; 
 }
 
-/*
 #myModal .modal-body {
+	height: 400px;
 	max-height: 500px;
 }
-*/
 
 img.img-rounded:hover {
 	background-color: black;
@@ -41,4 +40,16 @@ img.img-rounded:hover {
 
 .daterangepicker {
 	z-index:1151;
+}
+
+.tdsuccess {
+	background-color:#dff0d8;
+}
+
+.tdwarning {
+	background-color:#fcf8e3;
+}
+
+.tderror {
+	background-color:#f2dede;
 }
