@@ -45,7 +45,7 @@ $(".img-rounded").click(function(){
 	{
 		case "overview":
 			capture = "Overview";
-			console.log(checked);
+			console.log(checkedStation);
 			break;
 		case "tempHum":
 			capture = "Temperature / Humidity";
@@ -65,6 +65,33 @@ $(".img-rounded").click(function(){
 $('#myCarousel').carousel({interval:false});
 
 $('#myModal').on('shown', function(){
+
+	chart = new CanvasJS.Chart("chartContainer",
+    {
+	    zoomEnabled: true,
+	    legend:{
+		    horizontalAlign:"center",
+		    verticalAlign:"top"
+        },
+		axisX:{
+		labelAngle: 30,
+		},
+		
+		axisY :{
+		includeZero:false
+		},
+		
+		data: diagramData,
+
+    });
+
+    var dataSeries = { type: "line" };
+	var dataPoints = [];
+	
+	dataSeries.dataPoints = dataPoints;
+	diagramData.push(dataSeries);
+
+    chart.render();
 
 	$('#reportrangetable').daterangepicker(
     {
@@ -111,6 +138,6 @@ $('#myModal').on('hidden', function(){
 $('#example1').multiselect({
 	buttonClass: 'btn btn-small',
 	onChange:function(element, checked){
-        updateDiagram();
+        updateDiagram(element,checked);
     }
 });

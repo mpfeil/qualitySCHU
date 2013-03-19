@@ -1,7 +1,21 @@
 var map = L.map('map').setView([51.966667, 7.633333], 6);
 var data;
 var data2;
-var checked;
+var checkedStation;
+
+//Data Array for Diagram. Contains the single dataSeries
+var diagramData = [];
+
+//Single dataSeries for diagram
+var temperature = {type: "line", lineThickness: 2, showInLegend: true, name: "Temperatur"};
+var no = {type: "line", lineThickness: 2, showInLegend: true, name: "NO"};
+var no2 = {type: "line", lineThickness: 2, showInLegend: true, name: "NO2"};
+var ozone = {type: "line", lineThickness: 2, showInLegend: true, name: "Ozon"};
+var pm10 = {type: "line", lineThickness: 2, showInLegend: true, name: "PM10"};
+var so2 = {type: "line", lineThickness: 2, showInLegend: true, name: "SO2"};
+var wv = {type: "line", lineThickness: 2, showInLegend: true, name: "Windgeschwindigkeit"};
+var humidity = {type: "line", lineThickness: 2, showInLegend: true, name: "Luftfeuchtigkeit"}; 
+
 var lanuv = L.icon({
     iconUrl: 'img/tower.png',
     iconSize: [41, 41],
@@ -67,14 +81,14 @@ clusters.on('click', function(e){
 	if(isNaN(e.layer.options.title))
 	{
 		console.log("is not number:"+e.layer.options.title);
-		checked = e.layer.options.title;
+		checkedStation = e.layer.options.title;
 		$('.carousel').carousel(1);
 	}
 	else
 	{
 		console.log("is a number:"+e.layer.options.title);
 		$('.carousel').carousel(0);
-		checked = e.layer.options.title;
+		checkedStation = e.layer.options.title;
 		$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
 		$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
 		$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});
@@ -110,7 +124,7 @@ function updateTable(start,end)
 	eventtime_end = end.toString('yyyy-MM-ddT23:00:00+01:00');
 	var td = new Array();
 	jQuery.ajax({
-        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/operations/getobservation/offerings/temporary/procedures/'+checked+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
         type: 'get',
         dataType: "json",
         success:function(data3){
@@ -151,43 +165,82 @@ function updateTable(start,end)
 	
 }
 
-function updateDiagram()
-{	
+function removeFromDiagram(elem)
+{
+	console.log("remove: "+elem);
+/* 	dataDiagram.pop(elem); */
+/* 	chart.render();	 */
+}
+
+function addToDiagram(elem)
+{
+	console.log("add: "+elem);
 	var limit = 100000;    //increase number of dataPoints by increasing this
-   
 	var y = 0;
-	var data5 = []; 
-	var dataSeries = { type: "line" };
 	var dataPoints = [];
-	/*
-for (var i = 0; i < limit; i += 1) {
+	eventtime_start = start.toString('yyyy-MM-ddT00:00:00+01:00');
+	eventtime_end = end.toString('yyyy-MM-ddT23:00:00+01:00');
+	jQuery.ajax({
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/lanuv/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:'+elem+'/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+        type: 'get',
+        dataType: "json",
+        success:function(data3){
+        	data2 = data3;
+        	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
+        	{
+        		newtablerow = "";
+        		td = data2.data[0].result.DataArray.values[i];
+	        	date = new Date(td[0]).toString('d.MM.yyyy HH:mm:ss');
+	        	console.log(date.toString('d.MM.yyyy '));
+	        	for(var j = 2; j < td.length; j = j + 2)
+	        	{
+		        	if(td[j]=="100")
+		        	{
+			        	console.log("raw");
+			        	newtablerow = newtablerow + '<td class="tdwarning">'+td[j-1]+'</td>';
+		        	}
+		        	else if(td[j]=="101")
+		        	{
+			        	console.log("validated and outlier");
+			        	newtablerow = newtablerow + '<td class="tderror">'+td[j-1]+'</td>';
+		        	}
+		        	else if(td[j]=="102")
+		        	{
+			        	console.log("validated and not outlier");
+			        	newtablerow = newtablerow + '<td class="tdsuccess">'+td[j-1]+'</td>';
+		        	}
+		        	else
+		        	{
+			        	console.log("NaN");
+			        	newtablerow = newtablerow + '<td>'+td[j-1]+'</td>';
+		        	}
+	        	}
+	        	$('#tablebody').append('<tr class="trbody"><td>'+date+'</td>'+newtablerow+'</tr>');
+        	}
+        }
+    });
+	
+	for (var i = 0; i < limit; i += 1) {
     	y += (Math.random() * 10 - 5);
     	dataPoints.push({
 	    	x: i - limit / 2,
 	    	y: y,                
 	    });
 	}
-*/
-	dataSeries.dataPoints = dataPoints;
-	data5.push(dataSeries);
-	
-	chart = new CanvasJS.Chart("chartContainer",
-    {
-      zoomEnabled: true,
-      title:{
-        text: "Stress Test: 100,000 Data Points", 
-      },
-      axisX:{
-        labelAngle: 30,
-      },
-      
-      axisY :{
-        includeZero:false
-      },
-      
-      data: data5,  // random generator below
-      
-    });
+	temperature.dataPoints = dataPoints;
+	diagramData.push(temperature);	
+	chart.render();
+}
 
-    chart.render();	 
+
+function updateDiagram(element,checked)
+{	
+	if(checked)
+	{
+		addToDiagram(element.val())
+	}
+	else
+	{
+		removeFromDiagram(element.val());
+	}	 
 }
