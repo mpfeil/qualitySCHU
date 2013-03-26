@@ -17,6 +17,20 @@ html, body {
     width: 100%; 
 }
 
+#wizardDiv {
+  z-index:150;
+  background-color:#000000;
+  opacity: 0.6;
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  height: 100%;
+  margin-top: 0px;
+  width: 100%;
+  margin-left: 0px;
+  visibility: hidden;
+}
+
 #myModal .modal-body {
 	height: 400px;
 	max-height: 500px;

@@ -141,3 +141,9 @@ $('#example1').multiselect({
         updateDiagram(element,checked);
     }
 });
+
+var options = {};
+var wizard = $("#some-wizard").wizard(options);
+$('#download').click(function(){
+	wizard.show();	
+});

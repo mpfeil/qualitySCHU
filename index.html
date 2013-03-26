@@ -10,6 +10,7 @@
     	<link href="js/bootstrap/css/bootstrap.css" rel="stylesheet">
     	<link href="js/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     	<link href="js/daterangepicker/daterangepicker.css" rel="stylesheet">
+    	<link href="js/bootstrap-wizard/src/bootstrap-wizard.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/dist/leaflet.css" />
     	<link href="css/style.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.css" />
@@ -36,8 +37,9 @@
 		        		<span class="icon-bar"></span>
 		        	</a>
 		        	<a class="brand" href="#">qualitySCHU</a>
-		        	<div class="nav-collapse collapse">
+		        	<div class="nav-collapse collapse" visible="iPhone">
 			        	<ul class="nav">
+			        		<li><a id="download" role="button" data-toggle="modal">Download</a></li>
 			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content="Geosoftware II is a course at ifgi 2012-2013">About</a></li>
 						</ul>
@@ -131,14 +133,33 @@
 					</div>    
 			    </div>
 			  </div>
-			  <!-- Carousel nav -->
-			 <!--
- <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
--->
 			</div>
 		</div>
-		
+
+		<div class="wizard" id="some-wizard">
+		    <h1>Customize and download</h1>
+		 
+		    <div class="wizard-card" data-cardname="card1">
+		        <h3>Select the service</h3>
+		        Lanuv or AQE
+		    </div>
+		 
+		    <div class="wizard-card" data-cardname="card2">
+		        <h3>Select the procedures</h3>
+		        Lanuv Stations or AQEs
+		    </div>
+
+			<div class="wizard-card" data-cardname="card3">
+		        <h3>Select observed properties</h3>
+		        Lanuv Stations or AQEs
+		    </div>		    
+		 	
+		 	<div class="wizard-card" data-cardname="card4">
+		        <h3>Select the timeframe</h3>
+		        date from - until
+		    </div>
+		</div>
+
 		<!-- FAQ Modal -->
 		<div id="faqModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
 	    	<div class="modal-header">
@@ -153,7 +174,7 @@
 					    </div>
 					    <div id="collapseOne" class="accordion-body collapse">
 						    <div class="accordion-inner">
-	
+
 							</div>
 						</div>
 					</div>
@@ -163,14 +184,14 @@
 						</div>
 						<div id="collapseTwo" class="accordion-body collapse">
 							<div class="accordion-inner">
-	
+
 							</div>
 						</div>
 					</div>
 				</div>
 		    </div>
 		</div>
-		
+
 		<div id="myModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -285,6 +306,7 @@
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
     	<script src="http://d23cj0cdvyoxg0.cloudfront.net/cosmjs-1.0.0.min.js"></script> 
     	<script src="js/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    	<script src="js/bootstrap-wizard/src/bootstrap-wizard.js"></script>
     	<script src="js/spin.js"></script>
     	<script src="js/leaflet.spin.js"></script>
     	<script src="js/map.js"></script>
