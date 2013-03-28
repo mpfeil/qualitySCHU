@@ -36,10 +36,6 @@ html, body {
 	max-height: 500px;
 }
 
-img.img-rounded:hover {
-	background-color: black;
-}
-
 .leaflet-top .leaflet-control {
 	margin-top: 50px;
 }

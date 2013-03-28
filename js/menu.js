@@ -18,6 +18,24 @@ $(".img-rounded").hover(
 			case "co":
 				this.setAttribute('src', 'img/co_inverted.png');
 				break;
+			case "lanuvTempHum":
+				this.setAttribute('src', 'img/temperature_inverted.png');
+				break; 	
+			case "lanuvSO2":
+				this.setAttribute('src', 'img/so2_inverted.png');
+				break;
+			case "lanuvO3":
+				this.setAttribute('src', 'img/o3_inverted.png');
+				break;
+			case "lanuvCO":
+				this.setAttribute('src', 'img/co_inverted.png');
+				break;
+			case "lanuvNO2":
+				this.setAttribute('src', 'img/no2_inverted.png');
+				break;
+			case "lanuvDust":
+				this.setAttribute('src', 'img/dust_inverted.png');
+				break;
 		}	
 	},
 	function(){
@@ -34,6 +52,24 @@ $(".img-rounded").hover(
 				break;
 			case "co":
 				this.setAttribute('src', 'img/co.png');
+				break;
+			case "lanuvTempHum":
+				this.setAttribute('src', 'img/temperature.png');
+				break;
+			case "lanuvSO2":
+				this.setAttribute('src', 'img/so2.png');
+				break;
+			case "lanuvO3":
+				this.setAttribute('src', 'img/o3.png');
+				break;
+			case "lanuvCO":
+				this.setAttribute('src', 'img/co.png');
+				break;
+			case "lanuvNO2":
+				this.setAttribute('src', 'img/no2.png');
+				break;
+			case "lanuvDust":
+				this.setAttribute('src', 'img/dust.png');
 				break;
 		}
 	}
