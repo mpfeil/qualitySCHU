@@ -12,12 +12,10 @@ xApiKey = "tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g"
 
 def getAQEFeeds():
     request = urllib2.urlopen("http://api.cosm.com/v2/feeds?key=tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g&q=aqe&content=summary&status=live&per_page=150").read()
-    #request = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&content=summary&status=live&per_page=150").read()
     
     decoded_data = json.loads(request)
     
     for data in decoded_data["results"]:
-        #print data
         try:
             if str(data["id"]) == "77464":
                 break

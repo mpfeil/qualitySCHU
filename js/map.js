@@ -41,10 +41,10 @@ map.addLayer(clusters);
 $(document).ready(function($){
 	console.log("ready");
 	cosm.setKey("tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g");
-	var options = {};
-    var wizard = $("#some-wizard").wizard(options);
+	
 	clusters.fire('data:loading');
-	cosm.request({type: "get", url: "http://api.cosm.com/v2/feeds?lat=51.964894415545814&lon=7.6238250732421875&distance=100.0&q=AQE", done: addAQE});
+
+	cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds?&q=aqe&content=summary&status=live&per_page=150", done: addAQE});
 });
 
 function addLANUV()
@@ -105,8 +105,14 @@ function addAQE(results)
 	
 	for(var i = 0; i < data.length; i++)
 	{
-		marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:aqe, title:data[i].id});
-		clusters.addLayer(marker);
+		try {
+			marker = new L.Marker(new L.LatLng(data[i].location.lat,data[i].location.lon),{icon:aqe, title:data[i].id});
+			clusters.addLayer(marker);
+		}
+		catch(err){
+			console.log(err);
+		}
+		
 	}
 	
 	jQuery.ajax({
