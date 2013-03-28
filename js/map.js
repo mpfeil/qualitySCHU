@@ -78,18 +78,14 @@ marker.on('click', function(e){
 });
 
 clusters.on('click', function(e){
-
-	if(isNaN(e.layer.options.title))
+	checkedStation = e.layer.options.title;
+	if(isNaN(checkedStation))
 	{
-		console.log("is not number:"+e.layer.options.title);
-		checkedStation = e.layer.options.title;
 		$('.carousel').carousel(1);
 	}
 	else
 	{
-		console.log("is a number:"+e.layer.options.title);
 		$('.carousel').carousel(0);
-		checkedStation = e.layer.options.title;
 		$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
 		$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
 		$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});
@@ -125,8 +121,6 @@ function addAQE(results)
 
 function updateTable(start,end)
 {
-	console.log(start);
-	console.log(end);
 	eventtime_start = start.toString('yyyy-MM-ddT00:00:00+01:00');
 	eventtime_end = end.toString('yyyy-MM-ddT23:00:00+01:00');
 	var td = new Array();
@@ -162,7 +156,7 @@ function updateTable(start,end)
 		        	else
 		        	{
 			        	console.log("NaN");
-			        	newtablerow = newtablerow + '<td>'+td[j-1]+'</td>';
+			        	newtablerow = newtablerow + '<td>-</td>';
 		        	}
 	        	}
 	        	$('#tablebody').append('<tr class="trbody"><td>'+date+'</td>'+newtablerow+'</tr>');

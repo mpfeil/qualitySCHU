@@ -148,13 +148,10 @@ def insertObservation(station,values):
   </om:Observation>\n\
 </sos:InsertObservation>'
     
-    print insert_Observation
-    
     headers = {"Content-type": "application/raw", "Accept": "text/plain"}
     request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/lanuv",insert_Observation,headers)
     handler = urllib2.urlopen(request)
-    print handler.read()
-    
+    logger.info(handler.read())
 
 if __name__ == '__main__':
     logger.info("Parse process started")
