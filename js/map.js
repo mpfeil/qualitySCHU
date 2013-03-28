@@ -17,13 +17,13 @@ var wv = {type: "line", lineThickness: 2, showInLegend: true, name: "Windgeschwi
 var humidity = {type: "line", lineThickness: 2, showInLegend: true, name: "Luftfeuchtigkeit"}; 
 
 var lanuv = L.icon({
-    iconUrl: 'img/tower.png',
+    iconUrl: 'img/lanuv.png',
     iconSize: [41, 41],
     iconAnchor: [25, 40],
     popupAnchor: [-3, -40],
 });
 var aqe = L.icon({
-    iconUrl: 'img/egg.png',
+    iconUrl: 'img/aqe.png',
     iconSize: [41, 41],
     iconAnchor: [25, 40],
     popupAnchor: [-3, -40],

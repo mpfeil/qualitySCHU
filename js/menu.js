@@ -7,16 +7,16 @@ $(".img-rounded").hover(
 		switch(this.getAttribute("id"))
 		{
 			case "overview":
-				this.setAttribute('src', 'img/info_hover.png');
+				this.setAttribute('src', 'img/info_inverted.png');
 				break;
 			case "tempHum":
-				this.setAttribute('src', 'img/temphum_hover.png');
+				this.setAttribute('src', 'img/temperature_inverted.png');
 				break; 	
 			case "no2":
-				this.setAttribute('src', 'img/no2_hover.png');
+				this.setAttribute('src', 'img/no2_inverted.png');
 				break;
 			case "co":
-				this.setAttribute('src', 'img/co_hover.png');
+				this.setAttribute('src', 'img/co_inverted.png');
 				break;
 		}	
 	},
@@ -24,16 +24,16 @@ $(".img-rounded").hover(
 		switch(this.getAttribute("id"))
 		{
 			case "overview":
-				this.setAttribute('src', 'img/info.svg');
+				this.setAttribute('src', 'img/info.png');
 				break;
 			case "tempHum":
-				this.setAttribute('src', 'img/temphum.svg');
+				this.setAttribute('src', 'img/temperature.png');
 				break; 	
 			case "no2":
-				this.setAttribute('src', 'img/no2.svg');
+				this.setAttribute('src', 'img/no2.png');
 				break;
 			case "co":
-				this.setAttribute('src', 'img/co.svg');
+				this.setAttribute('src', 'img/co.png');
 				break;
 		}
 	}
