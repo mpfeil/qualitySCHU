@@ -1,9 +1,19 @@
-library(RODBC)
+## Purpose: Validation of air quality data
+## ------------------------------------------------------------------------------
+## RODBC package ist used to get and prepare the data from the database and to
+## update the database after validation
+## Validation is done using the findOutlier function
+## ------------------------------------------------------------------------------
+## Author: Nikolai Gorte
+
+
 
 
 #################################################################################
 ###############################findOutliers FUNCTION#############################
 #################################################################################
+
+
 
 ## identifies and flags outliers in the measurements using running median and
 ## left-sided window
@@ -18,7 +28,7 @@ findOutlier <- function(res, ws){
   if (ws%%2 == 0) 
     warning("'ws' must be odd!  Changing 'ws' to ", ws <- as.integer(1 + 2 * (ws%/%2)))
   
-  xt <- fres[,c("val_msr")]
+  xt <- res[,c("val_msr")]
   xtmed <- runmed(xt,ws)
   i <- length(xt)
 
@@ -47,8 +57,11 @@ findOutlier <- function(res, ws){
 
 
 
+library(RODBC)
+
+
 ## Connect to database
-ch<-odbcConnect("PostgreSQL30")
+ch<-odbcConnect("PostgreSQL35W")
 
 ## Set schema
 odbcQuery(ch,"SET search_path =lanuv, pg_catalog;")
@@ -68,7 +81,7 @@ obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 ws <- 31
 
 
-## Get non-validated measurements plus related foi's of each foi by joining following tables:
+## Get non-validated measurements plus of each foi by joining following tables:
 ## procedures, event_time, measures
 for(i in 1:length(fois[[1]])){
   ## Get the non-validated data
@@ -85,15 +98,21 @@ for(i in 1:length(fois[[1]])){
                                 ORDER BY 
                                 measures.id_msr")) 
   
-  if (nrow(rawData)==0 || nrow(rawData)<nrow(obspr)*ws) {next} 
+  ## number of observed properties for current feature of interest
+  nobspr <-length(unique(rawData[,c("id_opr_fk")]))
+  
+  ## skip current foi if theres not enough data for validation
+  if (nrow(rawData)<nobspr*ws) {next} 
   
   
-  ## gets the measured values for each observed propertie and validates them
-  ## if the table is not empty
+  ## gets the measured values of each observed property (if there are any) and validates them
   for(j in 1:length(obspr[[1]])){
     res<-rawData[rawData$id_opr_fk==obspr[j,1],]
+    
+    ## skip to next observed property if there's no data for the current property
     if (nrow(res)==0) next
     
+    ## helper row needed to identify the very first k=ws measurments which can't be validated
     helper<-sqlQuery(ch, paste("SELECT 
                                id_prc, id_foi_fk, id_msr, id_eti_fk, id_qi_fk, id_opr_fk, val_msr 
                                FROM 
@@ -110,10 +129,13 @@ for(i in 1:length(fois[[1]])){
                                measures.id_msr ASC LIMIT 1")) 
     
     
+    ## if helper is already validated we can delete all rows from res with res.id_msr < helper.id_msr
     if(helper[,c("id_qi_fk")][[1]]==101 || helper[,c("id_qi_fk")][[1]]==102){
       
       res <- res[!res$id_msr <helper[,c("id_msr")][[1]],]
+      if (nrow(res)==0) next
       
+      ## already validated data needed to validate the first k=ws measurements of the new non-validated data
       helperData <- sqlQuery(ch, paste("SELECT
                                        id_prc, id_foi_fk, id_msr, id_eti_fk, id_qi_fk, id_opr_fk, val_msr
                                        FROM 
@@ -126,7 +148,7 @@ for(i in 1:length(fois[[1]])){
                                        AND
                                        measures.id_opr_fk = (",obspr[j,1],")
                                        ORDER BY 
-                                       measures.id_msr DESC LIMIT (",length(obspr[[1]])*ws,")) as T 
+                                       measures.id_msr DESC LIMIT (",nobspr*ws,")) as T 
                                        ORDER BY
                                        T.id_msr ASC"))
       
@@ -139,6 +161,7 @@ for(i in 1:length(fois[[1]])){
     ## final table with same colums as the table in the database
     fres <-editData[ , -which(names(editData) %in% c("id_prc", "id_foi_fk"))]
     
+    ## validation
     fres <-findOutlier(fres,ws)
     
     ## Update table
