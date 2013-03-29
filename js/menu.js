@@ -114,7 +114,7 @@ $('#myModal').on('shown', function(){
 		},
 		
 		axisY :{
-		includeZero:false
+		includeZero:true
 		},
 		
 		data: diagramData,

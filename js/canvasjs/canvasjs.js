@@ -1,5 +1,5 @@
 ﻿/*
-* CanvasJS v1.0.0 Beta 2 - canvasjs.com
+* CanvasJS v1.0.0 Beta 3 - canvasjs.com
 * Copyright 2013 fenopix
 * 
 * CanvasJS follows Dual Licensing Model as mentioned below. 
@@ -30,16 +30,7 @@
             //panEnabled: false,
             theme: "theme1",
             animationEnabled: true,
-            colorSet: [
-                "#C0504E",
-                "#4F81BC",
-                "#9BBB58",
-                "#8064A1",
-                "#4AACC5",
-                "#F79647",
-                "#FFC000",
-                "#7F6084"
-            ]
+            colorSet: "colorSet1"
         },
 
         Title: {
@@ -200,8 +191,9 @@
 
     //#region Themes
 
-    var colorSets = [
-        [
+    var colorSets = {
+
+        "colorSet1": [
             "#369EAD",
             "#C24642",
             "#7F6084",
@@ -217,7 +209,7 @@
             "#A064A1",
             "#F79647"
         ],
-        [
+        "colorSet2": [
             "#4F81BC",
             "#C0504E",
             "#9BBB58",
@@ -229,7 +221,7 @@
             //"#FFC000",
             //"#7F6084"
         ],
-        [
+        "colorSet3": [
             "#8CA1BC",
             "#36845C",
             "#017E82",
@@ -244,49 +236,48 @@
             "#F2990B",
             "#03557B",
             "#782970"
-        ],
-        [
-            "#3698C5",
-            "#009B8D",
-            "#F1D691",
-            "#F8B90C",
-            "#0081B8",
-            "#5B5A96",
-            "#ACBDD1",
-            "#88A891",
-            "#39969D",
-            "#AECEDD",
-            "#A0B2BC",
-            "#BBAEB7",
-            "#A0C65F",
-            "#EEA6AA",
-            "#3798C5"
-        ],
-        [
-            "#88ADBF",
-            "#84C336",
-            "#7B91C3",
-            "#4661EE",
-            "#EC5657",
-            "#1BCDD1",
-            "#8FAABB",
-            "#B08BEB",
-            "#3EA0DD",
-            "#F5A52A",
-            "#23BFAA",
-            "#FAA586",
-            "#EB8CC6"
-        ]
+        ]//,
+        //"colorSet4": [
+        //    "#3698C5",
+        //    "#009B8D",
+        //    "#F1D691",
+        //    "#F8B90C",
+        //    "#0081B8",
+        //    "#5B5A96",
+        //    "#ACBDD1",
+        //    "#88A891",
+        //    "#39969D",
+        //    "#AECEDD",
+        //    "#A0B2BC",
+        //    "#BBAEB7",
+        //    "#A0C65F",
+        //    "#EEA6AA",
+        //    "#3798C5"
+        //],
+        //"colorSet5": [
+        //    "#88ADBF",
+        //    "#84C336",
+        //    "#7B91C3",
+        //    "#4661EE",
+        //    "#EC5657",
+        //    "#1BCDD1",
+        //    "#8FAABB",
+        //    "#B08BEB",
+        //    "#3EA0DD",
+        //    "#F5A52A",
+        //    "#23BFAA",
+        //    "#FAA586",
+        //    "#EB8CC6"
+        //]
 
-
-    ];
+    };
 
     var themes =
         {
             "theme1": {
                 Chart:
                     {
-                        colorSet: colorSets[0]
+                        colorSet: "colorSet1"
                     },
                 Title: {
                     //fontFamily: "impact, charcoal, arial black, sans-serif", fontSize: 30,//fontColor: "rgb(58,58,58)",
@@ -341,7 +332,7 @@
             "theme2": {
                 Chart:
                     {
-                        colorSet: colorSets[1]
+                        colorSet: "colorSet2"
                     },
                 Title: {
                     fontFamily: "impact, charcoal, arial black, sans-serif", fontSize: 32,//fontColor: "rgb(58,58,58)",
@@ -568,6 +559,7 @@
 
     //#region formatting functions/methods
     var dateFormat = function () {
+
 
         var reg = /D{1,4}|M{1,4}|Y{1,4}|h{1,2}|H{1,2}|m{1,2}|s{1,2}|f{1,3}|t{1,2}|T{1,2}|K|z{1,3}|"[^"]*"|'[^']*'/g;
         var dayStrings = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -1064,8 +1056,7 @@
         this._canvasJSContainer = document.createElement("div");
         this._canvasJSContainer.style.position = "relative";
         this._container.appendChild(this._canvasJSContainer);
-
-
+        
 
         this.canvas = document.createElement("canvas");
         this.canvas.width = width;
@@ -1285,6 +1276,9 @@
         ///<summary>Initializes Chart objects/state. Creates DataSeries class instance for each DataSeries provided by ther user. Sets the Axis Type based on the user data</summary>
         ///</signature>
         //this.ctx.canvas.width = this.ctx.canvas.width;
+
+        this._selectedColorSet = typeof (colorSets[this.colorSet]) !== "undefined" ? colorSets[this.colorSet] : colorSets["colorSet1"];
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
 
@@ -1292,7 +1286,7 @@
         this.axisY = null;
         this.axisY2 = null;
         this._indexLabels = [];
-
+        
         this._events = [];
         if (this._eventManager)
             this._eventManager.reset();
@@ -1326,14 +1320,14 @@
 
             if (dataSeries.color === null) {
                 if (this._options.data.length > 1) {
-                    dataSeries._colorSet = [this.colorSet[dataSeries.index % this.colorSet.length]];
-                    dataSeries.color = this.colorSet[dataSeries.index % this.colorSet.length];
+                    dataSeries._colorSet = [this._selectedColorSet[dataSeries.index % this._selectedColorSet.length]];
+                    dataSeries.color = this._selectedColorSet[dataSeries.index % this._selectedColorSet.length];
                 } else {
                     if (dataSeries.type === "line" || dataSeries.type === "area" || dataSeries.type === "stackedArea" || dataSeries.type === "stackedArea100") {
-                        dataSeries._colorSet = [this.colorSet[0]];
+                        dataSeries._colorSet = [this._selectedColorSet[0]];
                     }
                     else
-                        dataSeries._colorSet = this.colorSet;
+                        dataSeries._colorSet = this._selectedColorSet;
                 }
             } else {
                 dataSeries._colorSet = [dataSeries.color];
@@ -2881,13 +2875,6 @@
         //	
 
     }
-
-    Chart.prototype.colorSetIndex = 0;
-
-    //Chart.prototype.getNewColor = function () {
-    //    this.colorSetIndex = (++this.colorSetIndex) % this.colorSet.length;
-    //    return this.colorSet[this.colorSetIndex];
-    //}
 
     Chart.prototype.renderColumn = function (plotUnit) {
 
@@ -4716,7 +4703,7 @@
         startAngle = startAngle * Math.PI / 180;
         arcAngles.push(startAngle);
 
-        var colorPallet = this.colorSet;
+        var colorPallet = this._selectedColorSet;
         var labelRadius = (Math.min(plotArea.width, plotArea.height) * 0.5);
 
         //   var color = dataSeries.dataPoints[i].color ? dataSeries.dataPoints[i].color : dataSeries.color ? dataSeries.color : colorPallet[(i % colorPallet.length)];
@@ -4731,8 +4718,17 @@
 
 
             labelTexts.push(labelText);
+            var indexLabelFontStyle = dataSeries.dataPoints[i].indexLabelFontStyle ? dataSeries.dataPoints[i].indexLabelFontStyle : dataSeries.indexLabelFontStyle;
+            var indexLabelFontWeight = dataSeries.dataPoints[i].indexLabelFontWeight ? dataSeries.dataPoints[i].indexLabelFontWeight : dataSeries.indexLabelFontWeight;
+            var indexLabelFontSize = dataSeries.dataPoints[i].indexLabelFontSize ? dataSeries.dataPoints[i].indexLabelFontSize : dataSeries.indexLabelFontSize;
+            var indexLabelFontFamily = dataSeries.dataPoints[i].indexLabelFontFamily ? dataSeries.dataPoints[i].indexLabelFontFamily : dataSeries.indexLabelFontFamily;
 
+            ctx.save();
+            ctx.font = indexLabelFontStyle + " " + indexLabelFontWeight + " " + indexLabelFontSize + "px " + indexLabelFontFamily;
             var labelLength = ctx.measureText(labelTexts[i]).width;
+
+            ctx.restore();
+
             labelLengths.push(labelLength);
 
             total += Math.abs(dataSeries.dataPoints[i].y);   // considering negative values as positive
@@ -4917,7 +4913,8 @@
             that.ctx.translate(plotAreaCenter.x, plotAreaCenter.y);  // translating the context to center of plot area.
             that._eventManager.ghostCtx.translate(plotAreaCenter.x, plotAreaCenter.y); // translating the context of ghost canvas to center of plot area.
 
-            that.ctx.fillStyle = "#FFFFFF";
+            //that.ctx.fillStyle = "#FFFFFF";
+            that.ctx.fillStyle = that.backgroundColor ? that.backgroundColor : "white";
             that.ctx.fillRect(-plotArea.width / 2, -plotArea.height / 2, plotArea.width, plotArea.height);
             if (that.animationEnabled === true)
                 var fps = 60;
@@ -5035,7 +5032,8 @@
 
                 //TBI: Logic to restore plotArea background color while rendering.
 
-                that.ctx.fillStyle = "#FFFFFF";
+                //that.ctx.fillStyle = "#FFFFFF";
+                that.ctx.fillStyle = that.backgroundColor ? that.backgroundColor : "white";
 
                 that.ctx.fillRect(-plotArea.width / 2, -plotArea.height / 2, plotArea.width, plotArea.height);
 
@@ -5131,7 +5129,8 @@
                 animationParameter.isAnimating--;
                 //TBI: Logic to restore plotArea background color while rendering.
 
-                that.ctx.fillStyle = "#FFFFFF";
+                //that.ctx.fillStyle = that._options;
+                that.ctx.fillStyle = that.backgroundColor ? that.backgroundColor : "white";
                 that.ctx.fillRect(-plotArea.width / 2, -plotArea.height / 2, plotArea.width, plotArea.height);
 
                 for (var i = 0; i < noDataPoints; i++) {
@@ -8209,11 +8208,14 @@
 
             this.render = function () { _chart.render() };
             this.options = _chart._options;
+        },
+        addColorSet: function (name, colorSet) {
+            colorSets[name] = colorSet;
         }
 
     }
 
-    CanvasJS.Chart.version = "1.0.0 Beta 2";
+    CanvasJS.Chart.version = "1.0.0 Beta 3";
     window.CanvasJS = CanvasJS;
     //#endregion Public API
 
