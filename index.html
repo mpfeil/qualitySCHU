@@ -337,17 +337,23 @@
 								</div>
 						    </div>
 						    <div class="span6">
-							    <h4>Attribute</h4>
-							    <select id="example1">
-							        <option value="temperature">Temperatur</option>
-							        <option value="humidity">Luftfeuchtigkeit</option>
-							        <option value="no">NO</option>
-							        <option value="no2">NO<sub>2</sub></option>
-							        <option value="wv">Windgeschwindigkeit</option>
-							        <option value="so2">SO<sub>2</sub></option>
-							        <option value="ozone">Ozon</option>
-							        <option value="pm10">PM10</option>
-							    </select>
+						    	<h4>Attribute</h4>
+						    	<div class="btn-group" id="multiselect" data-toggle="button">
+								 	<a id="dropdown-multiselect" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								    	None selected
+								    	<span class="caret"></span>
+								  	</a>
+								  	<ul id="multiselect-menu" class="dropdown-menu dropdown-menu-form">
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperatur</input></label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Luftfeuchtigkeit</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no">NO</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Windgeschwindigkeit</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozon</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">PM10</label></a></li>
+								  	</ul>
+								</div>
 							</div>
 						</div>	    			
 			            <hr>
@@ -385,7 +391,6 @@
     	<script src="js/canvasjs/canvasjs.min.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
     	<script src="http://d23cj0cdvyoxg0.cloudfront.net/cosmjs-1.0.0.min.js"></script> 
-    	<script src="js/bootstrap-multiselect/bootstrap-multiselect.js"></script>
     	<script src="js/bootstrap-wizard/src/bootstrap-wizard.js"></script>
     	<script src="js/spin.js"></script>
     	<script src="js/leaflet.spin.js"></script>

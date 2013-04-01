@@ -171,11 +171,69 @@ $('#myModal').on('hidden', function(){
 	//TODO:Clear settings
 });
 
-$('#example1').multiselect({
-	buttonClass: 'btn btn-small',
-	onChange:function(element, checked){
-        updateDiagram(element,checked);
-    }
+$('.dropdown-menu').on('click', function(e){
+	if($(this).hasClass('dropdown-menu-form')){
+	    e.stopPropagation();
+	}
+});
+
+var checkedValues = 0;
+$('.checkbox').on('click', function(e){
+	if (e.target.checked) {
+		checkedValues ++;
+	}
+	else {
+		if (e.target.control)
+		{
+			checkedValues ++;
+			checkedValues --;		
+		}
+		else
+		{
+			checkedValues--;	
+		}
+	}
+	var caption = "";
+	$('.btn-group input[type="checkbox"]').each(function(){
+		if (this.checked) 
+		{
+			if (caption == "")
+			{
+				caption = caption + $(this).context.parentElement.innerText;
+				console.log(caption);
+			}
+			else {
+				caption = caption +","+$(this).context.parentElement.innerText;	
+				console.log(caption);
+			}
+		}
+		if (caption == "")
+		{
+			$('#dropdown-multiselect').text("None selected ").append('<span class="caret"></span>');	
+		}
+		else
+		{
+			$('#dropdown-multiselect').text(caption+" ").append('<span class="caret"></span>');	
+		}
+	});
+	
+	if (checkedValues == 2) {
+		$('.btn-group input[type="checkbox"]').each(function(){
+			if (!this.checked) 
+			{
+				this.disabled = true;
+			}
+		});
+	}
+	else
+	{
+		$('.btn-group input[type="checkbox"]').each(function(){
+			if (this.disabled) 
+			{
+				this.disabled = false;
+			}
+		});	
+	}
 });
 
 var options = {};

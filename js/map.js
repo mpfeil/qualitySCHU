@@ -2,6 +2,7 @@ var map = L.map('map').setView([51.966667, 7.633333], 6);
 var data;
 var data2;
 var checkedStation;
+var selectedMarker;
 
 //Data Array for Diagram. Contains the single dataSeries
 var diagramData = [];
@@ -22,8 +23,20 @@ var lanuv = L.icon({
     iconAnchor: [25, 40],
     popupAnchor: [-3, -40],
 });
+var lanuv_selected = L.icon({
+    iconUrl: 'img/lanuv_selected.png',
+    iconSize: [41, 41],
+    iconAnchor: [25, 40],
+    popupAnchor: [-3, -40],
+});
 var aqe = L.icon({
     iconUrl: 'img/aqe.png',
+    iconSize: [41, 41],
+    iconAnchor: [25, 40],
+    popupAnchor: [-3, -40],
+});
+var aqe_selected = L.icon({
+    iconUrl: 'img/aqe_selected.png',
     iconSize: [41, 41],
     iconAnchor: [25, 40],
     popupAnchor: [-3, -40],
@@ -73,18 +86,18 @@ map.on('locationerror', onLocationError);
 clusters.on('beforeDataLoad',   function() { layer.fire('data:loading'); });
 clusters.on('dataLoadComplete', function() { layer.fire('data:loaded'); });
 
-marker.on('click', function(e){
-	console.log(e);
-});
-
 clusters.on('click', function(e){
+	if (selectedMarker!= null && isNaN(selectedMarker.options.title)) {selectedMarker.setIcon(lanuv)} else if (selectedMarker!= null && Number(selectedMarker.options.title)) {selectedMarker.setIcon(aqe)};
 	checkedStation = e.layer.options.title;
+	selectedMarker = e.layer;
 	if(isNaN(checkedStation))
 	{
 		$('.carousel').carousel(1);
+		selectedMarker.setIcon(lanuv_selected);
 	}
 	else
 	{
+		selectedMarker.setIcon(aqe_selected);
 		$('.carousel').carousel(0);
 		$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
 		$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
@@ -233,9 +246,35 @@ function addToDiagram(elem)
 	chart.render();
 }
 
-
 function updateDiagram(element,checked)
 {	
+	// var options = 0;
+	// console.log(element);
+	// for (var i = 0; i < element.context.length - 1; i++) 
+	// {
+	// 	if (element.context[i].selected) {options = options + 1};
+	// };
+
+	// if (options == 2) {
+	// 	console.log("options == 2")
+	// 	for (var i = 0; i < element.context.length; i++) 
+	// 	{
+	// 	 	if (element.context[i].selected == false) 
+	// 	 	{
+	// 	 		element.context[i].disabled = true;
+	// 	 	}
+	// 	};	
+	// }
+	// else {
+	// 	for (var i = 0; i < element.context.length; i++) 
+	// 	{
+	// 	 	if (element.context[i].disabled == true) 
+	// 	 	{
+	// 	 		element.context[i].disabled = false;
+	// 	 	}
+	// 	};
+	// }
+	// $('#example1').multiselect('rebuild').button('toggle');
 	if(checked)
 	{
 		addToDiagram(element.val())
