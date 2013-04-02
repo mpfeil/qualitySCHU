@@ -8,14 +8,14 @@ import logging
 import re
 import json
 import time
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
-hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
+hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
@@ -48,8 +48,8 @@ def getStationsOfSOS():
 def insertObservation(station,values):
     
     one_hour_from_now = datetime.now() + timedelta(hours=3)
-    starttime = '{:%Y-%m-%dT%H:00:00+01}'.format(datetime.now())
-    endtime = '{:%Y-%m-%dT%H:30:00+01}'.format(one_hour_from_now)
+    starttime = '{:%Y-%m-%dT%H:00:00+02}'.format(datetime.now())
+    endtime = '{:%Y-%m-%dT%H:30:00+02}'.format(one_hour_from_now)
     
     insert_Observation = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:InsertObservation\n\
@@ -151,6 +151,7 @@ def insertObservation(station,values):
     headers = {"Content-type": "application/raw", "Accept": "text/plain"}
     request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/lanuv",insert_Observation,headers)
     handler = urllib2.urlopen(request)
+    print handler.read()
     logger.info(handler.read())
 
 if __name__ == '__main__':
@@ -163,11 +164,15 @@ if __name__ == '__main__':
         soup = BeautifulSoup(response)
         
         localtime = time.localtime(time.time())
-        
+        print localtime
+        print str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
         if str(localtime[3]) == '00':
             search = "24:00"
         else:
-            search = str(localtime[3])+":00"
+            if str(time.strftime("%z", localtime)) == "+0200":
+                search = str(localtime[3]-1)+":00"
+            else:
+                search = str(localtime[3])+":00"
         print search
         try:
             rows = soup.find('td', text = re.compile(search), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
@@ -181,8 +186,9 @@ if __name__ == '__main__':
             rfeu = rows[8].getText().lstrip()
             so2 = rows[9].getText().lstrip()
             staub = rows[10].getText().lstrip()
-            iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00+01", localtime)) 
-            logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
+            iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
+            print iso_datetime; 
+            logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]-1) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
             values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
             print values
             insertObservation(stations[i],values)
