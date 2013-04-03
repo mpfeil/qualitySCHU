@@ -8,14 +8,16 @@ import logging
 import re
 import json
 import time
-from bs4 import BeautifulSoup
+import datetime
+import dateutil.tz
+from BeautifulSoup import BeautifulSoup
 from datetime import datetime, timedelta
 
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
-hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
+hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
@@ -158,41 +160,62 @@ def insertObservation(station,values):
 if __name__ == '__main__':
     logger.info("Parse process started")
     
+    'Build correct timezone offset'
+    localtz = dateutil.tz.tzlocal()
+    localoffset = localtz.utcoffset(datetime.now())
+    localoffset_in_hours = (localoffset.days * 86400 + localoffset.seconds) / 3600
+    if localoffset_in_hours >= 0:
+        if localoffset_in_hours > 10:
+            localoffset_in_hours = "+"+str(localoffset_in_hours)
+        else:
+            localoffset_in_hours = "+0"+str(localoffset_in_hours)
+    if localoffset_in_hours < 0:
+        if localoffset_in_hours > 10:
+            localoffset_in_hours = "-"+str(localoffset_in_hours)
+        else:
+            localoffset_in_hours = "-0"+str(localoffset_in_hours)
+    
+    localtime = time.localtime(time.time())
+    #print localtime
+    #print str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
+    iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00", localtime))
+    iso_datetime = iso_datetime+localoffset_in_hours
+    search_for = str(time.strftime("%H", localtime))+":00"
+    
     stations = getStationsOfSOS()
     
     for i in range(len(stations)):
         response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()    
         soup = BeautifulSoup(response)
-        
-        localtime = time.localtime(time.time())
-        print localtime
-        print str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
-        if str(localtime[3]) == '00':
-            search = "24:00"
-        else:
-            if str(time.strftime("%z", localtime)) == "+0200":
-                search = str(localtime[3]-1)+":00"
-            else:
-                search = str(localtime[3])+":00"
-        print search
+
         try:
-            rows = soup.find('td', text = re.compile(search), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
-            
-            ozon = rows[2].getText().lstrip()
-            no = rows[3].getText().lstrip()
-            no2 = rows[4].getText().lstrip()
-            ltem = rows[5].getText().lstrip()
-            wri = rows[6].getText().lstrip()
-            wges = rows[7].getText().lstrip()
-            rfeu = rows[8].getText().lstrip()
-            so2 = rows[9].getText().lstrip()
-            staub = rows[10].getText().lstrip()
-            iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
-            #print iso_datetime; 
-            logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]-1) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
-            values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
-            #print values
-            insertObservation(stations[i],values)
+            if localoffset_in_hours == "+02" and search_for == "01:00":
+                search_for = "24:00"
+            if localoffset_in_hours == "+01" and search_for == "00:00":
+                search_for = "24:00"
+            rows = soup.find('td', text = re.compile(search_for), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
         except AttributeError as aE:
-            print aE
-            logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
+            print "first exception"
+            one_hour_back = datetime.now() - timedelta(hours=1)
+            one_hour_back = '{:%H:00}'.format(one_hour_back)
+            search_for = one_hour_back
+            try:
+                rows = soup.find('td', text = re.compile(search_for), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
+            except:
+                print aE
+                logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
+            
+        ozon = rows[2].getText().lstrip()
+        no = rows[3].getText().lstrip()
+        no2 = rows[4].getText().lstrip()
+        ltem = rows[5].getText().lstrip()
+        wri = rows[6].getText().lstrip()
+        wges = rows[7].getText().lstrip()
+        rfeu = rows[8].getText().lstrip()
+        so2 = rows[9].getText().lstrip()
+        staub = rows[10].getText().lstrip()
+        
+        logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+search_for+" : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
+        values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
+        print values
+        insertObservation(stations[i],values)
