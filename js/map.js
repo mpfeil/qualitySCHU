@@ -171,7 +171,7 @@ function updateTable(start,end)
         dataType: "json",
         success:function(data3){
         	data2 = data3;
-        	// console.log(data2);
+        	console.log(data2);
         	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
         	{
         		newtablerow = "";

@@ -47,9 +47,10 @@ def getStationsOfSOS():
 
 def insertObservation(station,values):
     
-    one_hour_from_now = datetime.now() + timedelta(hours=3)
+    three_hours_from_now = datetime.now() + timedelta(hours=3)
+    
     starttime = '{:%Y-%m-%dT%H:00:00+02}'.format(datetime.now())
-    endtime = '{:%Y-%m-%dT%H:30:00+02}'.format(one_hour_from_now)
+    endtime = '{:%Y-%m-%dT%H:30:00+02}'.format(three_hours_from_now)
     
     insert_Observation = '<?xml version="1.0" encoding="UTF-8"?>\n\
 <sos:InsertObservation\n\
@@ -187,10 +188,10 @@ if __name__ == '__main__':
             so2 = rows[9].getText().lstrip()
             staub = rows[10].getText().lstrip()
             iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
-            print iso_datetime; 
+            #print iso_datetime; 
             logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+str(localtime[3]-1) +":00 : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
             values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
-            print values
+            #print values
             insertObservation(stations[i],values)
         except AttributeError as aE:
             print aE
