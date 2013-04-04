@@ -24,7 +24,9 @@ errors = []
 def getAQEFeeds():
     try:
         logger.info("Checking COSM API for AQEs...")
-        cosm = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&status=live&per_page=150").read()
+        
+        cosm = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&order=relevance&status=live&per_page=150").read()
+        #cosm = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&status=live&per_page=150").read()
         cosm_decoded_data = json.loads(cosm)
         logger.info("Found "+str(cosm_decoded_data["totalResults"])+" feeds via the cosm API.")
         logger.info("Checking SOS for exisiting AQEs...")
@@ -57,7 +59,7 @@ def getAQEFeeds():
         print urlErr
     
     logger.info(str(len(update))+" can be updated!")
-    logger.info(str(len(insert))+" must be insert!")
+    logger.info(str(len(insert))+" must be inserted!")
     logger.warning(str(len(errors))+" founded! Exception is following...")
     for kE in errors:
         logger.warning(kE)
