@@ -1,6 +1,6 @@
 ## Purpose: Validation of air quality data
 ## ------------------------------------------------------------------------------
-## RODBC package ist used to get and prepare the data from the database and to
+## RODBC package is used to get and prepare the data from the database and to
 ## update the database after validation
 ## Validation is done using the findOutlier function
 ## ------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 ws <- 31
 
 
-## Get non-validated measurements plus of each foi by joining following tables:
+## Get non-validated measurements of each foi by joining following tables:
 ## procedures, event_time, measures
 for(i in 1:length(fois[[1]])){
   ## Get the non-validated data
@@ -109,8 +109,8 @@ for(i in 1:length(fois[[1]])){
   for(j in 1:length(obspr[[1]])){
     res<-rawData[rawData$id_opr_fk==obspr[j,1],]
     
-    ## skip to next observed property if there's no data for the current property
-    if (nrow(res)==0) next
+    ## skip to next observed property if there's not enough data for the current property
+    if (nrow(res)<ws+1) next
     
     ## helper row needed to identify the very first k=ws measurments which can't be validated
     helper<-sqlQuery(ch, paste("SELECT 
