@@ -42,11 +42,10 @@
 			        		<li><a id="download" role="button" data-toggle="modal">Download</a></li>
 			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content=" qualitySCHU is a project developed by students at ifgi, Münster, 
-                                                            which allows everyone to retrieve and visualize air quality data captured by so called air quality eggs, as well as data 
-                                                            provided by a german state agency called LANUV.">About</a></li>
-                                                                  <li><a href="#use" id="use" rel="popover" data-content="Please zoom into the map and choose one of the symbols displayed on the map.
-                                                                  The egg icon visualizes air quality egg data measuring stations, the radio tower icon LANUV stations. Further information can be found in the FAQ section.</p>
-                                                                  Current measured values will be displayed below the map. To view a table or a diagram of the data, please click on one of the corresponding symbols.">Use</a></li>                            
+                            which allows everyone to retrieve and visualize air quality data captured by so called air quality eggs, as well as data provided by a german state agency called LANUV.">About</a></li>
+                          	<li><a href="#use" id="use" rel="popover" data-content="Please zoom into the map and choose one of the symbols displayed on the map.
+                          	The egg icon visualizes air quality egg data measuring stations, the radio tower icon LANUV stations. Further information can be found in the FAQ section.
+                          	Current measured values will be displayed below the map. To view a table or a diagram of the data, please click on one of the corresponding symbols.">Use</a></li>                            
 						</ul>
 					</div>
 				</div>
@@ -98,38 +97,45 @@
 			    </div>
 			    <div class="item">
 					<div class="row-fluid" id="lanuv">
-			    		<div class="span12 offset1">
+			    		<div class="span12">
 				    		<div class="row-fluid">
-					    		<div class="span4">
+					    		<div class="span6">
 						    		<div class="row-fluid">
-							    		<div class="span4">
+							    		<div class="span3">
 								    		<img id="overview" class="img-rounded" src="img/info.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<h5>Overview</h5>
 								    	</div>
-								    	<div class="span4">
-									    	<img id="lanuvO3" class="img-rounded" src="img/o3.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
-									    </div>
-									    <div class="span4">
-									    	<img id="lanuvCO" class="img-rounded" src="img/co.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
-									    </div>
-									</div>
-								</div>
-								<div class="span4">
-						    		<div class="row-fluid">
-						    			<div class="span4">
+								    	<div class="span3">
 									    	<img id="lanuvTempHum" class="img-rounded" src="img/temperature.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Temperature / Humidity</h5>
 									    </div>
-							    		<div class="span4">
-								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
-								    	</div>
-								    	<div class="span4">
-									    	<img id="lanuvDust" class="img-rounded" src="img/dust.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    <div class="span3">
+									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Nitrogen Dioxide</h5>
+									    </div>
+									    <div class="span3">
+									    	<img id="lanuvCO" class="img-rounded" src="img/co.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Carbon Monoxide</h5>
 									    </div>
 									</div>
 								</div>
-								<div class="span4">
-									<div class="row-fluid">
-										<div class="span4">
-									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+								<div class="span6">
+						    		<div class="row-fluid">
+							    		<div class="span3">
+								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<h5>Sulfur Dioxide</h5>
+								    	</div>
+								    	<div class="span3">
+									    	<img id="lanuvDust" class="img-rounded" src="img/dust.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Dust</h5>
+									    </div>
+									    <div class="span3">
+									    	<img id="lanuvO3" class="img-rounded" src="img/o3.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Ozone</h5>
+									    </div>
+									    <div class="span3">
+									    	<img id="lanuvWV" class="img-rounded" src="img/wv.svg" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4>
+									    	<h5>Wind velocity</h5>
 									    </div>
 									</div>
 								</div>
@@ -311,7 +317,7 @@
 						<div class="accordion-heading">
 							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseNine">Has the visualized data been validated?</a>
 						</div>
-						<div id="collapseEight" class="accordion-body collapse">
+						<div id="collapseNine" class="accordion-body collapse">
 							<div class="accordion-inner">
 
 							</div>
@@ -321,7 +327,7 @@
 						<div class="accordion-heading">
 							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">How does the data validation work?</a>
 						</div>
-						<div id="collapseEight" class="accordion-body collapse">
+						<div id="collapseTen" class="accordion-body collapse">
 							<div class="accordion-inner">
 
 							</div>

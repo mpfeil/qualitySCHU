@@ -1,6 +1,7 @@
 var chart;
 
-$('#about').popover({placement:'bottom', trigger:'hover'})
+$('#about').popover({placement:'bottom', trigger:'click'})
+$('#use').popover({placement:'bottom', trigger:'click'})
 
 $(".img-rounded").hover(
 	function(){
