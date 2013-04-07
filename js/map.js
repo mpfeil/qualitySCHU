@@ -254,25 +254,44 @@ function addToDiagram(elems,start,end)
         dataType: "json",
         success:function(data3){
         	data2 = data3;
-        	var dataSeries2 = { type: "line", markerType: "circle",};
-		    var dataPoints2 = [];
+        	var dataSeries = { type: "line", markerType: "circle",};
+		    var dataPoints = [];
+		    if(elems.length == 2)
+		    {
+		    	var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
+		    	var dataPoints2 = [];	
+		    }
 		    diagramData = [];
         	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
         	{
         		td = data2.data[0].result.DataArray.values[i];
         		var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
+        		if(td.length > 3)
+        		{
+        			var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
+	        		dateTime = new Date(td[0]);
+	        		dataPoints2.push({
+			          x: dateTime,
+			          y: yValue2,
+			          markerType: "circle"                
+			        });	
+        		}
+        		var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
         		dateTime = new Date(td[0]);
-        		dataPoints2.push({
+        		dataPoints.push({
 		          x: dateTime,
 		          y: yValue,
 		          markerType: "circle"                
 		        });
         	}
 
-		     dataSeries2.dataPoints = dataPoints2; 
-
+		     dataSeries.dataPoints = dataPoints; 
 		     diagramData.push(dataSeries); 
-		     diagramData.push(dataSeries2);
+		     if(elems.length == 2)
+		     {
+		     	dataSeries2.dataPoints = dataPoints2;
+		     	diagramData.push(dataSeries2);	
+		     }
 		     chart.options.data = diagramData;	
 			 chart.render();
         }
