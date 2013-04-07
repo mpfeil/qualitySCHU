@@ -97,9 +97,28 @@ clusters.on('click', function(e){
 	selectedMarker = e.layer;
 	if(isNaN(checkedStation))
 	{
+		eventtime_start = Date.today().setTimeToNow().addHours(-1).toString('yyyy-MM-ddTHH:mm:ss')+getTz(Date.today().setTimeToNow().addHours(-1).getTimezoneOffset());
+		eventtime_end = Date.today().setTimeToNow().toString('yyyy-MM-ddTHH:mm:ss')+getTz(Date.today().setTimeToNow().getTimezoneOffset());
 		$('.carousel').carousel(1);
 		selectedMarker.setIcon(lanuv_selected);
 		selectedService = "lanuv";
+		jQuery.ajax({
+			url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+	        type: 'get',
+	        dataType: "json",
+	        success:function(data3){
+	        	console.log(data3);
+	        	console.log(data3.data[0].result.DataArray.values[0][1]);
+	        	$('#lanuvTempForm').text(data3.data[0].result.DataArray.values[0][13]);
+	        	$('#lanuvHumForm').text(data3.data[0].result.DataArray.values[0][1]);
+	        	$('#lanuvNO2Form').text(data3.data[0].result.DataArray.values[0][5]);
+	        	$('#lanuvNOForm').text(data3.data[0].result.DataArray.values[0][3]);
+	        	$('#lanuvSO2Form').text(data3.data[0].result.DataArray.values[0][11]);
+	        	$('#lanuvDustForm').text(data3.data[0].result.DataArray.values[0][9]);
+	        	$('#lanuvO3Form').text(data3.data[0].result.DataArray.values[0][7]);
+	        	$('#lanuvWVForm').text(data3.data[0].result.DataArray.values[0][15]);
+	        }
+		});
 	}
 	else
 	{
