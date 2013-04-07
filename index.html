@@ -319,16 +319,54 @@
 						</div>
 						<div id="collapseNine" class="accordion-body collapse">
 							<div class="accordion-inner">
+							<p>
+							In the table view you can easy distinguish validated data from non-validated data by the background color of the cell.
+							</p>
+							<p><b>Yellow:</b> not validated</p>							
+							<p><b>Green:</b> validated and no outlier</p>
+							<p><b>Red:</b> validated and outlier</p>
+							<p>
+							<br/>
+							<img src = "https://raw.github.com/mpfeil/qualitySCHU/master/Screenshots/table_color_code.PNG"
+							alt = "Table view" />
+							</p>
 
 							</div>
 						</div>
 					</div>
 					<div class="accordion-group">
 						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">How does the data validation work?</a>
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">What is meant by validation and how does it work?</a>
 						</div>
 						<div id="collapseTen" class="accordion-body collapse">
 							<div class="accordion-inner">
+							<p>
+							In our case validation basically means finding and labeling outliers 
+							in the data we get from LANUV and from the AQE's. This means no data will be deleted or changed!
+							</p>
+							<p>
+							It's also important to note that measurements labeled as outliers are not always errors 
+							in the measurements process. They may be valid observations indicating unusual events with 
+							unusual values which are labeled by the validation algorithm.
+							</p>
+							<p>
+							Outlier detection is done using the <a href="http://www.r-project.org/" target="_blank">R statistics software</a>.
+							</p>
+							<p>
+							It basically works like this: 
+							</p>
+							<p>
+							First of all the running <a href="http://en.wikipedia.org/wiki/Median" target="_blank">median</a> of a set of 
+							non-validated measurements is calculated. 
+							The window size depends on the used data (e.g. LANUV or AQE).
+							</p>
+							<p>
+							For the validation itself we use a leftsided window ranging from x<SUB>i</SUB>  to x<SUB>i-window_size</SUB>. 
+							From the values inside this window we compute the <a href="http://en.wikipedia.org/wiki/Interquartile_range" target="_blank">interquartile range</a>.
+							Starting from the most recent measurement we check if the measured value is smaller than 
+							the <b>running median &#x2212; 1,5 &#215; interquartile range </b> or larger than the <b>running median + 1,5 &#215; interquartile range</b>. 
+							If that's the case the measurement is labeled as outlier.
+							</p>
 
 							</div>
 						</div>
@@ -365,7 +403,7 @@
 		    		<div class="tab-pane fade in" id="table">
 		    			<form class="form-horizontal">
 							<div class="control-group">
-								<label class="control-label" for="reportrangetable">Date:</label>
+								<label class="control-label" for="reportrangetable">Zeitraum:</label>
 								<div class="controls">
 									<div id="reportrangetable">
 										<i class="icon-calendar icon-large"></i>
@@ -378,15 +416,15 @@
 		    			<table class="table">
 			    			<thead>
 			    				<tr>
-			    					<th>Date</th>
-			    					<th>Humidity (%)</th>
+			    					<th>Datum</th>
+			    					<th>Luftfeuchtigkeit (%)</th>
 			    					<th>NO (µg/m<sup>3</sup>)</th>
 			    					<th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Ozone (µg/m<sup>3</sup>)</th>
-			    					<th>Dust (µg/m<sup>3</sup>)</th>
+			    					<th>Ozon (µg/m<sup>3</sup>)</th>
+			    					<th>PM10 (µg/m<sup>3</sup>)</th>
 			    					<th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Temperature (°C)</th>
-			    					<th>Wind velocity (m/s)</th>
+			    					<th>Temperatur (°C)</th>
+			    					<th>Windgeschwindigkeit (m/s)</th>
 			    				</tr>
 			    			</thead> 
 			    			<tbody id="tablebody">
@@ -396,7 +434,7 @@
 		    		<div class="tab-pane fade-in" id="diagram">	
 		    			<div class="row-fluid">
 			    			<div class="span6">
-			    				<h4>Date</h4>
+			    				<h4>Zeitraum</h4>
 			    				<div id="reportrangediagram" class="pull-left">
 								    <i class="icon-calendar icon-large"></i>
 								    <span></span> <b class="caret"></b>
@@ -410,14 +448,14 @@
 								    	<span class="caret"></span>
 								  	</a>
 								  	<ul id="multiselect-menu" class="dropdown-menu dropdown-menu-form">
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperatur</input></label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Luftfeuchtigkeit</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no">NO</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Windgeschwindigkeit</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozon</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">Dust</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">PM10</label></a></li>
 								  	</ul>
 								</div>
 							</div>
