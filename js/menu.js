@@ -101,40 +101,53 @@ $(".img-rounded").click(function(){
 
 $('#myCarousel').carousel({interval:false});
 
+var todaystart = Date.parse("today");
+var todayend = Date.parse("next day");
+
 $('#myModal').on('shown', function(){
-
+	var diagramDataDummy = [];
 	chart = new CanvasJS.Chart("chartContainer",
-    {
-	    zoomEnabled: true,
-	    legend:{
-		    horizontalAlign:"center",
-		    verticalAlign:"top"
-        },
+	{
+		zoomEnabled: true,
+		title:{
+			// text: "Test Title",
+			fontSize: 30,
+		},
 		axisX:{
-		labelAngle: 30,
+			labelAngle: -30,
+			gridColor: "Silver",
+			tickColor: "silver",
 		},
-		
-		axisY :{
-		includeZero:true
+		theme: "theme1",
+		axisY: {
+			gridColor: "Silver",
+			tickColor: "silver",
+			titleFontColor: "LightCoral",
+			title: "Temperatur in deg C",
 		},
-		
-		data: diagramData,
+		axisY2:{ 
+				title: "Luftfeuchtigkeit in %",
+				gridColor: "Silver",
+			tickColor: "silver",
+    		titleFontColor: "LightSeaGreen",
+			},
 
-    });
+		data: diagramDataDummy, 
+	});
 
-    var dataSeries = { type: "line" };
-	var dataPoints = [];
-	
-	dataSeries.dataPoints = dataPoints;
-	diagramData.push(dataSeries);
+	var dataSeriesDummy = { type: "line" };
+	var dataPointsDummy = [];
+
+	dataSeriesDummy.dataPoints = dataPointsDummy;
+	diagramDataDummy.push(dataSeriesDummy);
 
     chart.render();
 
 	$('#reportrangetable').daterangepicker(
     {
         ranges: {
-            'Today': ['today', 'today'],
-            'Yesterday': ['yesterday', 'yesterday'],
+            'Today': ['today', 'next day'],
+            'Yesterday': ['yesterday', 'today'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -150,8 +163,8 @@ $('#myModal').on('shown', function(){
     $('#reportrangediagram').daterangepicker(
     {
         ranges: {
-            'Today': ['today', 'today'],
-            'Yesterday': ['yesterday', 'yesterday'],
+            'Today': ['today', 'next day'],
+            'Yesterday': ['yesterday', 'today'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -159,17 +172,28 @@ $('#myModal').on('shown', function(){
         }
     },
     function(start, end) {
+    	console.log(start);
+    	console.log(end);
+    	todaystart = start;
+    	todayend = end;
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
         $("td").empty();
-        updateDiagram();
+        buildDiagram();
     });
     
     $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
     $('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
 })
 
+function buildDiagram()
+{
+	addToDiagram(elements,todaystart,todayend);	
+}
+
 $('#myModal').on('hidden', function(){
 	//TODO:Clear settings
+	elements = [];
+	checkedValues = 0;
 });
 
 $('.dropdown-menu').on('click', function(e){
@@ -179,6 +203,7 @@ $('.dropdown-menu').on('click', function(e){
 });
 
 var checkedValues = 0;
+var elements = [];
 $('.checkbox').on('click', function(e){
 	if (e.target.checked) {
 		checkedValues ++;
@@ -187,25 +212,36 @@ $('.checkbox').on('click', function(e){
 		if (e.target.control)
 		{
 			checkedValues ++;
-			checkedValues --;		
+			checkedValues --;
 		}
 		else
 		{
-			checkedValues--;	
+			checkedValues--;
 		}
 	}
 	var caption = "";
 	$('.btn-group input[type="checkbox"]').each(function(){
 		if (this.checked) 
 		{
+			//Push checked elements to array if the not exsits in the array
+			if (elements.indexOf($(this)[0].value) == -1 )
+			{
+				elements.push($(this)[0].value);	
+			}
 			if (caption == "")
 			{
 				caption = caption + $(this).context.parentElement.innerText;
-				console.log(caption);
 			}
 			else {
 				caption = caption +","+$(this).context.parentElement.innerText;	
-				console.log(caption);
+			}
+		}
+		else 
+		{
+			//Pop not selected elements from array if they exsits in the array
+			if (elements.indexOf($(this)[0].value) > -1 )
+			{
+				elements.pop($(this)[0].value);	
 			}
 		}
 		if (caption == "")
@@ -235,6 +271,7 @@ $('.checkbox').on('click', function(e){
 			}
 		});	
 	}
+	buildDiagram();
 });
 
 var options = {};

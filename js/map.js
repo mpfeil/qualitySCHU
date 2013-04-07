@@ -7,16 +7,20 @@ var selectedMarker;
 
 //Data Array for Diagram. Contains the single dataSeries
 var diagramData = [];
+// var dataSeries = { type: "line", markerType: "circle"};
+// var dataPoints = [];
+// var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
+// var dataPoints2 = [];
 
 //Single dataSeries for diagram
-var temperature = {type: "line", lineThickness: 2, showInLegend: true, name: "Temperatur"};
-var no = {type: "line", lineThickness: 2, showInLegend: true, name: "NO"};
-var no2 = {type: "line", lineThickness: 2, showInLegend: true, name: "NO2"};
-var ozone = {type: "line", lineThickness: 2, showInLegend: true, name: "Ozon"};
-var pm10 = {type: "line", lineThickness: 2, showInLegend: true, name: "PM10"};
-var so2 = {type: "line", lineThickness: 2, showInLegend: true, name: "SO2"};
-var wv = {type: "line", lineThickness: 2, showInLegend: true, name: "Windgeschwindigkeit"};
-var humidity = {type: "line", lineThickness: 2, showInLegend: true, name: "Luftfeuchtigkeit"}; 
+// var temperature = {type: "line", lineThickness: 2, showInLegend: true, name: "Temperatur"};
+// var no = {type: "line", lineThickness: 2, showInLegend: true, name: "NO"};
+// var no2 = {type: "line", lineThickness: 2, showInLegend: true, name: "NO2"};
+// var ozone = {type: "line", lineThickness: 2, showInLegend: true, name: "Ozon"};
+// var pm10 = {type: "line", lineThickness: 2, showInLegend: true, name: "PM10"};
+// var so2 = {type: "line", lineThickness: 2, showInLegend: true, name: "SO2"};
+// var wv = {type: "line", lineThickness: 2, showInLegend: true, name: "Windgeschwindigkeit"};
+// var humidity = {type: "line", lineThickness: 2, showInLegend: true, name: "Luftfeuchtigkeit"}; 
 
 var lanuv = L.icon({
     iconUrl: 'img/lanuv.png',
@@ -222,47 +226,55 @@ function updateTable(start,end)
 	
 }
 
-function updateDiagram(element,checked)
-{	
-	if(checked)
-	{
-		addToDiagram(element.val())
-	}
-	else
-	{
-		removeFromDiagram(element.val());
-	}	 
-}
-
-function addToDiagram(elem)
+function addToDiagram(elems,start,end)
 {
-	console.log("add: "+elem);
-	var limit = 100000;    //increase number of dataPoints by increasing this
-	var y = 0;
-	var dataPoints = [];
-	eventtime_start = start.toString('yyyy-MM-ddT00:00:00+01:00');
-	eventtime_end = end.toString('yyyy-MM-ddT23:00:00+01:00');
+	query = "";
+	
+	//Build query string
+	for (var i = 0; i < elems.length; i++)
+	{
+		if (query == "")
+		{
+			query = "urn:ogc:def:parameter:x-istsos:1.0:meteo:air:" + elems[i];	
+		}
+		else
+		{
+			query = query + ",urn:ogc:def:parameter:x-istsos:1.0:meteo:air:" + elems[i]	
+		}
+	}
+	
+	//Setup timestamps for querying data
+	eventtime_start = start.toString('yyyy-MM-ddTHH:mm:ss');
+	eventtime_start = eventtime_start + getTz(start.getTimezoneOffset());
+	eventtime_end = end.toString('yyyy-MM-ddTHH:mm:ss');
+	eventtime_end = eventtime_end + getTz(end.getTimezoneOffset());
 	jQuery.ajax({
-        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:'+elem+'/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/'+query+'/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
         type: 'get',
         dataType: "json",
         success:function(data3){
         	data2 = data3;
+        	var dataSeries2 = { type: "line", markerType: "circle",};
+		    var dataPoints2 = [];
+		    diagramData = [];
         	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
         	{
-        		//TODO: Build Array for datapoints
+        		td = data2.data[0].result.DataArray.values[i];
+        		var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
+        		dateTime = new Date(td[0]);
+        		dataPoints2.push({
+		          x: dateTime,
+		          y: yValue,
+		          markerType: "circle"                
+		        });
         	}
+
+		     dataSeries2.dataPoints = dataPoints2; 
+
+		     diagramData.push(dataSeries); 
+		     diagramData.push(dataSeries2);
+		     chart.options.data = diagramData;	
+			 chart.render();
         }
     });
-	
-	temperature.dataPoints = dataPoints;
-	diagramData.push(temperature);	
-	chart.render();
-}
-
-function removeFromDiagram(elem)
-{
-	console.log("remove: "+elem);
-/* 	dataDiagram.pop(elem); */
-/* 	chart.render();	 */
 }
