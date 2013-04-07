@@ -109,10 +109,10 @@ $('#myModal').on('shown', function(){
 	chart = new CanvasJS.Chart("chartContainer",
 	{
 		zoomEnabled: true,
-		title:{
-			// text: "Test Title",
-			fontSize: 30,
-		},
+		// title:{
+		// 	// text: "Test Title",
+		// 	fontSize: 30,
+		// },
 		axisX:{
 			labelAngle: -30,
 			gridColor: "Silver",
@@ -122,12 +122,12 @@ $('#myModal').on('shown', function(){
 		axisY: {
 			gridColor: "Silver",
 			tickColor: "silver",
-			titleFontColor: "LightCoral",
-			title: "Temperatur in deg C",
+			titleFontColor: "LightSkyBlue",
+			title: "",
 		},
 		axisY2:{ 
-				title: "Luftfeuchtigkeit in %",
-				gridColor: "Silver",
+			title: "",
+			gridColor: "Silver",
 			tickColor: "silver",
     		titleFontColor: "LightSeaGreen",
 			},
@@ -172,8 +172,6 @@ $('#myModal').on('shown', function(){
         }
     },
     function(start, end) {
-    	console.log(start);
-    	console.log(end);
     	todaystart = start;
     	todayend = end;
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
@@ -187,7 +185,10 @@ $('#myModal').on('shown', function(){
 
 function buildDiagram()
 {
-	addToDiagram(elements,todaystart,todayend);	
+	if (elements != "")
+	{
+		addToDiagram(elements,todaystart,todayend);		
+	}
 }
 
 $('#myModal').on('hidden', function(){

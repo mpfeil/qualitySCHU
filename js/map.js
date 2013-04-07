@@ -8,7 +8,7 @@ var selectedMarker;
 //Data Array for Diagram. Contains the single dataSeries
 var diagramData = [];
 // var dataSeries = { type: "line", markerType: "circle"};
-// var dataPoints = [];
+var dataPoints = [];
 // var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
 // var dataPoints2 = [];
 
@@ -168,12 +168,10 @@ function updateTable(start,end)
 	eventtime_start = eventtime_start + getTz(start.getTimezoneOffset());
 	eventtime_end = end.toString('yyyy-MM-ddT23:00:00');
 	eventtime_end = eventtime_end + getTz(end.getTimezoneOffset());
-	// console.log(eventtime_start);
-	// console.log(eventtime_end);
 	
 	var td = new Array();
 	jQuery.ajax({
-        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
         type: 'get',
         dataType: "json",
         success:function(data3){
@@ -253,9 +251,9 @@ function addToDiagram(elems,start,end)
         type: 'get',
         dataType: "json",
         success:function(data3){
+        	dataPoints = [];
         	data2 = data3;
         	var dataSeries = { type: "line", markerType: "circle",};
-		    var dataPoints = [];
 		    if(elems.length == 2)
 		    {
 		    	var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
@@ -266,6 +264,7 @@ function addToDiagram(elems,start,end)
         	{
         		td = data2.data[0].result.DataArray.values[i];
         		var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
+        		var dataPointColor = (td[2] == 100) ? "#fcf8e3" : (td[2] == 101) ? "#f2dede" : (td[2] == 102) ? "#dff0d8" : "" ;
         		if(td.length > 3)
         		{
         			var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
@@ -273,27 +272,34 @@ function addToDiagram(elems,start,end)
 	        		dataPoints2.push({
 			          x: dateTime,
 			          y: yValue2,
-			          markerType: "circle"                
+			          markerType: "circle",
+			          markerSize:4,
+			          markerColor: dataPointColor               
 			        });	
         		}
-        		var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
         		dateTime = new Date(td[0]);
         		dataPoints.push({
-		          x: dateTime,
-		          y: yValue,
-		          markerType: "circle"                
+		        	x: dateTime,
+		          	y: yValue,
+		          	markerType: "circle",
+		          	markerSize:4,                
+		          	markerColor: dataPointColor
 		        });
         	}
 
-		     dataSeries.dataPoints = dataPoints; 
-		     diagramData.push(dataSeries); 
-		     if(elems.length == 2)
-		     {
-		     	dataSeries2.dataPoints = dataPoints2;
-		     	diagramData.push(dataSeries2);	
-		     }
-		     chart.options.data = diagramData;	
-			 chart.render();
+		    dataSeries.dataPoints = dataPoints;
+		    dataSeries.color = "LightSkyBlue";
+		    chart.options.axisY.title = elems[0]; 
+		    diagramData.push(dataSeries); 
+		    if(elems.length == 2)
+		    {
+		    	dataSeries2.dataPoints = dataPoints2;
+		     	diagramData.push(dataSeries2);
+		     	dataSeries2.color = "LightSeaGreen";
+		     	chart.options.axisY2.title = elems[1]; 
+		    }
+		    chart.options.data = diagramData;	
+			chart.render();
         }
     });
 }
