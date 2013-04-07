@@ -17,7 +17,7 @@ sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
-hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
+hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
@@ -78,9 +78,9 @@ def insertObservation(station,values):
       <swe:CompositPhenomenon dimension="9">\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:time:iso8601"/>\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity" />\n\
-        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no" />\n\
+        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2" />\n\
-        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv" />\n\
+        <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2" />\n\
         <swe:component xlink:href="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10" />\n\
@@ -106,7 +106,7 @@ def insertObservation(station,values):
                   </swe:Quantity>\n\
                 </swe:field>\n\
                 <swe:field name="nitrogen monoxide">\n\
-                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no">\n\
+                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono">\n\
                     <swe:uom code="mug"/>\n\
                   </swe:Quantity>\n\
                 </swe:field>\n\
@@ -116,7 +116,7 @@ def insertObservation(station,values):
                   </swe:Quantity>\n\
                   </swe:field>\n\
                   <swe:field name="wind velocity">\n\
-                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:neteo:air:wv">\n\
+                  <swe:Quantity definition="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv">\n\
                     <swe:uom code="m/s"/>\n\
                   </swe:Quantity>\n\
                   </swe:field>\n\
