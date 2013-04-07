@@ -17,7 +17,7 @@ sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
 logger = logging.getLogger('LANUV')
-hdlr = logging.FileHandler('/Users/matze/Downloads/logs/lanuv.log')
+hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
