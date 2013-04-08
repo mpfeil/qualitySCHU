@@ -48,6 +48,9 @@
                           	Current measured values will be displayed below the map. To view a table or a diagram of the data, please click on one of the corresponding symbols.">Use</a></li>                            
 						</ul>
 					</div>
+					<div class="control-group">
+					</div>
+					<span id="warningLoad" class="label pull-right label-warning" style="visibility:hidden;">COSM data not loaded. <a href="" onclick="add">Reload?</a></span>
 				</div>
 			</div>
 		</div>
@@ -82,11 +85,11 @@
 								<div class="span6">
 									<div class="row-fluid">
 										<div class="span6">
-											<img id="no2" class="img-rounded" src="img/no2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<img id="no2" class="img-rounded" src="img/no2.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="no2Form"></h4><h4 style="display:inline;" id="humForm">ppb</h4>
 											<h4>Nitrogen Dioxide</h4>
 										</div>
 										<div class="span6">
-											<img id="co" class="img-rounded" src="img/co.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppm</h4>
+											<img id="co" class="img-rounded" src="img/co.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="coForm"></h4><h4 style="display:inline;" id="humForm">ppb</h4>
 											<h4>Carbon Monoxide</h4>
 										</div>
 									</div>
@@ -102,39 +105,39 @@
 					    		<div class="span6">
 						    		<div class="row-fluid">
 							    		<div class="span3">
-								    		<img id="overview" class="img-rounded" src="img/info.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="overviewForm"></h4>
+								    		<img id="overview" class="img-rounded" src="img/info.png" style="width:60px; height:60px;"><h4 style="display:inline;" id="overviewForm"></h4>
 								    		<h5>Overview</h5>
 								    	</div>
 								    	<div class="span3">
-									    	<img id="lanuvTempHum" class="img-rounded" src="img/temperature.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvTempForm"></h5><h5 style="display:inline;" id="sepTempHum">°C /</h5><h5 style="display:inline;" id="lanuvHumForm"></h5><h5 style="display:inline;" id="lanuvSepHum">%</h5>
+									    	<img id="lanuvTempHum" class="img-rounded" src="img/temperature.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvTempForm"></h5><h5 style="display:inline;" id="sepTempHum">°C /</h5><h5 style="display:inline;" id="lanuvHumForm"></h5><h5 style="display:inline;" id="lanuvSepHum">%</h5>
 									    	<h5>Temperature / Humidity</h5>
 									    </div>
 									    <div class="span3">
-									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvNO2Form"></h5><h5 style="display:inline;" id="lanuvSepNO2Form">ppm</h5>
+									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvNO2Form"></h5><h5 style="display:inline;" id="lanuvSepNO2Form">µg/m<sup>3</sup></h5>
 									    	<h5>Nitrogen Dioxide</h5>
 									    </div>
 									    <div class="span3">
-									    	<img id="lanuvNO" class="img-rounded" src="img/co.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvNOForm"></h5><h5 style="display:inline;" id="humForm">ppm</h5>
-									    	<h5>Carbon Monoxide</h5>
+									    	<img id="lanuvNO" class="img-rounded" src="img/co.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvNOForm"></h5><h5 style="display:inline;" id="humForm">µg/m<sup>3</sup></h5>
+									    	<h5>Nitrogen Monoxide</h5>
 									    </div>
 									</div>
 								</div>
 								<div class="span6">
 						    		<div class="row-fluid">
 							    		<div class="span3">
-								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvSO2Form"></h5><h5 style="display:inline;" id="humForm">ppm</h5>
+								    		<img id="lanuvSO2" class="img-rounded" src="img/so2.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvSO2Form"></h5><h5 style="display:inline;" id="humForm">µg/m<sup>3</sup></h5>
 								    		<h5>Sulfur Dioxide</h5>
 								    	</div>
 								    	<div class="span3">
-									    	<img id="lanuvDust" class="img-rounded" src="img/dust.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvDustForm"></h5><h5 style="display:inline;" id="humForm">ppm</h5>
+									    	<img id="lanuvDust" class="img-rounded" src="img/dust.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvDustForm"></h5><h5 style="display:inline;" id="humForm">µg/m<sup>3</sup></h5>
 									    	<h5>Dust</h5>
 									    </div>
 									    <div class="span3">
-									    	<img id="lanuvO3" class="img-rounded" src="img/o3.png" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvO3Form"></h5><h5 style="display:inline;" id="humForm">ppm</h5>
+									    	<img id="lanuvO3" class="img-rounded" src="img/o3.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvO3Form"></h5><h5 style="display:inline;" id="humForm">µg/m<sup>3</sup></h5>
 									    	<h5>Ozone</h5>
 									    </div>
 									    <div class="span3">
-									    	<img id="lanuvWV" class="img-rounded" src="img/wv.svg" style="width:70px; height:70px;"><h5 style="display:inline;" id="lanuvWVForm"></h5><h5 style="display:inline;" id="wvForm">m/s</h5>
+									    	<img id="lanuvWV" class="img-rounded" src="img/wv.svg" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvWVForm"></h5><h5 style="display:inline;" id="wvForm">m/s</h5>
 									    	<h5>Wind velocity</h5>
 									    </div>
 									</div>
@@ -403,7 +406,7 @@
 		    		<div class="tab-pane fade in" id="table">
 		    			<form class="form-horizontal">
 							<div class="control-group">
-								<label class="control-label" for="reportrangetable">Zeitraum:</label>
+								<label class="control-label" for="reportrangetable">Date:</label>
 								<div class="controls">
 									<div id="reportrangetable">
 										<i class="icon-calendar icon-large"></i>
@@ -417,14 +420,14 @@
 			    			<thead>
 			    				<tr>
 			    					<th>Datum</th>
-			    					<th>Luftfeuchtigkeit (%)</th>
+			    					<th>Humidity (%)</th>
 			    					<th>NO (µg/m<sup>3</sup>)</th>
 			    					<th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Ozon (µg/m<sup>3</sup>)</th>
-			    					<th>PM10 (µg/m<sup>3</sup>)</th>
+			    					<th>Ozone (µg/m<sup>3</sup>)</th>
+			    					<th>Dust (µg/m<sup>3</sup>)</th>
 			    					<th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Temperatur (°C)</th>
-			    					<th>Windgeschwindigkeit (m/s)</th>
+			    					<th>Temperature (°C)</th>
+			    					<th>Wind velocity (m/s)</th>
 			    				</tr>
 			    			</thead> 
 			    			<tbody id="tablebody">
@@ -448,17 +451,14 @@
 								    	<span class="caret"></span>
 								  	</a>
 								  	<ul id="multiselect-menu" class="dropdown-menu dropdown-menu-form">
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperatur</input></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Luftfeuchtigkeit</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no">NO</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="nmono">NO</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Windgeschwindigkeit</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li>
 								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozon</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">PM10</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozone</label></a></li>
+								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">Dust</label></a></li>
 								  	</ul>
 								</div>
 							</div>

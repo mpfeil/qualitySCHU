@@ -28,7 +28,7 @@ $(".img-rounded").hover(
 			case "lanuvO3":
 				this.setAttribute('src', 'img/o3_inverted.png');
 				break;
-			case "lanuvCO":
+			case "lanuvNO":
 				this.setAttribute('src', 'img/co_inverted.png');
 				break;
 			case "lanuvNO2":
@@ -63,7 +63,7 @@ $(".img-rounded").hover(
 			case "lanuvO3":
 				this.setAttribute('src', 'img/o3.png');
 				break;
-			case "lanuvCO":
+			case "lanuvNO":
 				this.setAttribute('src', 'img/co.png');
 				break;
 			case "lanuvNO2":

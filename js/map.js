@@ -7,20 +7,7 @@ var selectedMarker;
 
 //Data Array for Diagram. Contains the single dataSeries
 var diagramData = [];
-// var dataSeries = { type: "line", markerType: "circle"};
 var dataPoints = [];
-// var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
-// var dataPoints2 = [];
-
-//Single dataSeries for diagram
-// var temperature = {type: "line", lineThickness: 2, showInLegend: true, name: "Temperatur"};
-// var no = {type: "line", lineThickness: 2, showInLegend: true, name: "NO"};
-// var no2 = {type: "line", lineThickness: 2, showInLegend: true, name: "NO2"};
-// var ozone = {type: "line", lineThickness: 2, showInLegend: true, name: "Ozon"};
-// var pm10 = {type: "line", lineThickness: 2, showInLegend: true, name: "PM10"};
-// var so2 = {type: "line", lineThickness: 2, showInLegend: true, name: "SO2"};
-// var wv = {type: "line", lineThickness: 2, showInLegend: true, name: "Windgeschwindigkeit"};
-// var humidity = {type: "line", lineThickness: 2, showInLegend: true, name: "Luftfeuchtigkeit"}; 
 
 var lanuv = L.icon({
     iconUrl: 'img/lanuv.png',
@@ -57,13 +44,31 @@ L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/
 map.addLayer(clusters);
 
 $(document).ready(function($){
-	console.log("ready");
 	cosm.setKey("tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g");
-	
 	clusters.fire('data:loading');
-
-	cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds?&q=aqe&content=summary&status=live&per_page=150", done: addAQE});
+	loadCOSM();
 });
+
+function loadCOSM()
+{
+	console.log("loadCOSM");
+	cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds?&q=aqe&content=summary&status=live&per_page=150", done: addAQE, fail:function(data){
+			console.log("fail");
+			console.log(data);
+			loadLANUV();
+			$('#warningLoad').css("visibility", "visible");
+	}});
+}
+
+function loadLANUV()
+{
+	jQuery.ajax({
+        url: 'http://www.lanuv.nrw.de/luft/temes/stationen.js',
+        type: 'get',
+        dataType: 'script',
+        success:addLANUV
+     });
+}
 
 function addLANUV()
 {
@@ -76,29 +81,22 @@ function addLANUV()
 	clusters.fire('data:loaded');
 }
 
-function onLocationFound(e) 
-{
-	map.setView(e.latlng,10);
-}
-
-function onLocationError(e) 
-{
-	alert(e.message);
-}
-
-map.on('locationfound', onLocationFound);
-map.on('locationerror', onLocationError);
 clusters.on('beforeDataLoad',   function() { layer.fire('data:loading'); });
 clusters.on('dataLoadComplete', function() { layer.fire('data:loaded'); });
 
 clusters.on('click', function(e){
+	cosm.stop('#tempForm');
+	cosm.stop('#humForm');
+	cosm.stop('#no2Form');
+	cosm.stop('#coForm');
 	if (selectedMarker!= null && isNaN(selectedMarker.options.title)) {selectedMarker.setIcon(lanuv)} else if (selectedMarker!= null && Number(selectedMarker.options.title)) {selectedMarker.setIcon(aqe)};
 	checkedStation = e.layer.options.title;
 	selectedMarker = e.layer;
 	if(isNaN(checkedStation))
 	{
-		eventtime_start = Date.today().setTimeToNow().addHours(-1).toString('yyyy-MM-ddTHH:mm:ss')+getTz(Date.today().setTimeToNow().addHours(-1).getTimezoneOffset());
-		eventtime_end = Date.today().setTimeToNow().toString('yyyy-MM-ddTHH:mm:ss')+getTz(Date.today().setTimeToNow().getTimezoneOffset());
+		eventtime_start = Date.today().setTimeToNow().addHours(-2).toString('yyyy-MM-ddTHH:59:00')+getTz(Date.today().setTimeToNow().addHours(-2).getTimezoneOffset());
+		eventtime_end = Date.today().setTimeToNow().toString('yyyy-MM-ddTHH:00:00')+getTz(Date.today().setTimeToNow().getTimezoneOffset());
+
 		$('.carousel').carousel(1);
 		selectedMarker.setIcon(lanuv_selected);
 		selectedService = "lanuv";
@@ -107,16 +105,30 @@ clusters.on('click', function(e){
 	        type: 'get',
 	        dataType: "json",
 	        success:function(data3){
-	        	console.log(data3);
-	        	console.log(data3.data[0].result.DataArray.values[0][1]);
-	        	$('#lanuvTempForm').text(data3.data[0].result.DataArray.values[0][13]);
-	        	$('#lanuvHumForm').text(data3.data[0].result.DataArray.values[0][1]);
-	        	$('#lanuvNO2Form').text(data3.data[0].result.DataArray.values[0][5]);
-	        	$('#lanuvNOForm').text(data3.data[0].result.DataArray.values[0][3]);
-	        	$('#lanuvSO2Form').text(data3.data[0].result.DataArray.values[0][11]);
-	        	$('#lanuvDustForm').text(data3.data[0].result.DataArray.values[0][9]);
-	        	$('#lanuvO3Form').text(data3.data[0].result.DataArray.values[0][7]);
-	        	$('#lanuvWVForm').text(data3.data[0].result.DataArray.values[0][15]);
+	        	$('#lanuvTempForm').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][13])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][13]).toFixed(1);
+	        	});
+	        	$('#lanuvHumForm').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][1])) ? "-" : new Number (data3.data[0].result.DataArray.values[0][1]).toFixed(1);
+	        	});
+	        	$('#lanuvNO2Form').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][5])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][5]).toFixed(1);
+	        	});
+	        	$('#lanuvNOForm').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][3])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][3]).toFixed(1);
+	        	});
+	        	$('#lanuvSO2Form').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][11])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][11]).toFixed(1);
+	        	});
+	        	$('#lanuvDustForm').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][9])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][9]).toFixed(1);
+	        	});
+	        	$('#lanuvO3Form').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][7])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][7]).toFixed(1);
+	        	});
+	        	$('#lanuvWVForm').text(function(){
+	        		return (isNaN(data3.data[0].result.DataArray.values[0][15])) ? "-" : new Number(data3.data[0].result.DataArray.values[0][15]).toFixed(1);
+	        	});
 	        }
 		});
 	}
@@ -124,11 +136,42 @@ clusters.on('click', function(e){
 	{
 		selectedMarker.setIcon(aqe_selected);
 		selectedService = "cosm";
+		var tempStream = "";
+		var humStream = "";
+		var no2Stream = "";
+		var coStream = "";
+		cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds/"+e.layer.options.title+".json", done: function(result){
+			console.log(result);
+			for (var i = 0; i < result.datastreams.length; i++)
+			{
+				var id = result.datastreams[i]["id"].toLowerCase();
+				if(id.match(/temperature/g))
+				{	
+					tempStream = result.datastreams[i]["id"];
+				}
+				if(id.match(/humidity/g))
+				{	
+					humStream = result.datastreams[i]["id"];
+				}
+				if(id.match(/co_[0-9]/g))
+				{	
+					coStream = result.datastreams[i]["id"];
+				}
+				if(id.match(/no2_[0-9]/g))
+				{	
+					no2Stream = result.datastreams[i]["id"];
+				}
+			}
+			cosm.stop('#tempForm');
+			cosm.stop('#humForm');
+			cosm.stop('#no2Form');
+			cosm.stop('#coForm');
+			$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:tempStream});
+			$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:humStream});
+			$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:no2Stream});
+			$('#coForm').cosm('live', {feed: e.layer.options.title, datastream:coStream});
+		}});
 		$('.carousel').carousel(0);
-		$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:'temperature'});
-		$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:'humidity'});
-		$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:'NO2'});
-		$('#coForm').cosm('live', {feed: e.layer.options.title, datastream:'CO'});
 	}
 })
 
@@ -149,13 +192,7 @@ function addAQE(results)
 		}
 		
 	}
-	
-	jQuery.ajax({
-        url: 'http://www.lanuv.nrw.de/luft/temes/stationen.js',
-        type: 'get',
-        dataType: 'script',
-        success:addLANUV
-     });
+	loadLANUV();
 }
 
 function getTz(offset)
@@ -200,39 +237,23 @@ function updateTable(start,end)
         	{
         		newtablerow = "";
         		td = data2.data[0].result.DataArray.values[i];
-	        	// date = new Date(td[0]);
-	        	// printdate = date.toString('dd.MM.yyyy');
-	        	// // if (date.getTime > )
-	        	// console.log(printdate);
-	        	// hours = date.getHours()-1;
-	        	// printdate = printdate +" "+hours;
-	        	// printdate = printdate +":00:00";
-	        	// console.log(printdate);
-	        	// console.log(date.getHours()-1);
-	        	// console.log(String(date.getHours()-1));
 	        	date = new Date(td[0]).toString('dd.MM.yyyy HH:mm:ss');
-	        	// console.log(date);
-	        	// console.log(date.toString('dd.MM.yyyy '));
 	        	for(var j = 2; j < td.length; j = j + 2)
 	        	{
 		        	if(td[j]=="100")
 		        	{
-			        	// console.log("raw");
 			        	newtablerow = newtablerow + '<td class="tdwarning">'+td[j-1]+'</td>';
 		        	}
 		        	else if(td[j]=="101")
 		        	{
-			        	// console.log("validated and outlier");
 			        	newtablerow = newtablerow + '<td class="tderror">'+td[j-1]+'</td>';
 		        	}
 		        	else if(td[j]=="102")
 		        	{
-			        	// console.log("validated and not outlier");
 			        	newtablerow = newtablerow + '<td class="tdsuccess">'+td[j-1]+'</td>';
 		        	}
 		        	else
 		        	{
-			        	// console.log("NaN");
 			        	newtablerow = newtablerow + '<td>-</td>';
 		        	}
 	        	}
