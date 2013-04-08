@@ -37,6 +37,9 @@ $(".img-rounded").hover(
 			case "lanuvDust":
 				this.setAttribute('src', 'img/dust_inverted.png');
 				break;
+			case "lanuvWV":
+				this.setAttribute('src', 'img/wind_velocity_inverted.png');
+				break;
 		}	
 	},
 	function(){
@@ -71,6 +74,9 @@ $(".img-rounded").hover(
 				break;
 			case "lanuvDust":
 				this.setAttribute('src', 'img/dust.png');
+				break;
+			case "lanuvWV":
+				this.setAttribute('src', 'img/wind_velocity.png');
 				break;
 		}
 	}
