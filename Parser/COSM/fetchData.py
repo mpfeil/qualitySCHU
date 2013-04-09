@@ -47,7 +47,7 @@ def getDatapointsFromCOSM(aqe):
     print '{:%Y-%m-%dT%H:%M:00}'.format(datetime.now())
     
     endtime = '{:%Y-%m-%dT%H:%M:00}'.format(datetime.now())
-    one_hour_from_now = dateutil.parser.parse(endtime) - timedelta(minutes=15)
+    one_hour_from_now = dateutil.parser.parse(endtime) - timedelta(minutes=14)
     starttime = '{:%Y-%m-%dT%H:%M:00}'.format(one_hour_from_now)
     
     for i in range(len(aqe)):

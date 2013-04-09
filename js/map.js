@@ -135,7 +135,7 @@ clusters.on('click', function(e){
 	else
 	{
 		selectedMarker.setIcon(aqe_selected);
-		selectedService = "cosm";
+		selectedService = "cosmcosm";
 		var tempStream = "";
 		var humStream = "";
 		var no2Stream = "";
@@ -225,9 +225,16 @@ function updateTable(start,end)
 	eventtime_end = end.toString('yyyy-MM-ddT23:00:00');
 	eventtime_end = eventtime_end + getTz(end.getTimezoneOffset());
 	
+	if (selectedService == "cosmcosm")
+	{
+		url = 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889' 
+	}
+	else if (selectedService == "lanuv") 
+
+
 	var td = new Array();
 	jQuery.ajax({
-        url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889',
+        url: url,
         type: 'get',
         dataType: "json",
         success:function(data3){
