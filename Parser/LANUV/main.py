@@ -13,9 +13,11 @@ import dateutil.tz
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime, timedelta
 
+#SOS path
 sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
 getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
 
+#logging functionality
 logger = logging.getLogger('LANUV')
 hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
@@ -23,6 +25,7 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
+#set parameters
 ozon = ""
 no = ""
 no2 = ""
@@ -33,6 +36,7 @@ rfeu = ""
 so2 = ""
 staub = ""
 
+#get stations that have been added to SOS
 def getStationsOfSOS():
     stations = []
     
@@ -46,6 +50,7 @@ def getStationsOfSOS():
         stations.append(temp) 
     
     return stations
+
 
 def insertObservation(station,values):
     
