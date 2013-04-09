@@ -30,7 +30,7 @@ def getAQEFeeds():
         cosm_decoded_data = json.loads(cosm)
         logger.info("Found "+str(cosm_decoded_data["totalResults"])+" feeds via the cosm API.")
         logger.info("Checking SOS for exisiting AQEs...")
-        sos = urllib2.urlopen("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosm/procedures/operations/getlist").read()
+        sos = urllib2.urlopen("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosmcosm/procedures/operations/getlist").read()
         sos_decoded_data = json.loads(sos)
         logger.info("Found "+str(sos_decoded_data["total"])+" via the SOS API.")
         availableFeedsInSos = []
@@ -99,12 +99,12 @@ def insertAQEFeeds(insert):
                         temperatureID = datastreams["id"]
                     elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=Humidity":
                         humidityID = datastreams["id"]
-                    elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=Dust":
-                        additionalSensors = additionalSensors + ',{"name":"dust","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:dust","uom":"ppb","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
-                    elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=VOC":
-                        additionalSensors = additionalSensors + ',{"name":"voc","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:voc","uom":"ppb","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
-                    elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=O3":
-                        additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppb","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'    
+                    #elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=Dust":
+                    #    additionalSensors = additionalSensors + ',{"name":"dust","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:dust","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
+                    #elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=VOC":
+                    #    additionalSensors = additionalSensors + ',{"name":"voc","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:voc","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
+                    #elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=O3":
+                    #    additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'    
                 elif str(feed["id"]) == "75842":
                     if datastreams["tags"][0] == "carbon monoxide":
                         coID = "CO"
@@ -112,16 +112,16 @@ def insertAQEFeeds(insert):
                         no2ID = "NO2"
                     elif datastreams["tags"][0] == "temperature":
                         temperatureID = "temperature"
-                    elif datastreams["tags"][0] == "O3":
-                        additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppb","description":"O3","constraint":{"role":null,"interval":["",""]}}'
+                    #elif datastreams["tags"][0] == "O3":
+                    #    additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppm","description":"O3","constraint":{"role":null,"interval":["",""]}}'
                     elif datastreams["tags"][0] == "relative humidity":
                         humidityID = "humidity"
             except KeyError as kE:
                 print str(feed["id"])+": "+str(kE)
-        registerSensor = '{"system_id":"'+str(feed["id"])+'","system":"'+str(feed["id"])+'","description":"","keywords":"'+keywords+'","identification":[],"classification":[{"name":"System Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:systemType","value":"insitu-fixed-point"},{"name":"Sensor Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:sensorType","value":"aqe"}],"characteristics":"","contacts":[],"documentation":[],"capabilities":[],"location":{"type":"Feature","geometry":{"type":"Point","coordinates":["'+str(feed["location"]["lon"])+'","'+str(feed["location"]["lat"])+'","0"]},"crs":{"type":"name","properties":{"name":"4326"}},"properties":{"name":"'+str(feed["id"])+'"}},"interfaces":"","inputs":[],"outputs":[{"name":"Time","definition":"urn:ogc:def:parameter:x-istsos:1.0:time:iso8601","uom":"iso8601","description":"","constraint":{"role":null,"interval":null}},{"name":"co","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co","uom":"ppb","description":"'+str(coID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"humidity","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity","uom":"%","description":"'+str(humidityID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"no2","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2","uom":"ppb","description":"'+str(no2ID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"temperature","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature","uom":"deg C","description":"'+str(temperatureID)+'","constraint":{"role":null,"interval":["",""]}}'+additionalSensors+'],"history":[]}'
+        registerSensor = '{"system_id":"'+str(feed["id"])+'","system":"'+str(feed["id"])+'","description":"","keywords":"'+keywords+'","identification":[],"classification":[{"name":"System Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:systemType","value":"insitu-fixed-point"},{"name":"Sensor Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:sensorType","value":"aqe"}],"characteristics":"","contacts":[],"documentation":[],"capabilities":[],"location":{"type":"Feature","geometry":{"type":"Point","coordinates":["'+str(feed["location"]["lon"])+'","'+str(feed["location"]["lat"])+'","0"]},"crs":{"type":"name","properties":{"name":"4326"}},"properties":{"name":"'+str(feed["id"])+'"}},"interfaces":"","inputs":[],"outputs":[{"name":"Time","definition":"urn:ogc:def:parameter:x-istsos:1.0:time:iso8601","uom":"iso8601","description":"","constraint":{"role":null,"interval":null}},{"name":"co","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co","uom":"ppm","description":"'+str(coID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"humidity","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity","uom":"%","description":"'+str(humidityID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"no2","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2","uom":"ppm","description":"'+str(no2ID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"temperature","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature","uom":"deg C","description":"'+str(temperatureID)+'","constraint":{"role":null,"interval":["",""]}}'+additionalSensors+'],"history":[]}'
         #print registerSensor
         headers = {"Content-type": "application/raw", "Accept": "application/json"}
-        request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosm/procedures",registerSensor,headers)
+        request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosmcosm/procedures",registerSensor,headers)
         handler = urllib2.urlopen(request)
         response = handler.read()
         response_data = json.loads(response)
