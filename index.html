@@ -43,9 +43,13 @@
 			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content=" qualitySCHU is a project developed by students at ifgi, Münster, 
                             which allows everyone to retrieve and visualize air quality data captured by so called air quality eggs, as well as data provided by a german state agency called LANUV.">About</a></li>
-                          	<li><a href="#use" id="use" rel="popover" data-content="Please zoom into the map and choose one of the symbols displayed on the map.
-                          	The egg icon visualizes air quality egg data measuring stations, the radio tower icon LANUV stations. Further information can be found in the FAQ section.
-                          	Current measured values will be displayed below the map. To view a table or a diagram of the data, please click on one of the corresponding symbols.">Use</a></li>                            
+                          	<li><a href="#use" id="use" rel="popover" data-content="To retrieve air quality data, please zoom into the map and navigate to a measurement location you are interested in. Then choose one of the symbols displayed on the map.
+                          	The egg icon visualizes air quality egg data measuring stations, the radio tower icon LANUV stations. Further information to this can be found in the FAQ section.
+                          	After clicking on one of the icons, currently measured values will be displayed below the map. To view a table or a diagram of the data, please click on one of the corresponding symbols visualizing the different sensors.
+                          	In the table view you can choose a measurement period. The table then shows all the values, which have been measured in this period of time by the different sensors. You can distinguish validated and non-validated data and 
+                          	easily detect outliers by the background color of the cell. For more information concerning data validation please have a look in the FAQ section. 
+                          	In the diagram view you also have the possibility to select a measurement period, as well as one, or for camparison purposes two different attributes (e.g. the relation between temperature and humidity). You can choose between 
+                          	predefined measurement periods or a custom range.">Use</a></li>                            
 						</ul>
 					</div>
 					<div class="control-group">
@@ -77,7 +81,7 @@
 								    		<h4>Overview</h4>
 								    	</div>
 								    	<div class="span6">
-									    	<img id="tempHum" class="img-rounded" src="img/temperature.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C / </h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
+									    	<img id="tempHum" class="img-rounded" src="img/temperature.png" style="width:70px; height:70px;"><h4 style="display:inline;" id="tempForm"></h4><h4 style="display:inline;" id="sepTempHum">°C /</h4><h4 style="display:inline;" id="humForm"></h4><h4 style="display:inline;" id="sepHum">%</h4>
 									    	<h4>Temperature / Humidity</h4>
 									    </div>
 									</div>
@@ -419,7 +423,7 @@
 		    			<table class="table">
 			    			<thead>
 			    				<tr>
-			    					<th>Datum</th>
+			    					<th>Date</th>
 			    					<th>Humidity (%)</th>
 			    					<th>NO (µg/m<sup>3</sup>)</th>
 			    					<th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th>
@@ -437,7 +441,7 @@
 		    		<div class="tab-pane fade-in" id="diagram">	
 		    			<div class="row-fluid">
 			    			<div class="span6">
-			    				<h4>Zeitraum</h4>
+			    				<h4>Period Of Time</h4>
 			    				<div id="reportrangediagram" class="pull-left">
 								    <i class="icon-calendar icon-large"></i>
 								    <span></span> <b class="caret"></b>
