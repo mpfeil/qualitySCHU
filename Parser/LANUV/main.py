@@ -24,6 +24,7 @@ formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
+#What about creating a new logfile daily//weekly/monthly or if size >x?
 
 #set parameters
 ozon = ""
@@ -51,7 +52,7 @@ def getStationsOfSOS():
     
     return stations
 
-
+#data -> SSO
 def insertObservation(station,values):
     
     three_hours_from_now = datetime.now() + timedelta(hours=3)
