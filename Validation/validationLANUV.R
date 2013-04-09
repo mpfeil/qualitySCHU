@@ -61,7 +61,7 @@ library(RODBC)
 
 
 ## Connect to database
-ch<-odbcConnect("PostgreSQL35W")
+ch<-odbcConnect("mydb1")
 
 ## Set schema
 odbcQuery(ch,"SET search_path =lanuv, pg_catalog;")
@@ -78,7 +78,7 @@ obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 
 
 
-ws <- 31
+ws <- 47
 
 
 ## Get non-validated measurements of each foi by joining following tables:
