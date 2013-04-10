@@ -39,7 +39,7 @@
 		        	<a class="brand" href="#">qualitySCHU</a>
 		        	<div class="nav-collapse collapse" visible="iPhone">
 			        	<ul class="nav">
-			        		<li><a href="#download" id="download" role="button" data-toggle="modal">Download</a></li>
+			        		<li><a id="download" role="button" data-toggle="modal">Download</a></li>
 			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content=" qualitySCHU is a project developed by students at ifgi, Münster, 
                                                         which allows everyone to retrieve and visualize air quality data captured by so called air quality eggs, as well as data provided by a german state agency called LANUV. The project name qualitySCHU 
@@ -193,7 +193,7 @@
 					    </div>
 					    <div id="collapseOne" class="accordion-body collapse">
 					        <div class="accordion-inner"> 
-                                                    An Air Quality Egg (AQE) is a low-cost sensor system which enables 
+                                                    An <b>Air Quality Egg</b> (AQE) is a low-cost sensor system which enables 
                                                     every person to get information about air quality in his direct surroundings. 
                                                     The air quality data is measured by different sensors.
 							</div>
@@ -209,7 +209,8 @@
                                                             outdoor sensors and a base station (the egg itself). 
                                                             Using an RF transmitter, the sensor data is going to be send 
                                                             wirelessly to the base station, which should be located inside. 
-                                                            The measured air quality data is sent to Cosm (open source 
+                                                            The measured air quality data is sent to 
+                                                            <a href="https://cosm.com/" target="_blank">Cosm</a> (open source 
                                                             data platform to store and access data) in real-time.
 							</div>
 						</div>
@@ -260,8 +261,8 @@
 						<div id="collapseSix" class="accordion-body collapse">
 							<div class="accordion-inner">
 							        <p> 
-                                                                    LANUV is an abbreviation for "Landesamt für Natur, Umwelt und 
-                                                                    Verbraucherschutz NRW". The LANUV maintains a large number of 
+                                                                    <b>LANUV</b> is an abbreviation for "<b>Landesamt für Natur, Umwelt und 
+                                                                    Verbraucherschutz NRW</b>". The LANUV maintains a large number of 
                                                                     stations for measuring air quality, which are eqipped with 
                                                                     additional sensors for measuring air quality.
                                                                 </p>
@@ -278,8 +279,10 @@
 						<div id="collapseSeven" class="accordion-body collapse">
 							<div class="accordion-inner">
 							        <p>
-							        	For the air quality egg data following measurements are availabe:
-							        	<br>Temperature, humidity, nitrogen dioxide and carbon monoxide.
+							        	For the <b>air quality egg</b> data following measurements are available:
+							        </p>
+							        <p>
+							        	<b>Temperature</b>, <b>humidity</b>, <b>nitrogen dioxide</b> and <b>carbon monoxide</b>.
 							        </p>
 							        <p>     
 							                Since the eggs could be located inside or outside a building, 
@@ -287,11 +290,14 @@
 							                is only a short distance between two neighboring eggs.
 							        </p>
 							        <p>
-							        	Temperature is measured in degree Celsius (°C) and humidity is measured in percent (%). 
+							        	<b><a href="http://en.wikipedia.org/wiki/Temperature" target="_blank">Temperature</a></b> is measured in degree 
+							        	<a href="http://en.wikipedia.org/wiki/Celsius" target="_blank">Celsius</a> (°C) and 
+							        	<b><a href="http://en.wikipedia.org/wiki/Humidity" target="_blank">Humidity</a></b>
+							        	is measured in <a href="http://en.wikipedia.org/wiki/Percentage" target="_blank">percent</a> (%). 
 							        </p>
 							        <p>
 							        	The NO2 and CO concentrations are both measured in 
-							        	<a href="http://en.wikipedia.org/wiki/Parts_per_million" target="_blank">parts per million</a> (ppm).
+							        	<a href="http://en.wikipedia.org/wiki/Parts-per_notation" target="_blank">parts per billion</a>(ppb).
 							        </p>
 							        <p>
 							        	<b>Nitrogen dioxide</b> (NO2) is produced as an intermediate in the industrial 
@@ -306,6 +312,16 @@
 							        	for example result from the incomplete combustion of carbonaceous materials.
 							        	<br>Further information can be found 
 							        	<a href="http://en.wikipedia.org/wiki/Carbon_monoxide" target="_blank">here</a>.
+							        </p>
+							        <p>     
+							                In addition to this the <b>LANUV</b> data include following measurements: 
+							        </p>
+							        <p>     
+							        	<b><a href="http://en.wikipedia.org/wiki/Nitrogen_monoxide" target="_blank">Nitrogen monoxide</a></b>, 
+							        	<b><a href="http://en.wikipedia.org/wiki/Sulfur_dioxide" target="_blank">sulfur dioxide</a></b>,
+							        	<b><a href="http://en.wikipedia.org/wiki/Particulates" target="_blank">dust</a></b>(particulates),
+							        	<b><a href="http://en.wikipedia.org/wiki/Ozone" target="_blank">ozone</a></b> and
+							        	<b><a href="http://en.wikipedia.org/wiki/Wind_velocity" target="_blank">wind velocity</a></b>.
 							        </p>
 
 							</div>
@@ -385,33 +401,6 @@
 							If that is the case the measurement is labeled as an outlier.
 							</p>
 
-							</div>
-						</div>
-					</div>
-					<div class="accordion-group">
-						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseEleven">How to download the data?</a>
-						</div>
-						<div id="collapseEleven" class="accordion-body collapse">
-							<div class="accordion-inner">
-							<p> 
-							There are 2 ways to download the data you want.							
-							</p>
-							<p>
-							If you are already experienced in using a Sensor Observation Service you can write own requests to our SOS
-							<br/>
-							<b>http://giv-geosoft2d.uni-muenster.de/istsos/lanuv?service=SOS </b> for LANUV data or
-							<br/>
-							<b>http://giv-geosoft2d.uni-muenster.de/istsos/cosmcosm?service=SOS</b> for COSM data.
-							<br/>
-							You can find further inforamtion on how to do this  <a href="https://wiki.52north.org/bin/view/SensorWeb/GetObservation" target="_blank">here</a>
-							</p>
-							<br/>
-							<p>
-							The easy but very basic way to download data is selecting the measuring station you want and clicking download. 
-							Then you only need to choose the observed property you want and a time frame.
-							After clicking submit an getObservation request is automatically generated and you get your data.
-							</p>
 							</div>
 						</div>
 					</div>
