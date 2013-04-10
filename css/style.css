@@ -31,10 +31,10 @@ html, body {
   visibility: hidden;
 }
 
-#myModal .modal-body {
+/*#myModal .modal-body {
 	height: 400px;
 	max-height: 500px;
-}
+}*/
 
 .leaflet-top .leaflet-control {
 	margin-top: 50px;

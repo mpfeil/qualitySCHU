@@ -11,6 +11,7 @@
     	<link href="js/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     	<link href="js/daterangepicker/daterangepicker.css" rel="stylesheet">
     	<link href="js/bootstrap-wizard/src/bootstrap-wizard.css" rel="stylesheet">
+    	<link href="js/bigmodal/css/bigmodals.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/dist/leaflet.css" />
     	<link href="css/style.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.css" />
@@ -39,7 +40,12 @@
 		        	<a class="brand" href="#">qualitySCHU</a>
 		        	<div class="nav-collapse collapse" visible="iPhone">
 			        	<ul class="nav">
+<<<<<<< HEAD
 			        		<li><a id="download" role="button" data-toggle="modal">Download</a></li>
+=======
+			        		<li><a href="#downloadModal" id="download" role="button" data-toggle="modal">Download</a></li>
+			        		<!-- <li><a href="#download" id="download" role="button" data-toggle="modal">Download</a></li> -->
+>>>>>>> Diagram working again
 			        		<li><a href="#faqModal" id="faq" role="button" data-toggle="modal">FAQ</a></li>
 							<li><a href="#about" id="about" rel="popover" data-content=" qualitySCHU is a project developed by students at ifgi, Münster, 
                                                         which allows everyone to retrieve and visualize air quality data captured by so called air quality eggs, as well as data provided by a german state agency called LANUV. The project name qualitySCHU 
@@ -51,7 +57,8 @@
 					</div>
 					<div class="control-group">
 					</div>
-					<span id="warningLoad" class="label pull-right label-warning" style="visibility:hidden;">COSM data not loaded. <a href="" onclick="add">Reload?</a></span>
+					<span id="hint" class="label pull-right label-warning" style="visibility:hidden;"></span>
+					<!-- <span id="notselected" class="label pull-right label-warning" style="visibility:hidden;">Please select a station on the map!</a></span> -->
 				</div>
 			</div>
 		</div>
@@ -150,6 +157,7 @@
 			  </div>
 			</div>
 		</div>
+		
 
 		<div class="wizard" id="some-wizard">
 		    <h1>Customize and download</h1>
@@ -538,12 +546,25 @@
 							</div>
 						</div>	    			
 			            <hr>
-			            <div id="chartContainer" style="width: 500px; height: 400px">
+			            <div id="chartContainer" style="width: 100%; height: 400px">
 			            </div>
 		    		</div>
 		    	</div>
 			</div>
 		    <div class="modal-footer">
+		    	<div class="row-fluid">
+		    		<div class="span4">
+		    			<span class="label pull-left label-warning"></a>Raw data</span>
+		    		</div>
+		    		<div class="span4">
+		    			<span class="label pull-left label-success"></a>Not outlier</span>
+		    		</div>
+		    		<div class="span4">
+		    			<span class="label pull-left label-important"></a>Outlier</span>
+		    		</div>
+		    	</div>
+		    	
+   
 		    </div>
 		</div>  
         <!-- FOOTER -->
@@ -568,6 +589,7 @@
     	<script src="js/bootstrap/js/bootstrap.js"></script>
     	<script src="js/daterangepicker/date.js"></script>
  	    <script src="js/daterangepicker/daterangepicker.js"></script>
+ 	    <script src="js/bigmodal/js/bootstrap-bigmodal.js"></script>
     	<script src="js/leaflet/dist/leaflet.js"></script>
     	<script src="js/canvasjs/canvasjs.min.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>

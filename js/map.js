@@ -6,8 +6,8 @@ var checkedStation;
 var selectedMarker;
 
 //Data Array for Diagram. Contains the single dataSeries
-var diagramData = [];
-var dataPoints = [];
+// var diagramData = [];
+// var dataPoints = [];
 
 var lanuv = L.icon({
     iconUrl: 'img/lanuv.png',
@@ -52,11 +52,12 @@ $(document).ready(function($){
 function loadCOSM()
 {
 	console.log("loadCOSM");
-	cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds?&q=aqe&content=summary&status=live&per_page=150", done: addAQE, fail:function(data){
+	cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds?q=aqe&content=summary&status=live&per_page=150", done: addAQE, fail:function(data){
 			console.log("fail");
 			console.log(data);
 			loadLANUV();
-			$('#warningLoad').css("visibility", "visible");
+			$('#hint').css("visibility", "visible");
+			$('#hint').append("COSM data not loaded <a href='' onclick='add'>Reload?</a>");
 	}});
 }
 
@@ -85,6 +86,7 @@ clusters.on('beforeDataLoad',   function() { layer.fire('data:loading'); });
 clusters.on('dataLoadComplete', function() { layer.fire('data:loaded'); });
 
 clusters.on('click', function(e){
+	$('#hint').css("visibility", "hidden");
 	cosm.stop('#tempForm');
 	cosm.stop('#humForm');
 	cosm.stop('#no2Form');
@@ -162,10 +164,6 @@ clusters.on('click', function(e){
 					no2Stream = result.datastreams[i]["id"];
 				}
 			}
-			cosm.stop('#tempForm');
-			cosm.stop('#humForm');
-			cosm.stop('#no2Form');
-			cosm.stop('#coForm');
 			$('#tempForm').cosm('live', {feed: e.layer.options.title, datastream:tempStream});
 			$('#humForm').cosm('live', {feed: e.layer.options.title, datastream:humStream});
 			$('#no2Form').cosm('live', {feed: e.layer.options.title, datastream:no2Stream});
@@ -179,7 +177,7 @@ function addAQE(results)
 {
 	data = results.results;
 	
-	console.log(data.length)
+	// console.log(data.length)
 	
 	for(var i = 0; i < data.length; i++)
 	{
@@ -224,55 +222,62 @@ function updateTable(start,end)
 	eventtime_start = eventtime_start + getTz(start.getTimezoneOffset());
 	eventtime_end = end.toString('yyyy-MM-ddT23:00:00');
 	eventtime_end = eventtime_end + getTz(end.getTimezoneOffset());
-	
+	var url = "";
 	if (selectedService == "cosmcosm")
 	{
 		url = 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889' 
 	}
-	else if (selectedService == "lanuv") 
-
+	if (selectedService == "lanuv")
+	{
+		url = 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/'+selectedService+'/operations/getobservation/offerings/temporary/procedures/'+checkedStation+'/observedproperties/urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2,urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity/eventtime/'+eventtime_start+'/'+eventtime_end+'?_dc=1363547035889'
+	} 
 
 	var td = new Array();
-	jQuery.ajax({
-        url: url,
-        type: 'get',
-        dataType: "json",
-        success:function(data3){
-        	data2 = data3;
-        	console.log(data2);
-        	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
-        	{
-        		newtablerow = "";
-        		td = data2.data[0].result.DataArray.values[i];
-	        	date = new Date(td[0]).toString('dd.MM.yyyy HH:mm:ss');
-	        	for(var j = 2; j < td.length; j = j + 2)
+	if (url != "")
+	{
+		jQuery.ajax({
+	        url: url,
+	        type: 'get',
+	        dataType: "json",
+	        success:function(data3){
+	        	data2 = data3;
+	        	console.log(data2);
+	        	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
 	        	{
-		        	if(td[j]=="100")
+	        		newtablerow = "";
+	        		td = data2.data[0].result.DataArray.values[i];
+	        		tempdate = td[0].split("+");
+	        		tempdate = tempdate[0]+"+02:00";
+					date = new Date(tempdate).toString('dd.MM.yyyy HH:mm:ss');
+		        	for(var j = 2; j < td.length; j = j + 2)
 		        	{
-			        	newtablerow = newtablerow + '<td class="tdwarning">'+td[j-1]+'</td>';
+			        	if(td[j]=="100")
+			        	{
+				        	newtablerow = newtablerow + '<td class="tdwarning">'+td[j-1]+'</td>';
+			        	}
+			        	else if(td[j]=="101")
+			        	{
+				        	newtablerow = newtablerow + '<td class="tderror">'+td[j-1]+'</td>';
+			        	}
+			        	else if(td[j]=="102")
+			        	{
+				        	newtablerow = newtablerow + '<td class="tdsuccess">'+td[j-1]+'</td>';
+			        	}
+			        	else
+			        	{
+				        	newtablerow = newtablerow + '<td>-</td>';
+			        	}
 		        	}
-		        	else if(td[j]=="101")
-		        	{
-			        	newtablerow = newtablerow + '<td class="tderror">'+td[j-1]+'</td>';
-		        	}
-		        	else if(td[j]=="102")
-		        	{
-			        	newtablerow = newtablerow + '<td class="tdsuccess">'+td[j-1]+'</td>';
-		        	}
-		        	else
-		        	{
-			        	newtablerow = newtablerow + '<td>-</td>';
-		        	}
+		        	$('#tablebody').append('<tr class="trbody"><td>'+date+'</td>'+newtablerow+'</tr>');
 	        	}
-	        	$('#tablebody').append('<tr class="trbody"><td>'+date+'</td>'+newtablerow+'</tr>');
-        	}
-        }
-    });
-	
+	        }
+	    });
+	}
 }
 
 function addToDiagram(elems,start,end)
 {
+	console.log("Start drawing diagram");
 	query = "";
 	
 	//Build query string
@@ -284,7 +289,7 @@ function addToDiagram(elems,start,end)
 		}
 		else
 		{
-			query = query + ",urn:ogc:def:parameter:x-istsos:1.0:meteo:air:" + elems[i]	
+			query = query + ",urn:ogc:def:parameter:x-istsos:1.0:meteo:air:" + elems[i];	
 		}
 	}
 	
@@ -298,55 +303,58 @@ function addToDiagram(elems,start,end)
         type: 'get',
         dataType: "json",
         success:function(data3){
-        	dataPoints = [];
-        	data2 = data3;
-        	var dataSeries = { type: "line", markerType: "circle",};
+		    var data = []; var dataSeries = { type: "line"};
+		    var dataPoints = [];
+
 		    if(elems.length == 2)
 		    {
-		    	var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
-		    	var dataPoints2 = [];	
+				var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
+		    	var dataPoints2 = [];		    	
 		    }
-		    diagramData = [];
-        	for(var i = 0; i < data2.data[0].result.DataArray.values.length; i++)
-        	{
-        		td = data2.data[0].result.DataArray.values[i];
-        		var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
-        		var dataPointColor = (td[2] == 100) ? "#fcf8e3" : (td[2] == 101) ? "#f2dede" : (td[2] == 102) ? "#dff0d8" : "" ;
-        		if(td.length > 3)
-        		{
-        			var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
-	        		dateTime = new Date(td[0]);
-	        		dataPoints2.push({
-			          x: dateTime,
-			          y: yValue2,
-			          markerType: "circle",
-			          markerSize:4,
-			          markerColor: dataPointColor               
-			        });	
-        		}
-        		dateTime = new Date(td[0]);
-        		dataPoints.push({
-		        	x: dateTime,
-		          	y: yValue,
-		          	markerType: "circle",
-		          	markerSize:4,                
-		          	markerColor: dataPointColor
-		        });
-        	}
 
+		    for(var i = 0; i < data3.data[0].result.DataArray.values.length; i++)
+		    {
+		    	td = data3.data[0].result.DataArray.values[i];
+		    	var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
+		    	var dataPointColor = (td[2] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
+		    	dateTime = new Date(td[0]);
+		        dataPoints.push({
+		          	x: dateTime,
+		          	y: yValue,
+		          	markerSize:1,
+		          	markerColor: dataPointColor              
+		        });
+		        if(td.length > 3)
+		        {
+		        	var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
+		        	var dataPointColor2 = (td[4] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
+		        	dataPoints2.push({
+			          	x: dateTime,
+			          	y: yValue2,
+			          	markerType: "circle",
+			          	markerSize:1,
+			          	markerColor: dataPointColor2               
+			        });
+
+		        }	
+		    }
+		  	
+		    dataSeries.markerType = "circle";
 		    dataSeries.dataPoints = dataPoints;
 		    dataSeries.color = "LightSkyBlue";
-		    chart.options.axisY.title = elems[0]; 
-		    diagramData.push(dataSeries); 
+		    chart.options.axisY.title = elems[0];
+		    data.push(dataSeries);
+
 		    if(elems.length == 2)
 		    {
 		    	dataSeries2.dataPoints = dataPoints2;
-		     	diagramData.push(dataSeries2);
+		     	data.push(dataSeries2);
 		     	dataSeries2.color = "LightSeaGreen";
 		     	chart.options.axisY2.title = elems[1]; 
 		    }
-		    chart.options.data = diagramData;	
-			chart.render();
+
+		    chart.options.data = data;
+		    chart.render();
         }
     });
 }

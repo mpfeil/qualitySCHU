@@ -84,25 +84,38 @@ $(".img-rounded").hover(
 
 $(".img-rounded").click(function(){
 	var capture;
-	switch(this.getAttribute("id"))
+	if (!selectedService)
 	{
-		case "overview":
-			capture = "Overview";
-			console.log(checkedStation);
-			break;
-		case "tempHum":
-			capture = "Temperature / Humidity";
-			break;
-		case "no2":
-			capture = "Nitrogen Dioxide";
-			break;
-		case "co":
-			capture = "Carbon Monoxide";
-			break;
+		$('#hint').css("visibility", "visible");
+		$('#hint').text("Please select a station on the map!");
 	}
-	$('#myModalLabel').text(capture);
-	$('#myTab a:first').tab('show');
-	$('#myModal').modal("show");
+	else
+	{
+		switch(this.getAttribute("id"))
+		{
+			case "overview":
+				capture = "Overview";
+				console.log(checkedStation);
+				break;
+			case "tempHum":
+				capture = "Temperature / Humidity";
+				break;
+			case "no2":
+				capture = "Nitrogen Dioxide";
+				break;
+			case "co":
+				capture = "Carbon Monoxide";
+				break;
+		}
+		$('#myModalLabel').text(capture);
+		$('#myTab a:first').tab('show');
+		// $('#myModal').modal("show");
+		$('#myModal').bigmodal("show");
+	}
+})
+
+$('#download').click(function(){
+	$('#downloadModal').modal("show");
 })
 
 $('#myCarousel').carousel({interval:false});
@@ -111,14 +124,10 @@ var todaystart = Date.parse("today");
 var todayend = Date.parse("next day");
 
 $('#myModal').on('shown', function(){
-	var diagramDataDummy = [];
+	
 	chart = new CanvasJS.Chart("chartContainer",
 	{
 		zoomEnabled: true,
-		// title:{
-		// 	// text: "Test Title",
-		// 	fontSize: 30,
-		// },
 		axisX:{
 			labelAngle: -30,
 			gridColor: "Silver",
@@ -138,22 +147,23 @@ $('#myModal').on('shown', function(){
     		titleFontColor: "LightSeaGreen",
 			},
 
-		data: diagramDataDummy, 
+		data: diagramDataDummy 
 	});
+	
+	chart.render();
 
+	var diagramDataDummy = [];
 	var dataSeriesDummy = { type: "line" };
 	var dataPointsDummy = [];
 
 	dataSeriesDummy.dataPoints = dataPointsDummy;
 	diagramDataDummy.push(dataSeriesDummy);
 
-    chart.render();
-
 	$('#reportrangetable').daterangepicker(
     {
         ranges: {
-            'Today': ['today', 'next day'],
-            'Yesterday': ['yesterday', 'today'],
+            'Today': ['today', 'today'],
+            'Yesterday': ['yesterday', 'yesterday'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -182,7 +192,7 @@ $('#myModal').on('shown', function(){
     	todayend = end;
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
         $("td").empty();
-        buildDiagram();
+        //buildDiagram();
     });
     
     $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
@@ -209,46 +219,18 @@ $('.dropdown-menu').on('click', function(e){
 	}
 });
 
-var checkedValues = 0;
-var elements = [];
-$('.checkbox').on('click', function(e){
-	if (e.target.checked) {
-		checkedValues ++;
-	}
-	else {
-		if (e.target.control)
-		{
-			checkedValues ++;
-			checkedValues --;
-		}
-		else
-		{
-			checkedValues--;
-		}
-	}
-	var caption = "";
+function buildCaption()
+{
+	var caption="";
 	$('.btn-group input[type="checkbox"]').each(function(){
 		if (this.checked) 
 		{
-			//Push checked elements to array if the not exsits in the array
-			if (elements.indexOf($(this)[0].value) == -1 )
-			{
-				elements.push($(this)[0].value);	
-			}
 			if (caption == "")
 			{
 				caption = caption + $(this).context.parentElement.innerText;
 			}
 			else {
 				caption = caption +","+$(this).context.parentElement.innerText;	
-			}
-		}
-		else 
-		{
-			//Pop not selected elements from array if they exsits in the array
-			if (elements.indexOf($(this)[0].value) > -1 )
-			{
-				elements.pop($(this)[0].value);	
 			}
 		}
 		if (caption == "")
@@ -259,27 +241,81 @@ $('.checkbox').on('click', function(e){
 		{
 			$('#dropdown-multiselect').text(caption+" ").append('<span class="caret"></span>');	
 		}
-	});
+	});	
+}
+
+var checkedValues = 0;
+var elements = [];
+$('.checkbox').on('click', function(e){
+	console.log(e);
 	
+	toElement = e.toElement;
+	if (e.target.checked) 
+	{
+		checkedValues ++;
+		elements.push(toElement.value);
+	}
+	else 
+	{
+		checkedValues--;
+		elements.pop(toElement.value);
+		// if (toElement.control.checked)
+		// checkedValues--;
+		// elements.pop(toElement.value);
+		// if (e.target.control)
+		// {
+		// 	checkedValues ++;
+		// 	checkedValues --;
+		// 	elements.push(toElement.value);
+		// }
+		// else
+		// {
+			// checkedValues--;
+		// }
+	}
+	buildCaption();
+	//checkOptions();
+	var caption = "";
+	
+	// if (checkedValues == 2) {
+	// 	$('.btn-group input[type="checkbox"]').each(function(){
+	// 		if (!this.checked) 
+	// 		{
+	// 			this.disabled = true;
+	// 		}
+	// 		else
+	// 		{
+	// 			this.disabled = false;	
+	// 		}
+	// 	});
+	// }
+	// else
+	// {
+	// 	$('.btn-group input[type="checkbox"]').each(function(){
+	// 		if (this.disabled) 
+	// 		{
+	// 			this.disabled = false;
+	// 		}
+	// 	});	
+	// }
+	buildDiagram();
+});
+
+function checkOptions()
+{
 	if (checkedValues == 2) {
 		$('.btn-group input[type="checkbox"]').each(function(){
 			if (!this.checked) 
 			{
 				this.disabled = true;
 			}
+			else
+			{
+				this.disabled = false;	
+			}
 		});
 	}
-	else
-	{
-		$('.btn-group input[type="checkbox"]').each(function(){
-			if (this.disabled) 
-			{
-				this.disabled = false;
-			}
-		});	
-	}
-	buildDiagram();
-});
+}
 
 var options = {};
 var wizard = $("#some-wizard").wizard(options);
