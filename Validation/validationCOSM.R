@@ -67,7 +67,7 @@ library(RODBC)
 ch<-odbcConnect("mydb1")
 
 ## Set schema
-odbcQuery(ch,"SET search_path =cosm, pg_catalog;")
+odbcQuery(ch,"SET search_path =cosmcosm, pg_catalog;")
 
 
 
@@ -81,7 +81,7 @@ obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 
 
 
-ws <- 47
+ws <- 61
 
 
 ## Get non-validated measurements of each foi by joining following tables:
