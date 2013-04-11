@@ -83,7 +83,6 @@ $(".img-rounded").hover(
 )
 
 $(".img-rounded").click(function(){
-	var capture;
 	if (!selectedService)
 	{
 		$('#hint').css("visibility", "visible");
@@ -91,25 +90,15 @@ $(".img-rounded").click(function(){
 	}
 	else
 	{
-		switch(this.getAttribute("id"))
+		if(selectedService == "lanuv")
 		{
-			case "overview":
-				capture = "Overview";
-				console.log(checkedStation);
-				break;
-			case "tempHum":
-				capture = "Temperature / Humidity";
-				break;
-			case "no2":
-				capture = "Nitrogen Dioxide";
-				break;
-			case "co":
-				capture = "Carbon Monoxide";
-				break;
+			$('#myModalLabel').append('<h3>'+lanuvStationen[checkedStation]["name"]+'</h3>');
 		}
-		$('#myModalLabel').text(capture);
+		if(selectedService == "cosmcosm")
+		{
+			$('#myModalLabel').append('<h3>'+results.title+'</h3>');
+		}
 		$('#myTab a:first').tab('show');
-		// $('#myModal').modal("show");
 		$('#myModal').bigmodal("show");
 	}
 })
@@ -130,7 +119,30 @@ $('#myModal').on('shown', function(){
 		$('#tablehead').children("tr").remove();
 		$('#tablehead').append('<tr><th>Date</th><th>Humidity (%)</th><th>NO (µg/m<sup>3</sup>)</th><th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th><th>Ozone (µg/m<sup>3</sup>)</th><th>Dust (µg/m<sup>3</sup>)</th><th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th><th>Temperature (°C)</th><th>Wind velocity (m/s)</th></tr>');
 		$('#multiselect-menu').children("li").remove();
-		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="nmono">NO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozone</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">Dust</label></a></li>');
+		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="real" type="checkbox" value="Temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="Humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="nmono">NO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="NO2">NO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="SO2">SO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="Ozone">Ozone</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="PM10">Dust</label></a></li>');
+		$('#home').children("div").remove();
+		$('#home').append('<div class="row-fluid"><div class="span6"><div class="span4"><h4>Stationsprofile:</h4><h4>Stationtype:</h4><h4>Disko:</h4><h4>Address:</h4></div><div class="span4"><h6><a href="http://www.lanuv.nrw.de/luft/messorte/steckbriefe/'+checkedStation.toLowerCase()+'.htm" target="_blank">'+checkedStation+'</a></h6><h6><a href="http://www.lanuv.nrw.de/luft/immissionen/luqs/typen.htm" target="_blank">'+lanuvStationen[checkedStation]["type"]+'</a></h6><h6><a href="http://www.lanuv.nrw.de/luft/immissionen/disko-neu.htm" target="_blank">'+lanuvStationen[checkedStation]["disko"]+'</a></h6><address>'+lanuvStationen[checkedStation]["address"]+'<br>'+lanuvStationen[checkedStation]["plz"]+'</address></div></div><div class="span6"><img src="http://www.lanuv.nrw.de/luft/messorte/bilder/bild-'+checkedStation.toLowerCase()+'.jpg" alt="some_text" width="100%" height="100%"></div></div>');
+		if(lanuvStationen[checkedStation]["disko"] == 1)
+		{
+			$('#tableTabContent').attr('data-toggle', '');
+			$('#tableTab').addClass('disabled');
+			$('#diagramTabContent').attr('data-toggle', '');
+			$('#diagramTab').addClass('disabled');
+		}
+		else
+		{
+			$('#myTab a[href="#diagram"]').on('click', function(){
+				$('#modalFooter').css('visibility', 'visible');
+				// console.log($('#checkTemp'));
+				// buildDiagram();
+				// buildCaption();
+				// checkOptions();
+			})
+
+			$('#myTab a[href="#table"]').on('click', function(){
+				$('#modalFooter').css('visibility', 'visible');
+			})
+		}
 		initCheckboxes();
 	}
 	if(selectedService == "cosmcosm")
@@ -138,7 +150,9 @@ $('#myModal').on('shown', function(){
 		$('#tablehead').children("tr").remove();
 		$('#tablehead').append('<tr><th>Date</th><th>CO (ppm)</th><th>Humidity (%)</th><th>NO<sub>2</sub> (ppm)</th><th>Temperature (°C)</th></tr>');
 		$('#multiselect-menu').children("li").remove();
-		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="co">CO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>');
+		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="checkTemp" type="checkbox" value="Temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="checkHum" type="checkbox" value="Humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="CO">CO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="NO2">NO<sub>2</sub></label></a></li>');
+		$('#home').children("div").remove();
+		$('#home').append('<div class="row-fluid"><div class="span6"><div class="span4"><h4>Description:</h4><h4>Creator:</h4><h4>Cosm feed:</h4><h4>Status:</h4><h4>Domain:</h4><h4>Exposure:</h4><h4>Elevation:</h4><h4>Tags:</h4></div><div class="span4"><h4>'+results["description"]+'</h4><h4><a href="'+results["creator"]+'" target="_blank">AirQualityEgg</a></h4><h4><a href="https://cosm.com/feeds/'+results["id"]+'" target="_blank">'+results["id"]+'</a></h4><h4>live</h4><h4>'+results["location"]["domain"]+'</h4><h4>'+results["location"]["exposure"]+'</h4><h4>35m</h4><h4><span style="display:inline;" class="label label-info">'+results["tags"][0]+'</span> <span style="display:inline;" class="label label-info">'+results["tags"][1]+'</span></h4></div></div><div class="span6"></div></div>');
 		initCheckboxes();
 
 	}
@@ -229,6 +243,13 @@ $('#myModal').on('hidden', function(){
 	elements = [];
 	checkedValues = 0;
 	$('#tablebody').children('tr').remove();
+	$('#modalFooter').css('visibility', 'hidden');
+	$('#tableTabContent').attr('data-toggle', 'tab');
+	$('#tableTab').removeClass('disabled');
+	$('#diagramTabContent').attr('data-toggle', 'tab');
+	$('#diagramTab').removeClass('disabled');
+	$('#myModalLabel').children('h3').remove();
+	$('#home').children("div").remove();
 });
 
 $('.dropdown-menu').on('click', function(e){
@@ -245,10 +266,11 @@ function buildCaption()
 		{
 			if (caption == "")
 			{
-				caption = caption + $(this).context.parentElement.innerText;
+				caption = caption + $(this).context.defaultValue;
 			}
-			else {
-				caption = caption +","+$(this).context.parentElement.innerText;	
+			else 
+			{
+				caption = caption +","+$(this).context.defaultValue;	
 			}
 		}
 		if (caption == "")
@@ -264,64 +286,39 @@ function buildCaption()
 
 var checkedValues = 0;
 var elements = [];
+var echeckbox;
 function initCheckboxes()
 {
 	$('.checkbox').on('click', function(e){
-	console.log(e);
 	
-	toElement = e.toElement;
-	if (e.target.checked) 
-	{
-		checkedValues ++;
-		elements.push(toElement.value);
-	}
-	else 
-	{
-		checkedValues--;
-		elements.pop(toElement.value);
-		// if (toElement.control.checked)
-		// checkedValues--;
-		// elements.pop(toElement.value);
-		// if (e.target.control)
-		// {
-		// 	checkedValues ++;
-		// 	checkedValues --;
-		// 	elements.push(toElement.value);
-		// }
-		// else
-		// {
-			// checkedValues--;
-		// }
-	}
-	buildCaption();
-	//checkOptions();
-	var caption = "";
+		if(e.target.checked)
+		{
+			checkedValues ++;
+			elements.push(e.target.defaultValue.toLowerCase());
+		}
+		else
+		{
+			if(e.target.control)
+			{
+				checkedValues ++;
+				checkedValues --;
+			}
+			else
+			{
+				checkedValues --;
+				elements.splice(elements.indexOf(e.target.defaultValue.toLowerCase()),1);	
+			}
+		}
 	
-	// if (checkedValues == 2) {
-	// 	$('.btn-group input[type="checkbox"]').each(function(){
-	// 		if (!this.checked) 
-	// 		{
-	// 			this.disabled = true;
-	// 		}
-	// 		else
-	// 		{
-	// 			this.disabled = false;	
-	// 		}
-	// 	});
-	// }
-	// else
-	// {
-	// 	$('.btn-group input[type="checkbox"]').each(function(){
-	// 		if (this.disabled) 
-	// 		{
-	// 			this.disabled = false;
-	// 		}
-	// 	});	
-	// }
-	buildDiagram();
-});	
+		buildCaption();
+		checkOptions();
+		buildDiagram();
+	});	
 }
 
+$('#myTab a[href="#home"]').on('click', function(){
+	$('#modalFooter').css('visibility', 'hidden');
+})
 
 function checkOptions()
 {
@@ -336,6 +333,15 @@ function checkOptions()
 				this.disabled = false;	
 			}
 		});
+	}
+	else
+	{
+		$('.btn-group input[type="checkbox"]').each(function(){
+			if (this.disabled) 
+			{
+				this.disabled = false;
+			}
+		});	
 	}
 }
 

@@ -58,7 +58,6 @@
 					<div class="control-group">
 					</div>
 					<span id="hint" class="label pull-right label-warning" style="visibility:hidden;"></span>
-					<!-- <span id="notselected" class="label pull-right label-warning" style="visibility:hidden;">Please select a station on the map!</a></span> -->
 				</div>
 			</div>
 		</div>
@@ -532,26 +531,44 @@
 		<div id="myModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    			<h3 id="myModalLabel"></h3>
+    			<h3 id="myModalLabel">
+
+    			</h3>
     		</div>
     		<div class="modal-body">
     			<ul id="myTab" class="nav nav-tabs">
 		    		<li><a href="#home" data-toggle="tab">Home</a></li>
-		    		<li><a href="#table" data-toggle="tab">Table</a></li>
-		    		<li><a href="#diagram" data-toggle="tab">Diagram</a></li>
+		    		<li id="tableTab"><a id="tableTabContent" href="#table" data-toggle="tab">Table</a></li>
+		    		<li id="diagramTab"><a id="diagramTabContent" href="#diagram" data-toggle="tab">Diagram</a></li>
 		    	</ul>
 		    	<div id="myTabContent" class="tab-content">
 		    		<div class="tab-pane fade in" id="home">
-		    			<div class="row-fluid">
+		    			<!-- <div class="row-fluid">
 			    			<div class="span6">
-			    				<h4>Some Input</h4>
-			    				<p><input type="text" class="span12"></p>
+			    				<div class="span4">
+			    					<h4>Description:</h4>
+			    					<h4>Creator:</h4>
+			    					<h4>Cosm feed:</h4>
+			    					<h4>Status:</h4>
+			    					<h4>Domain:</h4>
+			    					<h4>Exposure:</h4>
+			    					<h4>Elevation:</h4>
+			    					<h4>Tags:</h4>
+			    				</div>
+			    				<div class="span4">
+			    					<h4>Test the box</h4>
+			    					<h4><a href="https://cosm.com/users/airqualityegg" target="_blank">AirQualityEgg</a></h4>
+			    					<h4><a href="https://cosm.com/feeds/116247" target="_blank">116247</a></h4>
+			    					<h4>live</h4>
+			    					<h4>physical</h4>
+			    					<h4>outdoor</h4>
+			    					<h4>35m</h4>
+			    					<h4><span style="display:inline;" class="label label-info">device:type=Air Quality Egg</span> <span style="display:inline;" class="label label-info">device:type=airqualityegg</span></h4>
+			    				</div>
 						    </div>
 						    <div class="span6">
-							    <h4>Some More Input</h4>
-						        <p><input type="text" class="span12"></p>
 							</div>
-						</div>
+						</div> -->
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
 		    			<div class="row-fluid">
@@ -566,18 +583,6 @@
 						    </div>
 						</div>
 						<hr>
-		    			<!-- <form class="form-horizontal">
-							<div class="control-group">
-								<label class="control-label" for="reportrangetable">Date:</label>
-								<div class="controls">
-									<div id="reportrangetable">
-										<i class="icon-calendar icon-large"></i>
-										<span></span> <b class="caret"></b>
-									</div>
-								</div>
-							</div>
-						</form> -->
-			            
 		    			<table class="table">
 			    			<thead id="tablehead">
 			    			</thead> 
@@ -613,7 +618,7 @@
 		    	</div>
 			</div>
 		    <div class="modal-footer">
-		    	<div class="row-fluid">
+		    	<div class="row-fluid" style="visibility:hidden;" id="modalFooter">
 		    		<div class="span4">
 		    			<span class="label pull-left label-warning"></a>Raw data</span>
 		    		</div>

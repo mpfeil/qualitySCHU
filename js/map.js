@@ -4,6 +4,8 @@ var data2;
 var selectedService;
 var checkedStation;
 var selectedMarker;
+var results;
+var lanuvStationen;
 
 //Data Array for Diagram. Contains the single dataSeries
 // var diagramData = [];
@@ -73,6 +75,7 @@ function loadLANUV()
 
 function addLANUV()
 {
+	lanuvStationen = stationen;
 	for(station in stationen)
 	{
 		marker = new L.Marker(new L.LatLng(stationen[station].latitude,stationen[station].longitude),{icon:lanuv, title:station});
@@ -143,6 +146,7 @@ clusters.on('click', function(e){
 		var no2Stream = "";
 		var coStream = "";
 		cosm.request({type:"GET",url:"http://api.cosm.com/v2/feeds/"+e.layer.options.title+".json", done: function(result){
+			results = result;
 			console.log(result);
 			for (var i = 0; i < result.datastreams.length; i++)
 			{
@@ -305,7 +309,8 @@ function addToDiagram(elems,start,end)
 
         	console.log(data3);
 
-		    var data = []; var dataSeries = { type: "line"};
+		    var data = []; 
+		    var dataSeries = { type: "line"};
 		    var dataPoints = [];
 
 		    if(elems.length == 2)
@@ -321,8 +326,9 @@ function addToDiagram(elems,start,end)
 		    	var dataPointColor = (td[2] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
 		    	var dataPointType = (td[2] == 100) ? "circle" : (td[2] == 101) ? "cross" : (td[2] == 102) ? "circle" : "" ;
 		    	var dataPointSize = (td[2] == 100) ? "1" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
-		    	dateTime = new Date(td[0]);
-		    	console.log(yValue);
+		    	tempdate = td[0].split("+");
+	        	tempdate = tempdate[0]+"+02:00";
+		    	dateTime = new Date(tempdate);
 		        dataPoints.push({
 		          	x: dateTime,
 		          	y: yValue,
@@ -347,8 +353,6 @@ function addToDiagram(elems,start,end)
 
 		        }	
 		    }
-		  	
-		  	console.log(data3.data[0].result.DataArray.field[1].name);
 
 		    dataSeries.markerType = "circle";
 		    dataSeries.dataPoints = dataPoints;

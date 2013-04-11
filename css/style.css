@@ -31,11 +31,6 @@ html, body {
   visibility: hidden;
 }
 
-/*#myModal .modal-body {
-	height: 400px;
-	max-height: 500px;
-}*/
-
 .leaflet-top .leaflet-control {
 	margin-top: 50px;
 }
@@ -53,13 +48,13 @@ html, body {
 }
 
 .tdsuccess {
-	background-color:#dff0d8;
+	background-color:#468847;
 }
 
 .tdwarning {
-	background-color:#fcf8e3;
+	background-color:#f89406;
 }
 
 .tderror {
-	background-color:#f2dede;
+	background-color:#b94a48;
 }
