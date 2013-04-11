@@ -168,7 +168,7 @@ for(i in 1:length(fois[[1]])){
     fres <-findOutlier(fres,ws)
     
     ## Update table
-    sqlUpdate(ch, fres, "cosm.measures", "id_msr")}
+    sqlUpdate(ch, fres, "cosmcosm.measures", "id_msr")}
   
   
   }
