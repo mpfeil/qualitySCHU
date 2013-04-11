@@ -1,0 +1,142 @@
+  
+
+
+<!DOCTYPE html>
+<html>
+ <body>
+<div id="head">
+  <h1 class="instapaper_title">Installation</h1>
+</div>
+<div id="wiki-content">
+  <div class="wrap">
+  <div id="wiki-body" class="gollum-markdown-content instapaper_body">
+    <div class="markdown-body">
+      <p>This manual describes how to install QualitySCHU step by step. For this installation you will need Ubuntu Server 12.04.2 LTS (Precise Pangolin) which you will be able to get <a href="http://releases.ubuntu.com/precise/">here</a>. The installation was tested on a computer with Pentium III processor running at 2.66GHz, 512MB RAM, and a free harddisk space of 8GB.     </p>
+
+<p>Please read this installation manual carefully and make sure to precisely follow its steps as described below. Finally you will be the lucky administrator of an easy to maintain, fast accessable, and light-weight QualitySCHU server which contains an Apache webserver with a PostGIS database and an istSOS sensor observation service, that is able to mark outliers by running a statistical method called moving window powered by the <a href="http://www.r-project.org/">free software programming language R</a>.</p>
+
+<p>If you are ready to start, please log in on to your system as a common user (which is recommended) with the right to execute sudo commands (which is required). <em>So For further information feel free to follow the links.</em></p>
+
+<h2>
+<a name="install-webserver" class="anchor" href="#install-webserver"><span class="mini-icon mini-icon-link"></span></a>Install Webserver</h2>
+
+<p>QualitySCHU will make use of the <a href="http://httpd.apache.org/">Apache webserver</a>. </p>
+
+<ul>
+<li><p>Install Apache2<br><code>sudo apt-get install apache2</code></p></li>
+<li><p>Install mod_wsgi<br><code>sudo apt-get install libapache2-mod-wsgi</code></p></li>
+<li><p>set default Document read</p></li>
+</ul><h2>
+<a name="install-python" class="anchor" href="#install-python"><span class="mini-icon mini-icon-link"></span></a>Install Python</h2>
+
+<p>The parsers for LANUV and COSM are written in Python.<br><code>sudo apt-get install python-psycopg2</code>  </p>
+
+<h2>
+<a name="install-beautifulsoup" class="anchor" href="#install-beautifulsoup"><span class="mini-icon mini-icon-link"></span></a>Install BeautifulSoup</h2>
+
+<p>QualitySCHU will make use of <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> to parse the LANUV data.<br><code>sudo apt-get install python-beautifulsoup</code>  </p>
+
+<h2>
+<a name="install-dateutil" class="anchor" href="#install-dateutil"><span class="mini-icon mini-icon-link"></span></a>Install Dateutil</h2>
+
+<p>QualitySCHU will make use of Dateutil for avoiding problems with summertime changes. It is an extension of the standard module datetime.<br><code>sudo apt-get install python-dateutil</code></p>
+
+<h2>
+<a name="install-postgresql" class="anchor" href="#install-postgresql"><span class="mini-icon mini-icon-link"></span></a>Install PostgreSQL</h2>
+
+<p>QualitySCHU will make use of PostGIS, which requires PostgreSQL. PostgreSQL is an open source object-relational database management system.<br><code>sudo apt-get install postgresql</code><br>
+After finishing the installation routine, alter the password:<br></p><div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span>
+<span class="n">alter</span> <span class="n">user</span> <span class="n">postgres</span> <span class="n">password</span> <span class="err">'</span><span class="n">postgres</span><span class="err">'</span><span class="p">;</span>
+</pre></div>
+
+<h2>
+<a name="install-postgis" class="anchor" href="#install-postgis"><span class="mini-icon mini-icon-link"></span></a>Install PostGIS</h2>
+
+<p>PostGIS adds support for geographic objects to PostgreSQL.<br><code>sudo apt-get install postgresql-9.1-postgis</code></p>
+
+<h2>
+<a name="install-istsos" class="anchor" href="#install-istsos"><span class="mini-icon mini-icon-link"></span></a>Install istSOS</h2>
+
+<ul>
+<li>wget + unzip<br>
+</li>
+<li>siehe Daten<br>
+</li>
+<li><p>extra Datei bzgl. MaxRequest  </p></li>
+<li><p>63 Stationen manuell anlegen  </p></li>
+</ul><p>Setup:  </p>
+
+<ul>
+<li>DB anlegen</li>
+<li>Service COSM (ValueSet)</li>
+<li>Service LANUV (ValueSet)</li>
+<li>Validierung</li>
+</ul><h2>
+<a name="install-r" class="anchor" href="#install-r"><span class="mini-icon mini-icon-link"></span></a>Install R</h2>
+
+<ul>
+<li>QualitySCHU will use R with ODBC for connecting the PostgreSQL database.<br><code>sudo apt-get install r-cran-rodbc</code> </li>
+<li>Install ODBC driver for PostgreSQL<br><code>sudo apt-get install unixODBC odbc-postgresql</code>
+</li>
+<li>
+<p>Edit odbcinst.ini by using an editor of your choice. In this example we have used vim.
+</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">odbcinst</span><span class="p">.</span><span class="n">ini</span>
+
+<span class="p">[</span><span class="n">PostgreSQL</span><span class="p">]</span>
+<span class="n">Description</span>     <span class="o">=</span> <span class="n">PostgreSQL</span> <span class="n">driver</span> <span class="k">for</span> <span class="n">Linux</span> <span class="o">&amp;</span> <span class="n">Windows</span>
+<span class="n">Driver</span>          <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">odbc</span><span class="o">/</span><span class="n">psqlodbcw</span><span class="p">.</span><span class="n">so</span>
+<span class="n">Setup</span>           <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">odbc</span><span class="o">/</span><span class="n">libodbcpsqlS</span><span class="p">.</span><span class="n">so</span>
+</pre></div>
+</li>
+<li>
+<p>Configure connection to database
+</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">odbc</span><span class="p">.</span><span class="n">ini</span>
+
+<span class="p">[</span><span class="n">ODBC</span> <span class="n">Data</span> <span class="n">Sources</span><span class="p">]</span>
+<span class="n">mydb1</span> <span class="o">=</span> <span class="n">Database</span> <span class="n">description</span>
+
+<span class="p">[</span><span class="n">mydb1</span><span class="p">]</span>
+<span class="n">Driver</span> <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">odbc</span><span class="o">/</span><span class="n">psqlodbcw</span><span class="p">.</span><span class="n">so</span>  
+<span class="n">Database</span> <span class="o">=</span> <span class="n">istsos2</span>
+<span class="n">Servername</span> <span class="o">=</span> <span class="n">localhost</span>
+<span class="n">Username</span> <span class="o">=</span> <span class="n">your_username</span>
+<span class="n">Password</span> <span class="o">=</span> <span class="n">your_password</span>
+<span class="n">Protocol</span> <span class="o">=</span> <span class="mf">8.2.5</span>
+<span class="n">ReadOnly</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Port</span> <span class="o">=</span> <span class="mi">5432</span>
+
+<span class="p">[</span><span class="n">ODBC</span><span class="p">]</span>
+<span class="n">InstallDir</span> <span class="o">=</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span>
+</pre></div>
+</li>
+</ul><h2>
+<a name="clone-github-repo" class="anchor" href="#clone-github-repo"><span class="mini-icon mini-icon-link"></span></a>Clone Github Repo</h2>
+
+<p>Congratulations! You are nearly done! Now all requirements to run the QualitySCHU software are on your server. Note: QualitySCHU has been developed by using <a href="http://github.com/">GitHub</a>. In order to get this amazing software running on your server you have to clone the QualitySCHU GitHub repository.</p>
+
+<ul>
+<li>Change to /var/www<br><code>cd /var/www</code>
+</li>
+<li>Clone Repo<br><code>sudo git clone git://github.com/mpfeil/qualitySCHU.git</code>
+</li>
+</ul><h2>
+<a name="cronjobs" class="anchor" href="#cronjobs"><span class="mini-icon mini-icon-link"></span></a>Cronjobs</h2>
+
+<p>You might wish to know what is happening on your server and you might be tired of starting the parsers manually - so why don't you let cronjobs do the work for you? In this last topic you will learn how to start the required stuff manually and how to edit the crontab in a senseless way.</p>
+
+<ul>
+<li>LANUV-Parser<br><code>python /var/www/qualitySCHU/Parser/LANUV/main.py</code> will start the parser for the LANUV data manually. The parser logs its action to /var/www/logs/lanuv.log</li>
+<li>COSM-Parser<br><code>python /var/www/qualitySCHU/Parser/COSM/main.py</code> will start the parser for the COSM air quality egg data manually. The parser logs its action to /var/www/logs/cosm.log</li>
+<li>Validation<br><code>Rscript /var/www/qualitySCHU/Validation/validationLANUV.R</code> will start the validation script for the LANUV data manually.<br>
+</li>
+</ul><p>To automatically run the jobs, add them to your crontab by typing <code>crontab -e</code> to edit your crontab. We recommend to run the LANUV parser hourly and the LANUV validation script daily. Look <a href="https://help.ubuntu.com/community/CronHowto">here</a> for more information or refer to the cron and crontab manpage.</p>
+    </div>
+  </div>
+  </div>
+
+</div>
+  </body>
+</html>
+
