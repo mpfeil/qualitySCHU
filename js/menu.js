@@ -125,6 +125,24 @@ var todayend = Date.parse("next day");
 
 $('#myModal').on('shown', function(){
 	
+	if(selectedService == "lanuv")
+	{
+		$('#tablehead').children("tr").remove();
+		$('#tablehead').append('<tr><th>Date</th><th>Humidity (%)</th><th>NO (µg/m<sup>3</sup>)</th><th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th><th>Ozone (µg/m<sup>3</sup>)</th><th>Dust (µg/m<sup>3</sup>)</th><th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th><th>Temperature (°C)</th><th>Wind velocity (m/s)</th></tr>');
+		$('#multiselect-menu').children("li").remove();
+		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="nmono">NO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozone</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">Dust</label></a></li>');
+		initCheckboxes();
+	}
+	if(selectedService == "cosmcosm")
+	{
+		$('#tablehead').children("tr").remove();
+		$('#tablehead').append('<tr><th>Date</th><th>CO (ppm)</th><th>Humidity (%)</th><th>NO<sub>2</sub> (ppm)</th><th>Temperature (°C)</th></tr>');
+		$('#multiselect-menu').children("li").remove();
+		$('#multiselect-menu').append('<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="co">CO</label></a></li><li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>');
+		initCheckboxes();
+
+	}
+
 	chart = new CanvasJS.Chart("chartContainer",
 	{
 		zoomEnabled: true,
@@ -180,7 +198,7 @@ $('#myModal').on('shown', function(){
     {
         ranges: {
             'Today': ['today', 'next day'],
-            'Yesterday': ['yesterday', 'today'],
+            'Yesterday': ['yesterday', 'yesterday'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -191,8 +209,7 @@ $('#myModal').on('shown', function(){
     	todaystart = start;
     	todayend = end;
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
-        $("td").empty();
-        //buildDiagram();
+        buildDiagram();
     });
     
     $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
@@ -211,6 +228,7 @@ $('#myModal').on('hidden', function(){
 	//TODO:Clear settings
 	elements = [];
 	checkedValues = 0;
+	$('#tablebody').children('tr').remove();
 });
 
 $('.dropdown-menu').on('click', function(e){
@@ -246,7 +264,9 @@ function buildCaption()
 
 var checkedValues = 0;
 var elements = [];
-$('.checkbox').on('click', function(e){
+function initCheckboxes()
+{
+	$('.checkbox').on('click', function(e){
 	console.log(e);
 	
 	toElement = e.toElement;
@@ -299,7 +319,9 @@ $('.checkbox').on('click', function(e){
 	// 	});	
 	// }
 	buildDiagram();
-});
+});	
+}
+
 
 function checkOptions()
 {

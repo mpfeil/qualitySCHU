@@ -485,7 +485,19 @@
 						</div>
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
-		    			<form class="form-horizontal">
+		    			<div class="row-fluid">
+			    			<div class="span6">
+			    				<h4>Period Of Time</h4>
+			    				<div id="reportrangetable" class="pull-left">
+								    <i class="icon-calendar icon-large"></i>
+								    <span></span> <b class="caret"></b>
+								</div>
+						    </div>
+						    <div class="span6">
+						    </div>
+						</div>
+						<hr>
+		    			<!-- <form class="form-horizontal">
 							<div class="control-group">
 								<label class="control-label" for="reportrangetable">Date:</label>
 								<div class="controls">
@@ -495,21 +507,10 @@
 									</div>
 								</div>
 							</div>
-						</form>
+						</form> -->
 			            
 		    			<table class="table">
-			    			<thead>
-			    				<tr>
-			    					<th>Date</th>
-			    					<th>Humidity (%)</th>
-			    					<th>NO (µg/m<sup>3</sup>)</th>
-			    					<th>NO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Ozone (µg/m<sup>3</sup>)</th>
-			    					<th>Dust (µg/m<sup>3</sup>)</th>
-			    					<th>SO<sub>2</sub> (µg/m<sup>3</sup>)</th>
-			    					<th>Temperature (°C)</th>
-			    					<th>Wind velocity (m/s)</th>
-			    				</tr>
+			    			<thead id="tablehead">
 			    			</thead> 
 			    			<tbody id="tablebody">
 			    			</tbody>
@@ -532,20 +533,12 @@
 								    	<span class="caret"></span>
 								  	</a>
 								  	<ul id="multiselect-menu" class="dropdown-menu dropdown-menu-form">
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="temperature">Temperature</input></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="humidity">Humidity</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="nmono">NO</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="no2">NO<sub>2</sub></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="wv">Wind velocity</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="so2">SO<sub>2</sub></label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="ozone">Ozone</label></a></li>
-								  		<li><a><label class="checkbox"><input id="real" type="checkbox" value="pm10">Dust</label></a></li>
 								  	</ul>
 								</div>
 							</div>
 						</div>	    			
 			            <hr>
-			            <div id="chartContainer" style="width: 100%; height: 400px">
+			            <div id="chartContainer" style="width: 100%; height: 300px;">
 			            </div>
 		    		</div>
 		    	</div>

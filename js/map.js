@@ -277,7 +277,6 @@ function updateTable(start,end)
 
 function addToDiagram(elems,start,end)
 {
-	console.log("Start drawing diagram");
 	query = "";
 	
 	//Build query string
@@ -303,6 +302,9 @@ function addToDiagram(elems,start,end)
         type: 'get',
         dataType: "json",
         success:function(data3){
+
+        	console.log(data3);
+
 		    var data = []; var dataSeries = { type: "line"};
 		    var dataPoints = [];
 
@@ -317,32 +319,41 @@ function addToDiagram(elems,start,end)
 		    	td = data3.data[0].result.DataArray.values[i];
 		    	var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
 		    	var dataPointColor = (td[2] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
+		    	var dataPointType = (td[2] == 100) ? "circle" : (td[2] == 101) ? "cross" : (td[2] == 102) ? "circle" : "" ;
+		    	var dataPointSize = (td[2] == 100) ? "1" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
 		    	dateTime = new Date(td[0]);
+		    	console.log(yValue);
 		        dataPoints.push({
 		          	x: dateTime,
 		          	y: yValue,
-		          	markerSize:1,
-		          	markerColor: dataPointColor              
+		          	markerSize: dataPointSize,
+		          	markerColor: dataPointColor,
+		          	markerType: dataPointType              
 		        });
 		        if(td.length > 3)
 		        {
 		        	var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
 		        	var dataPointColor2 = (td[4] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
+		        	var dataPointType2 = (td[2] == 100) ? "circle" : (td[2] == 101) ? "cross" : (td[2] == 102) ? "circle" : "" ;
+		    		var dataPointSize2 = (td[2] == 100) ? "1" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
+
 		        	dataPoints2.push({
 			          	x: dateTime,
 			          	y: yValue2,
-			          	markerType: "circle",
-			          	markerSize:1,
-			          	markerColor: dataPointColor2               
+			          	markerSize: dataPointSize2,
+		          		markerColor: dataPointColor2,
+		          		markerType: dataPointType2              
 			        });
 
 		        }	
 		    }
 		  	
+		  	console.log(data3.data[0].result.DataArray.field[1].name);
+
 		    dataSeries.markerType = "circle";
 		    dataSeries.dataPoints = dataPoints;
 		    dataSeries.color = "LightSkyBlue";
-		    chart.options.axisY.title = elems[0];
+		    chart.options.axisY.title = data3.data[0].result.DataArray.field[1].name;
 		    data.push(dataSeries);
 
 		    if(elems.length == 2)
@@ -350,7 +361,7 @@ function addToDiagram(elems,start,end)
 		    	dataSeries2.dataPoints = dataPoints2;
 		     	data.push(dataSeries2);
 		     	dataSeries2.color = "LightSeaGreen";
-		     	chart.options.axisY2.title = elems[1]; 
+		     	chart.options.axisY2.title = data3.data[0].result.DataArray.field[3].name; 
 		    }
 
 		    chart.options.data = data;
