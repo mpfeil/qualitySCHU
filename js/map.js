@@ -7,10 +7,6 @@ var selectedMarker;
 var results;
 var lanuvStationen;
 
-//Data Array for Diagram. Contains the single dataSeries
-// var diagramData = [];
-// var dataPoints = [];
-
 var lanuv = L.icon({
     iconUrl: 'img/lanuv.png',
     iconSize: [41, 41],

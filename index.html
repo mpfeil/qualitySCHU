@@ -21,14 +21,9 @@
 	
     	<!-- Fav and touch icons -->
 		<link rel="shortcut icon" href="img/favicon.ico">
-    	<!--
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    	<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
--->
     </head>
     <body>
+    	<!-- Navigation bar at the top of the page -->
 		<div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
       		<div class="navbar-inner">
         		<div class="container-fluid">
@@ -53,9 +48,11 @@
 			</div>
 		</div>
     
+    	<!-- Map div -->
 		<div id="map">
 		</div>
 		
+		<!-- Sensor bar at the button of the page -->
 		<div class="container">
 			<div id="myCarousel" class="carousel slide">
 			  <ol class="carousel-inner">
@@ -64,6 +61,7 @@
 			  </ol>
 			  <!-- Carousel items -->
 			  <div class="carousel-inner">
+			  	<!-- cosm sensor bar-->
 			  	<div class="active item">
 					<div class="row-fluid" id="aqe">
 			    		<div class="span12">
@@ -96,6 +94,7 @@
 						</div>
 					</div>    
 			    </div>
+			    <!-- lanuv sensor bar -->
 			    <div class="item">
 					<div class="row-fluid" id="lanuv">
 			    		<div class="span12">
@@ -108,7 +107,7 @@
 								    	</div>
 								    	<div class="span3">
 									    	<img id="lanuvTempHum" class="img-rounded" src="img/temperature.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvTempForm"></h5><h5 style="display:inline;" id="sepTempHum">°C / </h5><h5 style="display:inline;" id="lanuvHumForm"></h5><h5 style="display:inline;" id="lanuvSepHum">%</h5>
-									    	<h5>Temperature / Humidity</h5>
+									    	<h5>Temp. / Humidity</h5>
 									    </div>
 									    <div class="span3">
 									    	<img id="lanuvNO2" class="img-rounded" src="img/no2.png" style="width:60px; height:60px;"><h5 style="display:inline;" id="lanuvNO2Form"></h5><h5 style="display:inline;" id="lanuvSepNO2Form">µg/m<sup>3</sup></h5>
@@ -148,7 +147,7 @@
 			</div>
 		</div>
 		
-
+		<!-- Download wizard -->
 		<div class="wizard" id="some-wizard">
 		    <h1>Customize and download</h1>
 		 
@@ -187,9 +186,9 @@
 					    </div>
 					    <div id="collapseOne" class="accordion-body collapse">
 					        <div class="accordion-inner"> 
-                                                    An <b>Air Quality Egg</b> (AQE) is a low-cost sensor system which enables 
-                                                    every person to get information about air quality in his direct surroundings. 
-                                                    The air quality data is measured by different sensors.
+                                An <b>Air Quality Egg</b> (AQE) is a low-cost sensor system which enables 
+                                every person to get information about air quality in his direct surroundings. 
+                                The air quality data is measured by different sensors.
 							</div>
 						</div>
 					</div>
@@ -199,13 +198,13 @@
 						</div>
 						<div id="collapseTwo" class="accordion-body collapse">
 							<div class="accordion-inner">
-                                                            The AQE is a sensor system composed of two components: 
-                                                            outdoor sensors and a base station (the egg itself). 
-                                                            Using an RF transmitter, the sensor data is going to be send 
-                                                            wirelessly to the base station, which should be located inside. 
-                                                            The measured air quality data is sent to 
-                                                            <a href="https://cosm.com/" target="_blank">Cosm</a> (open source 
-                                                            data platform to store and access data) in real-time.
+                                The AQE is a sensor system composed of two components: 
+                                outdoor sensors and a base station (the egg itself). 
+                                Using an RF transmitter, the sensor data is going to be send 
+                                wirelessly to the base station, which should be located inside. 
+                                The measured air quality data is sent to 
+                                <a href="https://cosm.com/" target="_blank">Cosm</a> (open source 
+                                data platform to store and access data) in real-time.
 							</div>
 						</div>
 					</div>
@@ -215,10 +214,10 @@
 						</div>
 						<div id="collapseThree" class="accordion-body collapse">
 							<div class="accordion-inner">
-                                                            The standard equipment includes an NO2 sensor and a CO Sensor 
-                                                            as well as temperature and humidity sensors. Optionally, 
-                                                            additional sensors can be purchased at an extra charge, 
-                                                            like PM10 or ozone/O3.
+                                The standard equipment includes an NO2 sensor and a CO Sensor 
+                                as well as temperature and humidity sensors. Optionally, 
+                                additional sensors can be purchased at an extra charge, 
+                                like PM10 or ozone/O3.
 							</div>
 						</div>
 					</div>
@@ -228,11 +227,11 @@
 						</div>
 						<div id="collapseFour" class="accordion-body collapse">
 							<div class="accordion-inner">
-                                                            Because the measured concentrations of NO2 and CO are most responsible 
-                                                            for the air pollution in urban areas, the collected data can help supporting
-                                                            the improvement of air quality, since areas which are particulary affected 
-                                                            by air pollution can be located much easier.
-                                                        </div>
+                                Because the measured concentrations of NO2 and CO are most responsible 
+                                for the air pollution in urban areas, the collected data can help supporting
+                                the improvement of air quality, since areas which are particulary affected 
+                                by air pollution can be located much easier.
+                            </div>
 						</div>
 					</div>
 					<div class="accordion-group">
@@ -241,10 +240,7 @@
 						</div>
 						<div id="collapseFive" class="accordion-body collapse">
 							<div class="accordion-inner"> 
-							    With an air quality egg every person has the opportunity to 
-                                                            participate in the conversation about air quality and learn 
-                                                            about the current, as well as long-term air quality in his 
-                                                            near surroundings.
+							    With an air quality egg every person has the opportunity to participate in the conversation about air quality and learn about the current, as well as long-term air quality in his near surroundings.
 							</div>
 						</div>
 					</div>
@@ -255,14 +251,14 @@
 						<div id="collapseSix" class="accordion-body collapse">
 							<div class="accordion-inner">
 							        <p> 
-                                                                    <b>LANUV</b> is an abbreviation for "<b>Landesamt für Natur, Umwelt und 
-                                                                    Verbraucherschutz NRW</b>". The LANUV maintains a large number of 
-                                                                    stations for measuring air quality, which are eqipped with 
-                                                                    additional sensors for measuring air quality.
-                                                                </p>
-                                                                <p>
-                                                                    For further information please have a look <a href="http://www.lanuv.nrw.de/luft/temes/stat.htm" target="_blank">here</a>.
-                                                                </p>
+                                        <b>LANUV</b> is an abbreviation for "<b>Landesamt für Natur, Umwelt und 
+                                        Verbraucherschutz NRW</b>". The LANUV maintains a large number of 
+                                        stations for measuring air quality, which are eqipped with 
+                                        additional sensors for measuring air quality.
+                                    </p>
+                                    <p>
+                                        For further information please have a look <a href="http://www.lanuv.nrw.de/luft/temes/stat.htm" target="_blank">here</a>.
+                                    </p>
 							</div>
 						</div>
 					</div>
@@ -279,9 +275,9 @@
 							        	<b>Temperature</b>, <b>humidity</b>, <b>nitrogen dioxide</b> and <b>carbon monoxide</b>.
 							        </p>
 							        <p>     
-							                Since the eggs could be located inside or outside a building, 
-							                the measured values could differ considerably, even though there 
-							                is only a short distance between two neighboring eggs.
+						                Since the eggs could be located inside or outside a building, 
+						                the measured values could differ considerably, even though there 
+						                is only a short distance between two neighboring eggs.
 							        </p>
 							        <p>
 							        	<b><a href="http://en.wikipedia.org/wiki/Temperature" target="_blank">Temperature</a></b> is measured in degree 
@@ -308,7 +304,7 @@
 							        	<a href="http://en.wikipedia.org/wiki/Carbon_monoxide" target="_blank">here</a>.
 							        </p>
 							        <p>     
-							                In addition to this the <b>LANUV</b> data include following measurements: 
+							            In addition to this the <b>LANUV</b> data include following measurements: 
 							        </p>
 							        <p>     
 							        	<b><a href="http://en.wikipedia.org/wiki/Nitrogen_monoxide" target="_blank">Nitrogen monoxide</a></b>, 
@@ -327,6 +323,7 @@
 						</div>
 						<div id="collapseEight" class="accordion-body collapse">
 							<div class="accordion-inner">
+<<<<<<< HEAD
 							<p>
 							In the table view you can easy distinguish validated data from non-validated data by the background color of the cell.
 							</p>
@@ -348,6 +345,28 @@
 							alt = "Diagram" />
 							</p>
 
+=======
+								<p>
+									In the table view you can easy distinguish validated data from non-validated data by the background color of the cell.
+								</p>
+								<p><b>Yellow:</b> not validated</p>							
+								<p><b>Green:</b> validated and no outlier</p>
+								<p><b>Red:</b> validated and outlier</p>
+								<p>
+								<br/>
+									<img src = "https://raw.github.com/mpfeil/qualitySCHU/master/Screenshots/table_color_code.PNG"
+									alt = "Table view" />
+								</p>
+								<br/>
+								<p>
+									The same applies for the diagram, except it's not the background color but the color of the dots representing measurments.
+								</p>
+								<br/>
+								<p>
+									<img src = "https://raw.github.com/mpfeil/qualitySCHU/master/Screenshots/diagram.PNG"
+									alt = "Diagram" />
+								</p>
+>>>>>>> Code clean up
 							</div>
 						</div>
 					</div>
@@ -357,53 +376,51 @@
 						</div>
 						<div id="collapseNine" class="accordion-body collapse">
 							<div class="accordion-inner">
-							<p>
-							In our case validation basically means finding and labeling outliers 
-							in the data we get from LANUV and from the AQE's. This means no data will be deleted or changed!
-							</p>
-							<p>
-							It is also important to note that measurements labeled as outliers are not always errors 
-							in the measurements process. They may be valid observations indicating unusual events with 
-							unusual values which are labeled by the validation algorithm.
-							</p>
-							<p>
-							Outlier detection is done using the <a href="http://www.r-project.org/" target="_blank">R statistics software</a>.
-							</p>
-							<p>
-							It basically works like this: 
-							</p>
-							<p>
-							First of all the running <a href="http://en.wikipedia.org/wiki/Median" target="_blank">median</a> of a set of 
-							non-validated measurements is calculated. 
-							The window size depends on the used data (e.g. LANUV or AQE).
-							</p>
-							<p>
-							For the validation itself we use a leftsided window ranging from x<SUB>i</SUB>  to x<SUB>i-window_size</SUB>. 
-							From the values inside this window we compute the <a href="http://en.wikipedia.org/wiki/Interquartile_range" target="_blank">interquartile range</a>.
-							Starting from the most recent measurement we check if the measured value is smaller than 
-							the <b>running median &#x2212; 1,5 &#215; interquartile range </b> or larger than the <b>running median + 1,5 &#215; interquartile range</b>. 
-							If that is the case the measurement is labeled as an outlier.
-							</p>
-							<p>
-							The validation of the LANUV data runs daily at 1:42 AM and the validation of the COSM data runs hourly.
-							</p>
-
+								<p>
+									In our case validation basically means finding and labeling outliers 
+									in the data we get from LANUV and from the AQE's. This means no data will be deleted or changed!
+								</p>
+								<p>
+									It is also important to note that measurements labeled as outliers are not always errors 
+									in the measurements process. They may be valid observations indicating unusual events with 
+									unusual values which are labeled by the validation algorithm.
+								</p>
+								<p>
+									Outlier detection is done using the <a href="http://www.r-project.org/" target="_blank">R statistics software</a>.
+								</p>
+								<p>
+									It basically works like this: 
+								</p>
+								<p>
+									First of all the running <a href="http://en.wikipedia.org/wiki/Median" target="_blank">median</a> of a set of 
+									non-validated measurements is calculated. 
+									The window size depends on the used data (e.g. LANUV or AQE).
+								</p>
+								<p>
+									For the validation itself we use a leftsided window ranging from x<SUB>i</SUB>  to x<SUB>i-window_size</SUB>. 
+									From the values inside this window we compute the <a href="http://en.wikipedia.org/wiki/Interquartile_range" target="_blank">interquartile range</a>.
+									Starting from the most recent measurement we check if the measured value is smaller than 
+									the <b>running median &#x2212; 1,5 &#215; interquartile range </b> or larger than the <b>running median + 1,5 &#215; interquartile range</b>. 
+									If that is the case the measurement is labeled as an outlier.
+								</p>
+								<p>
+									The validation of the LANUV data runs daily at 1:42 AM and the validation of the COSM data runs hourly.
+								</p>
 							</div>
 						</div>
 					</div>
-                                        <div class="accordion-group">
+                    <div class="accordion-group">
 						<div class="accordion-heading">
 							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">How to view a table of the data?</a>
 						</div>
 						<div id="collapseTen" class="accordion-body collapse">
 							<div class="accordion-inner">
-							<p>
-                                                        To view a table of the data, please click on one of the corresponding symbols below the map visualizing the different sensors.
-                                                        </p>
-                                                        <p>
-                                                        In the table view you can choose a measurement period. The table then shows all the values which have been measured in this period of time 
-                                                        by the different sensors. You can distinguish validated and non-validated data and easily detect outliers by the background color of the cell.
-                                                        </p>
+								<p>
+	                            	To view a table of the data, please click on one of the corresponding symbols below the map visualizing the different sensors.
+	                            </p>
+	                            <p>
+	                            	In the table view you can choose a measurement period. The table then shows all the values which have been measured in this period of time by the different sensors. You can distinguish validated and non-validated data and easily detect outliers by the background color of the cell.
+	                            </p>
 							</div>
 						</div>
 					</div>
@@ -413,13 +430,13 @@
 						</div>
 						<div id="collapseEleven" class="accordion-body collapse">
 							<div class="accordion-inner">
-							<p>
-                                                        To view a diagram of the data, please click on one of the corresponding symbols below the map visualizing the different sensors.
-                                                        </p>
-                                                        <p>
-                                                        In the diagram view you have the possibility to select a measurement period, as well as one, or for comparison purposes two different 
-                                                        attributes (e.g. to get information about the relation between temperature and humidity).<br>You can choose between predefined measurement periods or a custom range.
-                                                        </p>
+								<p>
+                                	To view a diagram of the data, please click on one of the corresponding symbols below the map visualizing the different sensors.
+                                </p>
+                                <p>
+                                	In the diagram view you have the possibility to select a measurement period, as well as one, or for comparison purposes two different 
+                                	attributes (e.g. to get information about the relation between temperature and humidity).<br>You can choose between predefined measurement periods or a custom range.
+                                </p>
 							</div>
 						</div>
 					</div>
@@ -429,24 +446,24 @@
 						</div> 
             			<div id="collapseTwelve" class="accordion-body collapse">
 							<div class="accordion-inner">
-							<p> 
-							There are 2 ways to download the data you want.              
-							</p>
-							<p>
-							If you are already experienced in using a Sensor Observation Service you can write own requests to our SOS
-							<br/>
-							<b>http://giv-geosoft2d.uni-muenster.de/istsos/lanuv?service=SOS </b> for LANUV data or
-							<br/>
-							<b>http://giv-geosoft2d.uni-muenster.de/istsos/cosmcosm?service=SOS</b> for COSM data.
-							<br/>
-							You can find further information on how to do this  <a href="http://istgeo.ist.supsi.ch/software/istsos/examples.html" target="_blank">here</a>
-							</p>
-							<br/>
-							<p>
-							The easy but very basic way to download data is selecting the measuring station you want and clicking download. 
-							Then you only need to choose the observed property you want and a time frame.
-							After clicking submit an getObservation request is automatically generated and you get your data.
-							</p>
+								<p> 
+									There are 2 ways to download the data you want.              
+								</p>
+								<p>
+									If you are already experienced in using a Sensor Observation Service you can write own requests to our SOS
+									<br/>
+									<b>http://giv-geosoft2d.uni-muenster.de/istsos/lanuv?service=SOS </b> for LANUV data or
+									<br/>
+									<b>http://giv-geosoft2d.uni-muenster.de/istsos/cosmcosm?service=SOS</b> for COSM data.
+									<br/>
+									You can find further information on how to do this  <a href="http://istgeo.ist.supsi.ch/software/istsos/examples.html" target="_blank">here</a>
+								</p>
+								<br/>
+								<p>
+									The easy but very basic way to download data is selecting the measuring station you want and clicking download. 
+									Then you only need to choose the observed property you want and a time frame.
+									After clicking submit an getObservation request is automatically generated and you get your data.
+								</p>
 							</div>
 						</div>
 					</div> 
@@ -457,14 +474,14 @@
             			<div id="collapseThirteen" class="accordion-body collapse">
 							<div class="accordion-inner">
 							<p> 
-							Read the <a href="instman.html" target="_blank">installation manual</a>.              
+								Read the <a href="instman.html" target="_blank">installation manual</a>.              
 							</p>
+						</div>
+		    		</div>
 				</div>
-		    </div>
+			</div>
 		</div>
-	</div>
-</div>
-</div>
+		</div>
 		
 		<!-- getting started Modal -->
 		<div id="getstartModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="getstartModalLabel" aria-hidden="true">
@@ -481,12 +498,13 @@
 					    <div id="collOne" class="accordion-body collapse">
 					        <div class="accordion-inner"> 
                                	<p> 
-                               	At first you see the starting screen, which appears as the standard view after opening the web page.
+                               		At first you see the starting screen, which appears as the standard view after opening the web page.
                                	</p>
                                	<p>
-                               	The screen of the web page is basically divided in three elements.
+                               		The screen of the web page is basically divided in three elements.
                                	</p>
                                	<p>
+<<<<<<< HEAD
                                	In the center of the screen you can see a map(1) based on Open Street Map, on which measuring stations are visualized.
                                	</p>
                                	<p>
@@ -494,30 +512,52 @@
                                	</p>
                                	<p>
                                	In the lower part you can see a sensor bar(3), which is used for the visualization of currently measured values of the selected station.
+=======
+                               		In the center of the screen you can see a map (based on Open Street Map), on which measuring stations are visualized.
+                               	</p>
+                               	<p>
+                               		In the upper part of the page, a selection menu is available, including the items Download, Getting Started, FAQ and About. 
+                               	</p>
+                               	<p>
+                               		In the lower part you can see a sensor display, which is used for the visualization of currently measured values.
+>>>>>>> Code clean up
                                	</p>
 								<p>
 								<img src = "https://raw.github.com/mpfeil/qualitySCHU/master/Screenshots/getting_started_1.png"alt = "Diagram" />
 								</p>
 								<br/>
                                	<p>
+<<<<<<< HEAD
                                	In order to download data, please click on the menu item "Download".<br>A new window will appear.
+=======
+                               		In order to make downloads, please click on the menu item "Download".<br>A window opens then.
+>>>>>>> Code clean up
                                	</p>
                                	<p>
-                               	If you have questions to some topics of the project or you like to get some background information, you can click on the menu item "FAQ".
-                               	<br>Then a list appears with frequently asked questions concerning this project.
+                               		If you have questions to some topics of the project or you like to get some background information, you can click on the menu item "FAQ".
+                               		<br>Then a list appears with frequently asked questions concerning this project.
                                	</p>
                                	<p>
-                               	By clicking on each question its answer appears. 
+                               		By clicking on each question its answer appears. 
                                	</p>
                                	<p> 
-                               	Click on the "x" to exit the window and you will return to the starting screen.
+                               		Click on the "x" to exit the window and you will return to the starting screen.
                                	</p>
+<<<<<<< HEAD
                                	The menu item "About" gives a short overview of the project and the possibility to contact us. To have a look at it, please 
                                	click on the about button.<br>A window will appear. 
                                	</p>
                                	<p>
                                	Have a click on the "x" and the window will disappear again.
                                 </p>
+=======
+                               		The menu item "About" gives a short overview of the project. To have a look at it, please 
+                               		click on the about button.<br>A popup window will appear. 
+                               	</p>
+                               	<p>
+                               		Have another click on the "About" button and the popup window will disappear again.
+                               </p>
+>>>>>>> Code clean up
 							</div>
 						</div>
 					</div>
@@ -528,42 +568,42 @@
 						<div id="collTwo" class="accordion-body collapse">
 							<div class="accordion-inner">
                                 <p>
-                                The map view provides several functions.
+                                	The map view provides several functions.
                                 </p>
                                 <p> 
-                                In order to zoom into the map, you can click on the + button. 
+                                	In order to zoom into the map, you can click on the + button. 
                                 </p>
                                 <p>
-                                In the same way you can click on the - button to zoom out of the map. 
+                                	In the same way you can click on the - button to zoom out of the map. 
                                 </p>
                                 <p>
-                                Alternatively you can use the scroll wheel of your computer mouse to zoom in and out of the map.
+                                	Alternatively you can use the scroll wheel of your computer mouse to zoom in and out of the map.
                                 </p>
                                 <p>
-                                To move the map, you can click the left mouse button and move it in a direction you like to.
+                                	To move the map, you can click the left mouse button and move it in a direction you like to.
                                 </p>
                                 <p>
-                                As you can see, several different objects are displayed on the map.
+                                	As you can see, several different objects are displayed on the map.
                                 </p>
                                 <p>
-                                The circles containing a number, describe a clustering of symbols. A cluster concentrates 
-                                various symbols, which are in close proximity. The different colour results out of the fact 
-                                that a clustering of up to 9 symbols is visualized by a green circle, 10 or more clustered 
-                                symbols by a yellow circle.
+                                	The circles containing a number, describe a clustering of symbols. A cluster concentrates 
+                                	various symbols, which are in close proximity. The different colour results out of the fact 
+                                	that a clustering of up to 9 symbols is visualized by a green circle, 10 or more clustered 
+                                	symbols by a yellow circle.
                                 </p>
                                 <p>
-                                As an alternative to a direct zoom into the map, a click on the circle also causes a change in scale.
+                                	As an alternative to a direct zoom into the map, a click on the circle also causes a change in scale.
                                 </p>
                                 <p>
-                                You can choose two different types of symbols on the map. 
+                                	You can choose two different types of symbols on the map. 
                                 </p>
                                 <p>
-                                The icon in shape of an egg refers to air quality egg data measuring stations, which have been placed there, 
-                                the icon in shape of a radio tower refers to LANUV stations.
+                                	The icon in shape of an egg refers to air quality egg data measuring stations, which have been placed there, 
+                                	the icon in shape of a radio tower refers to LANUV stations.
                                 </p>
                                 <p>
-                                You can click on each of the icons. After doing so, currently measured values will be 
-                                displayed below the map.
+                                	You can click on each of the icons. After doing so, currently measured values will be 
+                                	displayed below the map.
                                 </p>
 							</div>
 						</div>
@@ -574,6 +614,7 @@
 						</div>
 						<div id="collThree" class="accordion-body collapse">
 							<div class="accordion-inner">
+<<<<<<< HEAD
                                                                 <p>
                                                                 After clicking on a symbol (either air quality eggs or LANUV stations) you notice that 
                                                                 in the sensor bar in the lower part of the page some values have appeared.<br>They describe 
@@ -623,6 +664,9 @@
 								<br>If you select two different attributes, it is easier to understand relations between attributes values.
 								</p>
 
+=======
+                                Lorem ipsum.
+>>>>>>> Code clean up
 							</div>
 						</div>
 					</div>
@@ -663,12 +707,11 @@
 			</div>
 		</div>
 		
-
+		<!-- Overview modal -->
 		<div id="myModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     			<h3 id="myModalLabel">
-
     			</h3>
     		</div>
     		<div class="modal-body">
@@ -711,6 +754,11 @@
 						    </div>
 						    <div class="span6">
 						    	<h4>Attribute</h4>
+						    	<!-- <select class="selectpicker" multiple>
+							      	<option>Mustard</option>
+							      	<option>Ketchup</option>
+							      	<option>Relish</option>
+							  	</select> -->
 						    	<div class="btn-group" id="multiselect" data-toggle="button">
 								 	<a id="dropdown-multiselect" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 								    	None selected
@@ -729,21 +777,16 @@
 			</div>
 		    <div class="modal-footer">
 		    	<div class="row-fluid" style="visibility:hidden;" id="modalFooter">
-		    		<div class="span4">
-		    			<span class="label pull-left label-warning"></a>Raw data</span>
-		    		</div>
-		    		<div class="span4">
-		    			<span class="label pull-left label-success"></a>Not outlier</span>
-		    		</div>
-		    		<div class="span4">
-		    			<span class="label pull-left label-important"></a>Outlier</span>
+		    		<div class="pull-right">
+		    			<span class="label label-warning"></a>Raw data</span>
+		    			<span class="label label-success"></a>Not outlier</span>
+		    			<span class="label label-important"></a>Outlier</span>
 		    		</div>
 		    	</div>
-		    	
-   
 		    </div>
 		</div>  
 
+		<!-- About Modal -->
 		<div id="aboutModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

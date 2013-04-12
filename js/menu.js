@@ -1,8 +1,5 @@
 var chart;
 
-$('#about').popover({placement:'bottom', trigger:'click'})
-$('#use').popover({placement:'bottom', trigger:'click'})
-
 $(".img-rounded").hover(
 	function(){
 		switch(this.getAttribute("id"))
@@ -155,6 +152,18 @@ $('#myModal').on('shown', function(){
 		$('#home').append('<div class="row-fluid"><div class="span6"><div class="span4"><h4>Description:</h4><h4>Creator:</h4><h4>Cosm feed:</h4><h4>Status:</h4><h4>Domain:</h4><h4>Exposure:</h4><h4>Elevation:</h4><h4>Tags:</h4></div><div class="span4"><h4>'+results["description"]+'</h4><h4><a href="'+results["creator"]+'" target="_blank">AirQualityEgg</a></h4><h4><a href="https://cosm.com/feeds/'+results["id"]+'" target="_blank">'+results["id"]+'</a></h4><h4>live</h4><h4>'+results["location"]["domain"]+'</h4><h4>'+results["location"]["exposure"]+'</h4><h4>35m</h4><h4><span style="display:inline;" class="label label-info">'+results["tags"][0]+'</span> <span style="display:inline;" class="label label-info">'+results["tags"][1]+'</span></h4></div></div><div class="span6"></div></div>');
 		initCheckboxes();
 
+		$('#myTab a[href="#diagram"]').on('click', function(){
+			$('#modalFooter').css('visibility', 'visible');
+
+			// console.log($('#checkTemp'));
+			// buildDiagram();
+			// buildCaption();
+			// checkOptions();
+		})
+
+		$('#myTab a[href="#table"]').on('click', function(){
+			$('#modalFooter').css('visibility', 'visible');
+		})
 	}
 
 	chart = new CanvasJS.Chart("chartContainer",
@@ -230,6 +239,12 @@ $('#myModal').on('shown', function(){
     $('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
 })
 
+$('a[data-toggle="tab"]').on('shown', function (e) {
+	alert
+  	$('.selectpicker').val('humidity');
+	$('.selectpicker').change();
+})
+
 function buildDiagram()
 {
 	if (elements != "")
@@ -239,7 +254,6 @@ function buildDiagram()
 }
 
 $('#myModal').on('hidden', function(){
-	//TODO:Clear settings
 	elements = [];
 	checkedValues = 0;
 	$('#tablebody').children('tr').remove();
@@ -284,9 +298,9 @@ function buildCaption()
 	});	
 }
 
-var checkedValues = 0;
-var elements = [];
 var echeckbox;
+var elements = [];
+var checkedValues = 0;
 function initCheckboxes()
 {
 	$('.checkbox').on('click', function(e){
