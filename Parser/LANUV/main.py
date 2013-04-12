@@ -1,8 +1,16 @@
-'''
-Created on 30.12.2012
+# -*- coding: utf-8 -*-
+# COSM Parser - Institute for Geoinformatics University of Muenster
+# Copyright (C) 2013 Matthias Pfeil
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-@author: Matthias Pfeil
-'''
 import urllib2
 import logging
 import re
@@ -13,11 +21,8 @@ import dateutil.tz
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime, timedelta
 
-#SOS path
-sos_url = "http://giv-geosoft2d.uni-muenster.de/istsosold/qualityschu"
-getCapabilities = "?request=getCapabilities&sections=operationsmetadata&service=SOS&version=1.0.0"
-
-#logging functionality
+#Logger settings. You can change the logging file and 
+#the formatter.
 logger = logging.getLogger('LANUV')
 hdlr = logging.FileHandler('/var/www/logs/lanuv.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
@@ -52,7 +57,7 @@ def getStationsOfSOS():
     
     return stations
 
-#data -> SSO
+#This method inserts the new observations
 def insertObservation(station,values):
     
     three_hours_from_now = datetime.now() + timedelta(hours=3)
@@ -157,16 +162,16 @@ def insertObservation(station,values):
   </om:Observation>\n\
 </sos:InsertObservation>'
     
+    #Send request to the SOS
     headers = {"Content-type": "application/raw", "Accept": "text/plain"}
     request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/lanuv",insert_Observation,headers)
     handler = urllib2.urlopen(request)
-    print handler.read()
     logger.info(handler.read())
 
 if __name__ == '__main__':
     logger.info("Parse process started")
     
-    'Build correct timezone offset'
+    #Build correct timezone offset
     localtz = dateutil.tz.tzlocal()
     localoffset = localtz.utcoffset(datetime.now())
     localoffset_in_hours = (localoffset.days * 86400 + localoffset.seconds) / 3600
@@ -181,19 +186,21 @@ if __name__ == '__main__':
         else:
             localoffset_in_hours = "-0"+str(localoffset_in_hours)
     
+    #Calculate and set the current time
     localtime = time.localtime(time.time())
-    #print localtime
-    #print str(time.strftime("%Y-%m-%dT%H:00:00%z", localtime))
     iso_datetime = str(time.strftime("%Y-%m-%dT%H:00:00", localtime))
     iso_datetime = iso_datetime+localoffset_in_hours
     search_for = str(time.strftime("%H", localtime))+":00"
     
+    #Call getStationsOfSOS and get all registered stations
     stations = getStationsOfSOS()
     
+    #Call the LANUV website for all stations
     for i in range(len(stations)):
         response = urllib2.urlopen('http://www.lanuv.nrw.de/luft/temes/heut/'+stations[i][0]+'.htm').read()    
         soup = BeautifulSoup(response)
-
+        
+        #Try to find the data on LANUV website
         try:
             if localoffset_in_hours == "+02" and search_for == "01:00":
                 search_for = "24:00"
@@ -201,16 +208,15 @@ if __name__ == '__main__':
                 search_for = "24:00"
             rows = soup.find('td', text = re.compile(search_for), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
         except AttributeError as aE:
-            print "first exception"
             one_hour_back = datetime.now() - timedelta(hours=1)
             one_hour_back = '{:%H:00}'.format(one_hour_back)
             search_for = one_hour_back
             try:
                 rows = soup.find('td', text = re.compile(search_for), attrs = {'class' : 'mw_zeit'}).findPrevious('tr').findAll('td')
             except:
-                print aE
                 logger.error("No values for LANUV Station "+str(stations[i])+" at "+str(localtime[3])+":00"+" available!")
-            
+        
+        #Get the data and strip off whitespaces    
         ozon = rows[2].getText().lstrip()
         no = rows[3].getText().lstrip()
         no2 = rows[4].getText().lstrip()
@@ -223,5 +229,8 @@ if __name__ == '__main__':
         
         logger.info("Successfully parsed values for Station "+str(stations[i][0])+" for "+search_for+" : "+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon)
         values = iso_datetime+","+rfeu+","+no+","+no2+","+wges+","+ltem+","+so2+","+staub+","+ozon
-        print values
+        
+        #Call insertObservation method
         insertObservation(stations[i],values)
+        
+    logger.info("Parse process finished")

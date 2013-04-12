@@ -1,20 +1,34 @@
-'''
-Created on 20.03.2013
+# -*- coding: utf-8 -*-
+# COSM Parser - Institute for Geoinformatics University of Muenster
+# Copyright (C) 2013 Matthias Pfeil
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-@author: Matthias Pfeil
-'''
 import urllib2
 import logging
 import json
 from urllib2 import URLError
 
+#Set your COSM API Key
 xApiKey = "tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g"
+
+#Logger settings. You can change the logging file and 
+#the formatter.
 logger = logging.getLogger('COSM')
-hdlr = logging.FileHandler('/Users/matze/downloads/logs/cosm.log')
+hdlr = logging.FileHandler('/var/www/logs/cosmnewandupdate.log')
 formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
+
+#Globel variables
 insert = []
 update = []
 errors = []
@@ -25,11 +39,15 @@ def getAQEFeeds():
     try:
         logger.info("Checking COSM API for AQEs...")
         
+        #Query string for COSM data.
+        #You can modify the query string after the rules find here: 
+        #https://cosm.com/docs/v2/feed/list.html
         cosm = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&order=relevance&status=live&per_page=150").read()
-        #cosm = urllib2.urlopen("http://api.cosm.com/v2/feeds?key="+xApiKey+"&q=aqe&status=live&per_page=150").read()
         cosm_decoded_data = json.loads(cosm)
         logger.info("Found "+str(cosm_decoded_data["totalResults"])+" feeds via the cosm API.")
         logger.info("Checking SOS for exisiting AQEs...")
+        
+        #Query the SOS via the WAlib of istSOS
         sos = urllib2.urlopen("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosmcosm/procedures/operations/getlist").read()
         sos_decoded_data = json.loads(sos)
         logger.info("Found "+str(sos_decoded_data["total"])+" via the SOS API.")
@@ -56,7 +74,6 @@ def getAQEFeeds():
         
     except URLError as urlErr:
         logger.error(urlErr)
-        print urlErr
     
     logger.info(str(len(update))+" can be updated!")
     logger.info(str(len(insert))+" must be inserted!")
@@ -65,6 +82,7 @@ def getAQEFeeds():
         logger.warning(kE)
     
     logger.info("Insert the new feeds...")
+    #Call insert Method with AQEs which does not exsist in the SOS
     insertAQEFeeds(insert)
     logger.info("Insert DONE. Watch out for exceptions during the insert!")
     
@@ -87,8 +105,9 @@ def insertAQEFeeds(insert):
             keywords = str(feed["location"]["exposure"])
         else:
             keywords = ""
+            
+        #Check what datastreams are available for new AQE/Sensor
         for datastreams in feed["datastreams"]:
-            #print str(feed["id"])+": "+str(datastreams)
             try:
                 if datastreams["tags"][0] == "aqe:data_origin=computed":
                     if datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=CO":
@@ -104,7 +123,9 @@ def insertAQEFeeds(insert):
                     #elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=VOC":
                     #    additionalSensors = additionalSensors + ',{"name":"voc","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:voc","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
                     #elif datastreams["tags"][len(datastreams["tags"])-1] == "aqe:sensor_type=O3":
-                    #    additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'    
+                    #    additionalSensors = additionalSensors + ',{"name":"ozone","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:o3","uom":"ppm","description":"'+datastreams["id"]+'","constraint":{"role":null,"interval":["",""]}}'
+                #Special case for AQE in Muenster. Datastreams have different
+                #naming than new shipped and registered AQEs
                 elif str(feed["id"]) == "75842":
                     if datastreams["tags"][0] == "carbon monoxide":
                         coID = "CO"
@@ -118,8 +139,11 @@ def insertAQEFeeds(insert):
                         humidityID = "humidity"
             except KeyError as kE:
                 print str(feed["id"])+": "+str(kE)
+                
+        #JSON encoded string to register the new AQE/Sensor
         registerSensor = '{"system_id":"'+str(feed["id"])+'","system":"'+str(feed["id"])+'","description":"","keywords":"'+keywords+'","identification":[],"classification":[{"name":"System Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:systemType","value":"insitu-fixed-point"},{"name":"Sensor Type","definition":"urn:ogc:def:classifier:x-istsos:1.0:sensorType","value":"aqe"}],"characteristics":"","contacts":[],"documentation":[],"capabilities":[],"location":{"type":"Feature","geometry":{"type":"Point","coordinates":["'+str(feed["location"]["lon"])+'","'+str(feed["location"]["lat"])+'","0"]},"crs":{"type":"name","properties":{"name":"4326"}},"properties":{"name":"'+str(feed["id"])+'"}},"interfaces":"","inputs":[],"outputs":[{"name":"Time","definition":"urn:ogc:def:parameter:x-istsos:1.0:time:iso8601","uom":"iso8601","description":"","constraint":{"role":null,"interval":null}},{"name":"co","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co","uom":"ppm","description":"'+str(coID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"humidity","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity","uom":"%","description":"'+str(humidityID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"no2","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2","uom":"ppm","description":"'+str(no2ID)+'","constraint":{"role":null,"interval":["",""]}},{"name":"temperature","definition":"urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature","uom":"deg C","description":"'+str(temperatureID)+'","constraint":{"role":null,"interval":["",""]}}'+additionalSensors+'],"history":[]}'
-        #print registerSensor
+        
+        #Send request via WAlib to SOS
         headers = {"Content-type": "application/raw", "Accept": "application/json"}
         request = urllib2.Request("http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosmcosm/procedures",registerSensor,headers)
         handler = urllib2.urlopen(request)
@@ -131,7 +155,7 @@ def insertAQEFeeds(insert):
         else:
             logger.error(response_data["message"])
             unsuccessful = unsuccessful + 1
-        #print response_data["message"]
+        
     logger.info("Successful inserts: "+str(successful)+" feeds.")
     logger.warning("Unsuccessful inserts: "+str(unsuccessful)+" feeds. Watch the preceding errors!")
 
