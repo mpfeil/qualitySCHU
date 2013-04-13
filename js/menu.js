@@ -360,7 +360,181 @@ function checkOptions()
 }
 
 var options = {};
-var wizard = $("#some-wizard").wizard(options);
+var selectedServiceToDownload;
+var selectedProceduresToDownload;
+var selectedObservedProperties;
+var wizard = $("#downloadWizard").wizard(options);
+
+wizard.el.find(".wizard-success .download-more-data").click(function() {
+	wizard.reset();
+});
+
+wizard.el.find(".wizard-success .im-done").click(function() {
+	wizard.reset().close();
+});
+
 $('#download').click(function(){
+	$("#service").select2({
+    	placeholder: "Select a service",
+    	allowClear: true
+	});	
 	wizard.show();	
 });
+
+wizard.on("reset",function(wizard){
+	selectedServiceToDownload = "";
+	selectedProceduresToDownload = [];
+	selectedObservedProperties = [];
+	$('#errorSection').addClass('hide');
+	$('#service').select2('val','');
+	$('#procedures').select2('val','');
+	$('#obsProp').select2('val','');
+})
+
+wizard.on("submit", function(wizard) {
+	var submit = {
+		"hostname": $('#obsProp').select2('val')
+	};
+
+	setTimeout(function() {
+		wizard.trigger("success");
+		wizard.hideButtons();
+		wizard._submitting = false;
+		wizard.showSubmitCard("success");
+		wizard._updateProgressBar(0);
+	}, 2000);
+});
+
+function somethingSelected(card)
+{
+	ret = {
+		status: true
+	};
+
+	if($("#service").select2("val") == "")
+	{
+		ret.status = false;
+		ret.msg = "Nothing selected!";
+	}
+	else
+	{
+		selectedServiceToDownload = $("#service").select2("val");
+	}
+	
+	return ret;
+}
+
+function somethingSelected2(card)
+{
+	ret = {
+		status: true
+	};
+	if($("#procedures").select2("val") == "")
+	{
+		$('#errorSection').removeClass('hide');
+		ret.status = false;
+	}
+	else
+	{
+		$('#errorSection').addClass('hide');
+		selectedProceduresToDownload = $("#procedures").select2("val");
+	}
+}
+
+function somethingSelected3(card)
+{
+	ret = {
+		status: true
+	};
+	if($('#obsProp').select2("val") == "")
+	{
+		$('#errorSectionObsProp').removeClass('hide');
+		ret.status = false;
+	}
+	else
+	{
+		$('#errorSectionObsProp').addClass('hide');
+		selectedObservedProperties = $("#obsProp").select2("val");
+	}
+
+	return ret;
+}
+
+function loadAvailableStations(card)
+{
+	$("#procedures").select2({
+    	placeholder: "Select some procedures",
+    	allowClear: true
+	});
+	if(selectedServiceToDownload == "lanuv")
+	{
+		var trafficOptGroup = "<optgroup label='Traffic'>";
+		var backgroundOptGroup = "<optgroup label='Background'>";
+		var industryOptGroup = "<optgroup label='Industry'>";
+
+		for(station in lanuvStationen)
+		{
+			if(lanuvStationen[station]["disko"] == 0)
+			{
+				if(lanuvStationen[station]["type"].toLowerCase() == 'verkehr' )
+				{
+					trafficOptGroup = trafficOptGroup + "<option value="+lanuvStationen[station]["kuerzel"]+">"+lanuvStationen[station]["name"]+"</option>";
+				}
+				if(lanuvStationen[station]["type"].toLowerCase() == 'hintergrund')
+				{
+					backgroundOptGroup = backgroundOptGroup + "<option value="+lanuvStationen[station]["kuerzel"]+">"+lanuvStationen[station]["name"]+"</option>";
+				}
+				if(lanuvStationen[station]["type"].toLowerCase() == 'industrie')
+				{
+					industryOptGroup = industryOptGroup + "<option value="+lanuvStationen[station]["kuerzel"]+">"+lanuvStationen[station]["name"]+"</option>";
+				}	
+			}
+		}	
+		trafficOptGroup = trafficOptGroup + "</optgroup>";
+		backgroundOptGroup = backgroundOptGroup + "</optgroup>";
+		industryOptGroup = industryOptGroup + "</optgroup>";
+
+		$('#procedures').append(trafficOptGroup);
+		$('#procedures').append(backgroundOptGroup);
+		$('#procedures').append(industryOptGroup);
+	}
+}
+
+function loadObservedProperties(card)
+{
+	$("#obsProp").select2({
+    	placeholder: "Select some observed properties",
+    	allowClear: true
+	});
+	if(selectedServiceToDownload == "lanuv")
+	{
+		$("#obsProp").append('<option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature">Temperature</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity">Humidity</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:nmono">Nitrogen Monoxide</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2">Nitrogen Dioxide</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:so2">Sulfur Dioxide</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:ozone">Ozone</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:pm10">Dust</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:wv">Wind velocity</option>');
+	}
+	if(selectedServiceToDownload == "cosmcosm")
+	{
+		$("#obsProp").append('<option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:temperature">Temperature</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:humidity">Humidity</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:co">Carbon Monoxide</option><option value="urn:ogc:def:parameter:x-istsos:1.0:meteo:air:no2">Nitrogen Dioxide</option>');
+	}
+}
+
+function loadTimeFrame(card)
+{
+	alert("hello world");
+	$('#reportrangeDownload').daterangepicker(
+    {
+        ranges: {
+            'Today': ['today', 'next day'],
+            'Yesterday': ['yesterday', 'yesterday'],
+            'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
+            'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
+            'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
+            'Last Month': [Date.today().moveToFirstDayOfMonth().add({ months: -1 }), Date.today().moveToFirstDayOfMonth().add({ days: -1 })]
+        }
+    },
+    function(start, end) {
+    	console.log(start);
+    	console.log(end);
+        $('#reportrangeDownload span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
+    });
+
+    $('#reportrangeDownload span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.parse('next day').toString('MMM. d, yyyy'));
+}

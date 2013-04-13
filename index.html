@@ -12,6 +12,7 @@
     	<link href="js/daterangepicker/daterangepicker.css" rel="stylesheet">
     	<link href="js/bootstrap-wizard/src/bootstrap-wizard.css" rel="stylesheet">
     	<link href="js/bigmodal/css/bigmodals.css" rel="stylesheet">
+    	<link href="js/select2/select2.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/dist/leaflet.css" />
     	<link href="css/style.css" rel="stylesheet">
     	<link rel="stylesheet" href="js/leaflet/markercluster/dist/MarkerCluster.css" />
@@ -148,28 +149,66 @@
 		</div>
 		
 		<!-- Download wizard -->
-		<div class="wizard" id="some-wizard">
+		<div class="wizard" id="downloadWizard">
 		    <h1>Customize and download</h1>
-		 
-		    <div class="wizard-card" data-cardname="card1">
+		 	
+		    <div class="wizard-card" data-onValidated="loadAvailableStations" data-cardname="service">
 		        <h3>Select the service</h3>
-		        Lanuv or AQE
+		        <p>Please select first what kind of data (LANUV or AQE) you want to download.</p>
+		        <select id="service" data-validate="somethingSelected">
+		        	<option value="" selected="selected"></option>
+			        <option value="lanuv">Lanuv</option>
+			        <option value="cosmcosm">AirQualityEgg</option>
+			    </select>
 		    </div>
 		 
-		    <div class="wizard-card" data-cardname="card2">
+		    <div class="wizard-card" data-onValidated="loadObservedProperties" data-cardname="procedures">
 		        <h3>Select the procedures</h3>
-		        Lanuv Stations or AQEs
+		        <div class="wizard-input-section">
+		        	<p>Please select which available stations you want to download.</p>
+		        	<select id="procedures" data-validate="somethingSelected2" style="width:100%;" multiple>
+		        		<option value=""></option>
+			    	</select>
+			    </div>
+			    <div id="errorSection" class="alert alert-error hide">
+					Please select at least one station!
+				</div>
 		    </div>
 
-			<div class="wizard-card" data-cardname="card3">
+			<div class="wizard-card" data-onValidated="loadTimeFrame" data-cardname="obsProp">
 		        <h3>Select observed properties</h3>
-		        Lanuv Stations or AQEs
+		        <div class="wizard-input-section">
+		        	<p>Please select which observed properties you want to download.</p>
+		        	<select id="obsProp" data-validate="somethingSelected3" style="width:100%;" multiple>
+		        		<option value=""></option>
+			    	</select>
+			    </div>
+			    <div id="errorSectionObsProp" class="alert alert-error hide">
+					Please select at least one observed property!
+				</div>
 		    </div>		    
 		 	
-		 	<div class="wizard-card" data-cardname="card4">
+		 	<div class="wizard-card" data-cardname="timeframe">
 		        <h3>Select the timeframe</h3>
-		        date from - until
+		        <div class="wizard-input-section">
+		        	<p>Please select the timeframe for the download.</p>
+		        	<div id="reportrangeDownload" class="pull-left">
+					    <i class="icon-calendar icon-large"></i>
+					    <span></span> <b class="caret"></b>
+					</div>
+			    </div>
 		    </div>
+
+		    <div class="wizard-success">
+				<div class="alert alert-success">
+					<span class="downloadURL"></span>
+					was created <strong>successfully.</strong>
+				</div>
+		
+				<a class="btn download-more-data">Download more data</a>
+				<span style="padding:0 10px">or</span>
+				<a class="btn im-done">Done</a>
+			</div>
 		</div>
 
 		<!-- FAQ Modal -->
@@ -819,6 +858,9 @@
     			<p>
     				<a href="http://thenounproject.com/noun/windsock/#icon-No614" target="_blank">Windsock</a>  from The Noun Project
     			</p>
+    			<p>
+    				<a href="http://thenounproject.com/noun/download/#icon-No6080" target="_blank">Download</a> designed by <a href="http://thenounproject.com/Luis" target="_blank">Luis Prado</a> from The Noun Project
+    			</p>
 			</div>
 		    <div class="modal-footer">
 		    	<div class="pull-left">
@@ -838,6 +880,7 @@
     	<script src="js/daterangepicker/date.js"></script>
  	    <script src="js/daterangepicker/daterangepicker.js"></script>
  	    <script src="js/bigmodal/js/bootstrap-bigmodal.js"></script>
+ 	    <script src="js/select2/select2.js"></script>
     	<script src="js/leaflet/dist/leaflet.js"></script>
     	<script src="js/canvasjs/canvasjs.min.js"></script>
     	<script src="js/leaflet/markercluster/dist/leaflet.markercluster-src.js"></script>
