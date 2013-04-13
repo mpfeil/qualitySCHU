@@ -218,10 +218,12 @@ function getTz(offset)
 
 function updateTable(start,end)
 {
-	eventtime_start = start.toString('yyyy-MM-ddT00:00:00');
+	eventtime_start = start.toString('yyyy-MM-ddTHH:mm:ss');
 	eventtime_start = eventtime_start + getTz(start.getTimezoneOffset());
-	eventtime_end = end.toString('yyyy-MM-ddT23:00:00');
+	eventtime_end = end.toString('yyyy-MM-ddTHH:mm:ss');
 	eventtime_end = eventtime_end + getTz(end.getTimezoneOffset());
+	console.log(eventtime_start);
+	console.log(eventtime_end);
 	var url = "";
 	if (selectedService == "cosmcosm")
 	{
@@ -306,12 +308,12 @@ function addToDiagram(elems,start,end)
         	console.log(data3);
 
 		    var data = []; 
-		    var dataSeries = { type: "line"};
+		    var dataSeries = { type: "line", lineThickness: 3};
 		    var dataPoints = [];
 
 		    if(elems.length == 2)
 		    {
-				var dataSeries2 = { type: "line", axisYType: "secondary", markerType: "circle",};
+				var dataSeries2 = { type: "line", lineThickness: 3, axisYType: "secondary", markerType: "circle",};
 		    	var dataPoints2 = [];		    	
 		    }
 
@@ -321,7 +323,7 @@ function addToDiagram(elems,start,end)
 		    	var yValue = (isNaN(parseFloat(td[1]))) ? null : parseFloat(td[1]);
 		    	var dataPointColor = (td[2] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
 		    	var dataPointType = (td[2] == 100) ? "circle" : (td[2] == 101) ? "cross" : (td[2] == 102) ? "circle" : "" ;
-		    	var dataPointSize = (td[2] == 100) ? "1" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
+		    	var dataPointSize = (td[2] == 100) ? "3" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
 		    	tempdate = td[0].split("+");
 	        	tempdate = tempdate[0]+"+02:00";
 		    	dateTime = new Date(tempdate);
@@ -337,7 +339,7 @@ function addToDiagram(elems,start,end)
 		        	var yValue2 = (isNaN(parseFloat(td[3]))) ? null : parseFloat(td[3]);
 		        	var dataPointColor2 = (td[4] == 100) ? "#f89406" : (td[2] == 101) ? "#b94a48" : (td[2] == 102) ? "#468847" : "" ;
 		        	var dataPointType2 = (td[2] == 100) ? "circle" : (td[2] == 101) ? "cross" : (td[2] == 102) ? "circle" : "" ;
-		    		var dataPointSize2 = (td[2] == 100) ? "1" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
+		    		var dataPointSize2 = (td[2] == 100) ? "3" : (td[2] == 101) ? "5" : (td[2] == 102) ? "1" : "" ;
 
 		        	dataPoints2.push({
 			          	x: dateTime,

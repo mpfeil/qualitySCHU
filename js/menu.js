@@ -37,6 +37,9 @@ $(".img-rounded").hover(
 			case "lanuvWV":
 				this.setAttribute('src', 'img/wind_velocity_inverted.png');
 				break;
+			case "download":
+				this.setAttribute('src', 'img/download_inverted.png');
+				break;
 		}	
 	},
 	function(){
@@ -74,6 +77,9 @@ $(".img-rounded").hover(
 				break;
 			case "lanuvWV":
 				this.setAttribute('src', 'img/wind_velocity.png');
+				break;
+			case "download":
+				this.setAttribute('src', 'img/download.png');
 				break;
 		}
 	}
@@ -173,6 +179,7 @@ $('#myModal').on('shown', function(){
 			labelAngle: -30,
 			gridColor: "Silver",
 			tickColor: "silver",
+			valueFormatString: "DD-MMM-hh:mm",
 		},
 		theme: "theme1",
 		axisY: {
@@ -203,8 +210,8 @@ $('#myModal').on('shown', function(){
 	$('#reportrangetable').daterangepicker(
     {
         ranges: {
-            'Today': ['today', 'today'],
-            'Yesterday': ['yesterday', 'yesterday'],
+            'Today': ['today', 'next day'],
+            'Yesterday': ['yesterday', 'today'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -221,7 +228,7 @@ $('#myModal').on('shown', function(){
     {
         ranges: {
             'Today': ['today', 'next day'],
-            'Yesterday': ['yesterday', 'yesterday'],
+            'Yesterday': ['yesterday', 'today'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -234,15 +241,11 @@ $('#myModal').on('shown', function(){
         $('#reportrangediagram span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
         buildDiagram();
     });
-    
-    $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
-    $('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
-})
-
-$('a[data-toggle="tab"]').on('shown', function (e) {
-	alert
-  	$('.selectpicker').val('humidity');
-	$('.selectpicker').change();
+  
+  	$('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.parse('next day').toString('MMM. d, yyyy'));
+  	$('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.parse('next day').toString('MMM. d, yyyy'));  
+    // $('#reportrangetable span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
+    // $('#reportrangediagram span').html(Date.today().toString('MMM. d, yyyy') + ' - ' + Date.today().toString('MMM. d, yyyy'));
 })
 
 function buildDiagram()
@@ -363,10 +366,14 @@ var options = {};
 var selectedServiceToDownload;
 var selectedProceduresToDownload;
 var selectedObservedProperties;
+var selectedStartdateToDownload;
+var selectedEnddateToDownload;
+var downloadURLJSON;
 var wizard = $("#downloadWizard").wizard(options);
 
 wizard.el.find(".wizard-success .download-more-data").click(function() {
 	wizard.reset();
+
 });
 
 wizard.el.find(".wizard-success .im-done").click(function() {
@@ -386,22 +393,33 @@ wizard.on("reset",function(wizard){
 	selectedProceduresToDownload = [];
 	selectedObservedProperties = [];
 	$('#errorSection').addClass('hide');
-	$('#service').select2('val','');
 	$('#procedures').select2('val','');
 	$('#obsProp').select2('val','');
+	$('#procedures').children('optgroup').remove();
+	$('#obsProp').children('option').remove();
 })
 
 wizard.on("submit", function(wizard) {
-	var submit = {
-		"hostname": $('#obsProp').select2('val')
-	};
+	downloadURLJSON = "http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/"+selectedServiceToDownload+"/operations/getobservation/offerings/temporary/procedures/"+selectedProceduresToDownload+"/observedproperties/"+selectedObservedProperties+"/eventtime/"+selectedStartdateToDownload+"/"+selectedEnddateToDownload+"";
+	$('#hrefJSON').attr('href',downloadURLJSON);
+
+	downloadURLXML = "http://giv-geosoft2d.uni-muenster.de/istsos/"+selectedServiceToDownload+"?service=SOS&request=GetObservation&offering=temporary&procedure="+selectedProceduresToDownload+"&srsName=4326&observedProperty="+selectedObservedProperties+"&responseFormat=text/xml&service=SOS&version=1.0.0&eventTime="+selectedStartdateToDownload+"/"+selectedEnddateToDownload+"";
+	$('#hrefXML').attr('href',downloadURLXML);
+
+	downloadURLPlain = "http://giv-geosoft2d.uni-muenster.de/istsos/"+selectedServiceToDownload+"?service=SOS&request=GetObservation&offering=temporary&procedure="+selectedProceduresToDownload+"&srsName=4326&observedProperty="+selectedObservedProperties+"&responseFormat=text/plain&service=SOS&version=1.0.0&eventTime="+selectedStartdateToDownload+"/"+selectedEnddateToDownload+"";
+	$('#hrefPlain').attr('href',downloadURLPlain);
+
+	downloadURLXJSON = "http://giv-geosoft2d.uni-muenster.de/istsos/"+selectedServiceToDownload+"?service=SOS&request=GetObservation&offering=temporary&procedure="+selectedProceduresToDownload+"&srsName=4326&observedProperty="+selectedObservedProperties+"&responseFormat=text/x-json&service=SOS&version=1.0.0&eventTime="+selectedStartdateToDownload+"/"+selectedEnddateToDownload+"";
+	$('#hrefXJSON').attr('href',downloadURLXJSON);
+
+	downloadURLSensorML = "http://giv-geosoft2d.uni-muenster.de/istsos/"+selectedServiceToDownload+"?service=SOS&request=GetObservation&offering=temporary&procedure="+selectedProceduresToDownload+"&srsName=4326&observedProperty="+selectedObservedProperties+"&responseFormat=text/xml;subtype='sensorML/1.0.0'&service=SOS&version=1.0.0&eventTime="+selectedStartdateToDownload+"/"+selectedEnddateToDownload+"";
+	$('#hrefSensorML').attr('href',downloadURLSensorML);
 
 	setTimeout(function() {
 		wizard.trigger("success");
 		wizard.hideButtons();
 		wizard._submitting = false;
 		wizard.showSubmitCard("success");
-		wizard._updateProgressBar(0);
 	}, 2000);
 });
 
@@ -439,6 +457,8 @@ function somethingSelected2(card)
 		$('#errorSection').addClass('hide');
 		selectedProceduresToDownload = $("#procedures").select2("val");
 	}
+
+	return ret;
 }
 
 function somethingSelected3(card)
@@ -468,6 +488,8 @@ function loadAvailableStations(card)
 	});
 	if(selectedServiceToDownload == "lanuv")
 	{
+		$('#procedures').children('optgroup').remove();
+		$('#procedures').children('option').remove();
 		var trafficOptGroup = "<optgroup label='Traffic'>";
 		var backgroundOptGroup = "<optgroup label='Background'>";
 		var industryOptGroup = "<optgroup label='Industry'>";
@@ -490,6 +512,7 @@ function loadAvailableStations(card)
 				}	
 			}
 		}	
+		
 		trafficOptGroup = trafficOptGroup + "</optgroup>";
 		backgroundOptGroup = backgroundOptGroup + "</optgroup>";
 		industryOptGroup = industryOptGroup + "</optgroup>";
@@ -498,10 +521,28 @@ function loadAvailableStations(card)
 		$('#procedures').append(backgroundOptGroup);
 		$('#procedures').append(industryOptGroup);
 	}
+	if(selectedServiceToDownload == "cosmcosm")
+	{
+		$('#procedures').children('optgroup').remove();
+		$('#procedures').children('option').remove();
+
+		jQuery.ajax({
+			url: 'http://giv-geosoft2d.uni-muenster.de/istsos/wa/istsos/services/cosmcosm/procedures/operations/getlist',
+	        type: 'get',
+	        dataType: "json",
+	        success:function(data3){
+	        	for(var i = 0; i < data3.data.length; i++)
+	        	{
+	        		$('#procedures').append('<option value='+data3.data[i]["name"]+'>'+data3.data[i]["name"]+'</option>');
+	        	}
+	        }
+	    });
+	}
 }
 
 function loadObservedProperties(card)
 {
+	$('#obsProp').children('option').remove();
 	$("#obsProp").select2({
     	placeholder: "Select some observed properties",
     	allowClear: true
@@ -518,12 +559,11 @@ function loadObservedProperties(card)
 
 function loadTimeFrame(card)
 {
-	alert("hello world");
 	$('#reportrangeDownload').daterangepicker(
     {
         ranges: {
             'Today': ['today', 'next day'],
-            'Yesterday': ['yesterday', 'yesterday'],
+            'Yesterday': ['yesterday', 'today'],
             'Last 7 Days': [Date.today().add({ days: -6 }), 'today'],
             'Last 30 Days': [Date.today().add({ days: -29 }), 'today'],
             'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
@@ -531,8 +571,10 @@ function loadTimeFrame(card)
         }
     },
     function(start, end) {
-    	console.log(start);
-    	console.log(end);
+    	selectedStartdateToDownload = start.toString('yyyy-MM-ddTHH:mm:ss');
+		selectedStartdateToDownload = selectedStartdateToDownload + getTz(start.getTimezoneOffset());
+		selectedEnddateToDownload = end.toString('yyyy-MM-ddTHH:mm:ss');
+		selectedEnddateToDownload = selectedEnddateToDownload + getTz(end.getTimezoneOffset());
         $('#reportrangeDownload span').html(start.toString('MMM. d, yyyy') + ' - ' + end.toString('MMM. d, yyyy'));
     });
 
