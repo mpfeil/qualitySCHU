@@ -17,6 +17,7 @@ import json
 from datetime import datetime, timedelta
 import dateutil.tz
 import dateutil.parser
+from urllib2 import HTTPError
 
 #Set your COSM API Key
 xApiKey = "tT0xUa9Yy24qPaZXDgJi-lDmf3iSAKxvMEhJWDBleHpMWT0g"
@@ -118,7 +119,9 @@ def getDatapointsFromCOSM(aqe):
             insertAQEDataToSOS(insert,aqes,starttime,endtime)
             
         except KeyError as kE:
-            logger.error("Following Error occured for AQE:"+search_for+": "+kE);
+            logger.error("Following Error occured for AQE:"+search_for+": "+str(kE));
+        except HTTPError as HTTPEr:
+            logger.error("Following Error occured for AQE:"+search_for+": "+str(HTTPEr));
             
 #This method inserts the passed data to the SOS
 def insertAQEDataToSOS(inserts,aqe,start,end):
@@ -147,7 +150,7 @@ def insertAQEDataToSOS(inserts,aqe,start,end):
                         valuesToInsert = valuesToInsert +","+ values[count2][j].split(",")[1]
                 count2 = count2 + 1
     except IndexError as iE:
-        logger.error("Following Error occured for AQE with feedID:"+aqe[0]+": "+iE)
+        logger.error("Following Error occured for AQE with feedID:"+str(aqe[0])+": "+str(iE))
     
     logger.info("Insert following values for AQE with feedID:"+aqe[0]+" and AssignedSensorId: "+aqe[1]+":"+valuesToInsert);
     
