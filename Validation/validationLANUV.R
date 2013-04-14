@@ -77,7 +77,7 @@ fois <- sqlQuery(ch, paste("SELECT id_foi FROM foi"))
 obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 
 
-
+## Window Size, measurements of 2 days inside the window
 ws <- 47
 
 

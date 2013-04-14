@@ -80,7 +80,7 @@ fois <- sqlQuery(ch, paste("SELECT id_foi FROM foi"))
 obspr <- sqlQuery(ch, paste("SELECT id_opr FROM observed_properties"))
 
 
-
+## Window Size, measurements of one hour inside the window
 ws <- 61
 
 
