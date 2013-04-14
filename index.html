@@ -53,12 +53,12 @@
 		<div id="map">
 		</div>
 		
-		<!-- Sensor bar at the button of the page -->
+		<!-- Sensor bar at the bottom of the page -->
 		<div class="container">
-			<div id="myCarousel" class="carousel slide">
+			<div id="sensorbar" class="carousel slide">
 			  <ol class="carousel-inner">
-			    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			    <li data-target="#myCarousel" data-slide-to="1"></li>
+			    <li data-target="#sensorbar" data-slide-to="0" class="active"></li>
+			    <li data-target="#sensorbar" data-slide-to="1"></li>
 			  </ol>
 			  <!-- Carousel items -->
 			  <div class="carousel-inner">
@@ -750,19 +750,19 @@
 		</div>
 			
 		<!-- Overview modal -->
-		<div id="myModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
+		<div id="overviewModal" class="modal hide fade" modalOverflow="true" tabindex="-1" data-width="760">
     		<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    			<h3 id="myModalLabel">
+    			<h3 id="overviewModalLabel">
     			</h3>
     		</div>
     		<div class="modal-body">
-    			<ul id="myTab" class="nav nav-tabs">
+    			<ul id="overviewModalTabs" class="nav nav-tabs">
 		    		<li><a href="#home" data-toggle="tab">Home</a></li>
 		    		<li id="tableTab"><a id="tableTabContent" href="#table" data-toggle="tab">Table</a></li>
 		    		<li id="diagramTab"><a id="diagramTabContent" href="#diagram" data-toggle="tab">Diagram</a></li>
 		    	</ul>
-		    	<div id="myTabContent" class="tab-content">
+		    	<div id="overviewModalTabsContent" class="tab-content">
 		    		<div class="tab-pane fade in" id="home">
 		    		</div>
 		    		<div class="tab-pane fade in" id="table">
@@ -778,7 +778,7 @@
 						    </div>
 						</div>
 						<hr>
-		    			<table class="table">
+		    			<table class="table" id="dataTable">
 			    			<thead id="tablehead">
 			    			</thead> 
 			    			<tbody id="tablebody">
@@ -815,6 +815,9 @@
 			</div>
 		    <div class="modal-footer">
 		    	<div class="row-fluid" style="visibility:hidden;" id="modalFooter">
+		    		<div class="pull-left">
+		    			<span class="label label-warning" id="dataAvailable" style="visibility:hidden;"></a>No data available!</span>
+		    		</div>
 		    		<div class="pull-right">
 		    			<span class="label label-warning"></a>Raw data</span>
 		    			<span class="label label-success"></a>Not outlier</span>
