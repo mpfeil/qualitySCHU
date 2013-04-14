@@ -1,12 +1,6 @@
-  
-
-
 <!DOCTYPE html>
 <html>
- <body>
-<div id="head">
-  <h1 class="instapaper_title">Installation</h1>
-</div>
+  <body>
 <div id="wiki-content">
   <div class="wrap">
   <div id="wiki-body" class="gollum-markdown-content instapaper_body">
@@ -15,7 +9,7 @@
 
 <p>Please read this installation manual carefully and make sure to precisely follow its steps as described below. Finally you will be the lucky administrator of an easy to maintain, fast accessable, and light-weight QualitySCHU server which contains an Apache webserver with a PostGIS database and an istSOS sensor observation service, that is able to mark outliers by running a statistical method called moving window powered by the <a href="http://www.r-project.org/">free software programming language R</a>.</p>
 
-<p>If you are ready to start, please log in on to your system as a common user (which is recommended) with the right to execute sudo commands (which is required). <em>So For further information feel free to follow the links.</em></p>
+<p>If you are ready to start, please log in on to your system as a common user (which is recommended) with the right to execute sudo commands (which is required). <del>So For further information feel free to follow the links.</del></p>
 
 <h2>
 <a name="install-webserver" class="anchor" href="#install-webserver"><span class="mini-icon mini-icon-link"></span></a>Install Webserver</h2>
@@ -57,21 +51,242 @@ After finishing the installation routine, alter the password:<br></p><div class=
 <h2>
 <a name="install-istsos" class="anchor" href="#install-istsos"><span class="mini-icon mini-icon-link"></span></a>Install istSOS</h2>
 
-<ul>
-<li>wget + unzip<br>
-</li>
-<li>siehe Daten<br>
-</li>
-<li><p>extra Datei bzgl. MaxRequest  </p></li>
-<li><p>63 Stationen manuell anlegen  </p></li>
-</ul><p>Setup:  </p>
+<p>QualitySCHU will make use of the sensor observation service <a href="istgeo.ist.supsi.ch/software/istsos/">istSOS</a>. This part of the installation will be the most difficult one, so make sure you are awake and motivated to keep on installing QualitySCHU. Please note, that this part of the installation manual is close to the istSOS's tutorial. We strongly recommend to have a look <a href="istgeo.ist.supsi.ch/software/istsos/tutorial.html">at it</a>.  </p>
+
+<h3>
+<a name="configure-the-istsos" class="anchor" href="#configure-the-istsos"><span class="mini-icon mini-icon-link"></span></a>Configure the istSOS</h3>
 
 <ul>
-<li>DB anlegen</li>
-<li>Service COSM (ValueSet)</li>
-<li>Service LANUV (ValueSet)</li>
-<li>Validierung</li>
-</ul><h2>
+<li>
+<p>Download and unzip istSOS to /usr/local/:<br></p>
+<div class="highlight"><pre><span class="n">wget</span> <span class="n">https</span><span class="o">:</span><span class="c1">//istsos.googlecode.com/files/istSOS-2.0-RC2.tar.gz</span>
+<span class="n">sudo</span> <span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">istSOS</span><span class="o">-</span><span class="mf">2.0</span><span class="o">-</span><span class="n">RC2</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">C</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span>
+</pre></div>
+</li>
+<li>
+<p>Set execution permission and owner for the folders services and logs:<br></p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">755</span> <span class="o">-</span><span class="n">R</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span><span class="n">istsos</span>
+<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="o">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">services</span>
+<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="o">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">logs</span>
+</pre></div>
+</li>
+<li>
+<p>Configure Apache and WSGI<br><code>sudo vim /etc/apache2/sites-enabled/000-default</code><br>
+Add the following lines just before the closing tag &lt;/VirtualHost&gt;:
+</p>
+<div class="highlight"><pre><span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">istsos</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">application</span><span class="p">.</span><span class="n">py</span>
+<span class="n">Alias</span> <span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">admin</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">istsosRC2</span><span class="o">/</span><span class="n">istsos</span><span class="o">/</span><span class="n">interface</span>
+</pre></div>
+</li>
+<li><p>Restart Apache<br><code>sudo /etc/init.d/apache2 restart</code></p></li>
+<li>
+<p>Create PostGIS database
+</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">createdb</span> <span class="o">-</span><span class="n">E</span> <span class="n">UTF8</span> <span class="n">istsos2</span>
+<span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span> <span class="o">-</span><span class="n">d</span> <span class="n">istsos2</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mf">9.1</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">postgis</span><span class="o">-</span><span class="mf">1.5</span><span class="o">/</span><span class="n">postgis</span><span class="p">.</span><span class="n">sql</span> 
+<span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span> <span class="o">-</span><span class="n">d</span> <span class="n">istsos2</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mf">9.1</span><span class="o">/</span><span class="n">contrib</span><span class="o">/</span><span class="n">postgis</span><span class="o">-</span><span class="mf">1.5</span><span class="o">/</span><span class="n">spatial_ref_sys</span><span class="p">.</span><span class="n">sql</span>
+</pre></div>
+</li>
+</ul><p>Your istSOS should be running now. Check the installation success on the browser by loading the page <em>http://localhost/istsos/admin</em> or type another adress, if you did not install the server on your local machine but on a remote server.  </p>
+
+<p>From this point use the istSOS-GUI to configure your qualitySCHU server.  </p>
+
+<ul>
+<li>Press the database button<br><img src="https://a248.e.akamai.net/camo.github.com/1dee1e60c3f85522c36c653a7a716ca74330f165/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f64617461626173652e737667" alt="database button (that one with the elephant)"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">Database</span>
+
+    <span class="nl">user:</span> <span class="n">postgres</span>
+    <span class="nl">password:</span> <span class="n">postgres</span>
+    <span class="nl">host:</span> <span class="n">localhost</span>
+    <span class="nl">port:</span> <span class="mi">5432</span>
+    <span class="n">DB</span> <span class="n">name</span><span class="o">:</span> <span class="n">istsos2</span>
+</pre></div>
+</li>
+<li>Press the service provider button to configure your service provider informations<br><img src="https://a248.e.akamai.net/camo.github.com/b332e5018ded22fa59efa33b1f02b2da4aa70807/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f70726f76696465722e737667" alt="the green circle guy"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">Service</span> <span class="n">provider</span>
+
+    <span class="n">use</span> <span class="n">your</span> <span class="n">institutional</span> <span class="n">information</span>
+</pre></div>
+</li>
+<li>Press the service identification button to configure the service identification information<br><img src="https://a248.e.akamai.net/camo.github.com/0b086200dd2ab2b235c3ed8245ad41c275904d6d/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f636f6e74616374732e737667" alt="the greencard"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">Service</span> <span class="n">identification</span>
+
+    <span class="n">describe</span> <span class="n">the</span> <span class="n">service</span> <span class="n">with</span> <span class="n">metadata</span>
+</pre></div>
+</li>
+<li>Press the Coordinates systems button to configure your service coordinates system<br><img src="https://a248.e.akamai.net/camo.github.com/7e531571c9e50301c6a598118460e99594facd1f/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f636f6f7264696e6174652e737667" alt="this green earth"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">Coordinates</span> <span class="n">system</span>
+
+    <span class="n">set</span> <span class="n">your</span> <span class="k">default</span> <span class="n">EPSG</span> <span class="n">code</span><span class="p">,</span> <span class="n">other</span> <span class="n">permitted</span> <span class="n">coord</span><span class="p">.</span> <span class="n">systems</span><span class="p">,</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span>
+</pre></div>
+</li>
+<li>Press the GetObservation Configuration button to configure your getobservation request options.<br><img src="https://a248.e.akamai.net/camo.github.com/62e4ef1e2ea7344601ae348952523b02f6308971/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f6765746f62732e737667" alt="gruene lupe"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">GetObservation</span> <span class="n">configuration</span>
+
+    <span class="n">set</span> <span class="n">maximum</span> <span class="n">interval</span> <span class="n">per</span> <span class="n">request</span> <span class="n">and</span> <span class="n">no</span> <span class="n">data</span> <span class="n">aggregation</span> <span class="n">value</span>
+</pre></div>
+</li>
+<li>Press the Proxy Configuration button to configure your service proxy adress.<br><img src="https://a248.e.akamai.net/camo.github.com/226b76b153121db5620506965c9b0e714fbe4a9e/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f70726f78792e737667" alt="Proxy"><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">Proxy</span> <span class="n">configuration</span>
+
+    <span class="n">set</span> <span class="n">the</span> <span class="n">address</span> <span class="n">of</span> <span class="n">the</span> <span class="n">istsos</span> <span class="n">service</span>
+</pre></div>
+</li>
+<li>The istSOS has a feature for setting a maximum period for data retrievement requests to avoid server overloads. But we want to be able to request all data. Therefore download this modified <a href="https://github.com/mpfeil/qualitySCHU/blob/master/istSOS/GO_filter.py">GO_filter.py</a> to the following folder on your server and replace the old one:  <strong>/YOUR_INSTALL_FOLDER/istsos/istsoslib/filters</strong>.<br>
+</li>
+</ul><p>After you have done this you must restart your apache2 server!<br><code>sudo /etc/init.d/apache2 restart</code><br>
+Now you will be able to go via the istSOS admin interface to <strong>Server &gt; GetObservation configuration</strong> and set <strong>0 (=zero) for Max Request interval (hours)</strong></p>
+
+<h3>
+<a name="setup-the-services" class="anchor" href="#setup-the-services"><span class="mini-icon mini-icon-link"></span></a>Setup the services:</h3>
+
+<h4>
+<a name="lanuv" class="anchor" href="#lanuv"><span class="mini-icon mini-icon-link"></span></a>LANUV</h4>
+
+<ul>
+<li>Create the LANUV service. Press the New service button and set the requested values:<br><img src="https://a248.e.akamai.net/camo.github.com/898c709c8b9f86a08f1e938d84f728e372a1940c/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f6e65775f736572766963652e737667" alt="New Service"><br><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">New</span> <span class="n">service</span>
+
+    <span class="n">set</span> <span class="n">the</span> <span class="n">service</span> <span class="n">name</span> <span class="p">(</span><span class="o">*</span><span class="n">lanuv</span><span class="o">*</span><span class="p">)</span> <span class="n">and</span> <span class="n">EPSG</span> <span class="p">(</span><span class="o">*</span><span class="mi">4326</span><span class="o">*</span><span class="p">)</span> <span class="n">and</span> <span class="n">database</span> <span class="n">connections</span>
+</pre></div>
+</li>
+<li>Create the observed properties 
+<div class="highlight"><pre><span class="n">lanuv</span> <span class="o">&gt;</span> <span class="n">Observed</span> <span class="n">properties</span>
+
+    <span class="nl">Name:</span> <span class="n">temperature</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">temperature</span>
+    <span class="nl">Description:</span>
+
+    <span class="nl">Name:</span> <span class="n">humidity</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">humidity</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">nitrogen</span> <span class="n">dioxide</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">no2</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">nitrogen</span> <span class="n">monoxide</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">nmono</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">ozone</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">ozone</span>
+    <span class="nl">Description:</span>
+
+    <span class="nl">Name:</span> <span class="n">pm10</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">pm10</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">sulfur</span> <span class="n">dioxide</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">so2</span>
+    <span class="nl">Description:</span>  
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">wind</span> <span class="n">velocity</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">wv</span>
+    <span class="nl">Description:</span> 
+</pre></div>
+</li>
+<li>Define the units of measures. Use the admin interface once again, go to <strong>Services &gt; lanuv</strong> and press the Units of measures button.<br><img src="https://a248.e.akamai.net/camo.github.com/179a8c564f3272d77236281f8fa95d535aa14fce/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f756e69742e737667" alt="Units of measures"><div class="highlight"><pre><span class="n">lanuv</span> <span class="o">&gt;</span> <span class="n">Units</span> <span class="n">of</span> <span class="n">measures</span>
+
+    <span class="nl">Code:</span> <span class="n">deg</span> 
+    <span class="n">Description</span><span class="o">:</span> <span class="n">Celsius</span> <span class="n">degree</span>
+
+    <span class="nl">Code:</span> <span class="o">%</span>
+    <span class="nl">Description:</span> <span class="n">percentage</span>
+
+    <span class="nl">Code:</span> <span class="n">m</span><span class="o">/</span><span class="n">s</span>
+    <span class="nl">Description:</span> <span class="n">meter</span> <span class="n">per</span> <span class="n">seconds</span>
+
+    <span class="nl">Code:</span> <span class="n">mug</span>
+    <span class="nl">Description:</span> <span class="n">microgramm</span> <span class="n">per</span> <span class="n">cubic</span> <span class="n">meter</span>
+</pre></div>
+</li>
+<li>Add the first lanuv procedure.<br><img src="https://a248.e.akamai.net/camo.github.com/898c709c8b9f86a08f1e938d84f728e372a1940c/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f6e65775f736572766963652e737667" alt="New Service"><br>
+Visit the <a href="http://www.lanuv.nrw.de/luft/temes/stat.htm">lanuv station website</a> and open the <a href="http://www.lanuv.nrw.de/luft/temes/stationen.js">Station.js</a> file. 
+Take the first station in the list (*VACW*) and create it. <strong>You will find the coordinates in WGS84 for each station in the linked Station.js file and the z-Value (height) under the station links on the lanuv website</strong>
+<div class="highlight"><pre>   <span class="nl">Name:</span> <span class="n">VACW</span>
+   <span class="nl">Description:</span> <span class="n">fill</span> <span class="n">in</span>  <span class="n">your</span> <span class="n">own</span> <span class="n">description</span> 
+   <span class="n">Keywords</span><span class="o">:</span> <span class="n">fill</span> <span class="n">in</span> <span class="n">your</span> <span class="n">own</span> <span class="n">keywords</span>
+
+   <span class="n">System</span> <span class="n">type</span><span class="o">:</span> <span class="n">insitu</span><span class="o">-</span><span class="n">fixed</span><span class="o">-</span><span class="n">point</span>
+   <span class="n">Sensor</span> <span class="n">type</span><span class="o">:</span> <span class="n">lanuv</span>
+
+   <span class="n">FOI</span> <span class="n">name</span><span class="o">:</span> <span class="n">VACW</span>
+   <span class="nl">EPSG:</span> <span class="mi">4326</span>
+   <span class="nl">Coordinates:</span> <span class="n">x</span><span class="o">:</span> <span class="mf">6.09576</span> <span class="n">y</span><span class="o">:</span> <span class="mf">50.7730</span> <span class="n">z</span><span class="o">:</span> <span class="mi">163</span>
+
+   <span class="nl">Outputs:</span>
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">temperature</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">deg</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">humidity</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="o">%</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">wv</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">m</span><span class="o">/</span><span class="n">s</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">nmono</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">mug</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">no2</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">mug</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">ozone</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">mug</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">pm10</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">mug</span>
+
+       <span class="n">Observed</span> <span class="n">property</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">so2</span>
+       <span class="n">Unit</span> <span class="n">od</span> <span class="n">measure</span><span class="o">:</span> <span class="n">mug</span>
+</pre></div>
+</li>
+<li>Once you have created the first station you can use the tool <strong>copy configuration from exisiting procedure</strong>:<br><img src="https://a248.e.akamai.net/camo.github.com/6ca5ce0c7b9033fe2727a195258556a5a15a6863/687474703a2f2f69737467656f2e6973742e73757073692e63682f736f6674776172652f697374736f732f5f696d616765732f696e746572666163652d636f70792d636f6e6669672d746f6f6c2e706e67" alt="copy tool"><br>
+Now go through the list of stations and create the stations by copying a procedure and just changing the following variables:</li>
+<li>Name</li>
+<li>FOI Name</li>
+<li>coordinates (x,y,z)</li>
+</ul><p>We are sorry that there is no script for it but it is only a work of 20 minutes ;)</p>
+
+<p>Now the lanuv SOS is ready!  </p>
+
+<h4>
+<a name="cosm-aqe" class="anchor" href="#cosm-aqe"><span class="mini-icon mini-icon-link"></span></a>COSM (AQE)</h4>
+
+<ul>
+<li>Create the LANUV service. Press the New service button and set the requested values:<br><img src="https://a248.e.akamai.net/camo.github.com/898c709c8b9f86a08f1e938d84f728e372a1940c/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f6e65775f736572766963652e737667" alt="New Service"><br><div class="highlight"><pre><span class="n">Server</span> <span class="o">&gt;</span> <span class="n">New</span> <span class="n">service</span>
+
+    <span class="n">set</span> <span class="n">the</span> <span class="n">service</span> <span class="n">name</span> <span class="p">(</span><span class="o">*</span><span class="n">cosmcosm</span><span class="o">*</span><span class="p">)</span> <span class="n">and</span> <span class="n">EPSG</span> <span class="p">(</span><span class="o">*</span><span class="mi">4326</span><span class="o">*</span><span class="p">)</span> <span class="n">and</span> <span class="n">database</span> <span class="n">connections</span>
+</pre></div>
+</li>
+<li>Create the observed properties 
+<div class="highlight"><pre><span class="n">lanuv</span> <span class="o">&gt;</span> <span class="n">Observed</span> <span class="n">properties</span>
+
+    <span class="nl">Name:</span> <span class="n">temperature</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">temperature</span>
+    <span class="nl">Description:</span>
+
+    <span class="nl">Name:</span> <span class="n">humidity</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">humidity</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">nitrogen</span> <span class="n">dioxide</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">no2</span>
+    <span class="nl">Description:</span> 
+
+    <span class="n">Name</span><span class="o">:</span> <span class="n">carbon</span> <span class="n">monoxide</span>
+    <span class="n">Definition</span> <span class="n">URN</span><span class="o">:</span> <span class="n">urn</span><span class="o">:</span><span class="n">ogc</span><span class="o">:</span><span class="n">def</span><span class="o">:</span><span class="n">parameter</span><span class="o">:</span><span class="n">x</span><span class="o">-</span><span class="n">istsos</span><span class="o">:</span><span class="mf">1.0</span><span class="o">:</span><span class="n">meteo</span><span class="o">:</span><span class="n">air</span><span class="o">:</span><span class="n">co</span>
+    <span class="nl">Description:</span>  
+</pre></div>
+</li>
+<li>Define the units of measures. Use the admin interface once again, go to <strong>Services &gt; cosmcosm</strong> and press the Units of measures button.<br><img src="https://a248.e.akamai.net/camo.github.com/179a8c564f3272d77236281f8fa95d535aa14fce/687474703a2f2f6769762d67656f736f667432642e756e692d6d75656e737465722e64652f697374736f732f61646d696e2f696d616765732f6d656e752f756e69742e737667" alt="Units of measures"><br><div class="highlight"><pre><span class="n">cosmcosm</span> <span class="o">&gt;</span> <span class="n">Units</span> <span class="n">of</span> <span class="n">measures</span>
+
+    <span class="nl">Code:</span> <span class="n">deg</span> <span class="n">C</span>
+    <span class="nl">Description:</span> <span class="n">Celsius</span> <span class="n">degree</span>
+
+    <span class="nl">Code:</span> <span class="o">%</span>
+    <span class="nl">Description:</span> <span class="n">percentage</span>
+
+    <span class="nl">Code:</span> <span class="n">ppm</span>
+    <span class="nl">Description:</span> <span class="n">parts</span> <span class="n">per</span> <span class="n">million</span>
+</pre></div>
+</li>
+</ul><p>Now the cosm SOS is ready! It will be filled by the QualitySCHU parsers. You will find more information about this topic in the <a href="https://github.com/mpfeil/qualitySCHU/wiki/Installation#cronjobs">cronjobs</a> section.</p>
+
+<h2>
 <a name="install-r" class="anchor" href="#install-r"><span class="mini-icon mini-icon-link"></span></a>Install R</h2>
 
 <ul>
@@ -127,8 +342,9 @@ After finishing the installation routine, alter the password:<br></p><div class=
 <p>You might wish to know what is happening on your server and you might be tired of starting the parsers manually - so why don't you let cronjobs do the work for you? In this last topic you will learn how to start the required stuff manually and how to edit the crontab in a senseless way.</p>
 
 <ul>
-<li>LANUV-Parser<br><code>python /var/www/qualitySCHU/Parser/LANUV/main.py</code> will start the parser for the LANUV data manually. The parser logs its action to /var/www/logs/lanuv.log</li>
-<li>COSM-Parser<br><code>python /var/www/qualitySCHU/Parser/COSM/main.py</code> will start the parser for the COSM air quality egg data manually. The parser logs its action to /var/www/logs/cosm.log</li>
+<li>LANUV-Parser<br><code>python /var/www/qualitySCHU/Parser/LANUV/main.py</code> will start the parser for the LANUV data manually. The parser default logging file is /var/www/logs/lanuv.log</li>
+<li>COSM-Parsers
+<code>python /var/www/qualitySCHU/Parser/COSM/newandupdate.py</code> will start the parser for looking up if there are new AirQualityEggs out on COSM which are not registered in the SOS. The parser default logging file is /var/www/logs/cosmnewandupdate.log<br><code>python /var/www/qualitySCHU/Parser/COSM/fetchData.py</code> will start the parser for the COSM air quality egg data manually. The parser default logging file is /var/www/logs/cosmfetchData.log</li>
 <li>Validation<br><code>Rscript /var/www/qualitySCHU/Validation/validationLANUV.R</code> will start the validation script for the LANUV data manually.<br>
 </li>
 </ul><p>To automatically run the jobs, add them to your crontab by typing <code>crontab -e</code> to edit your crontab. We recommend to run the LANUV parser hourly and the LANUV validation script daily. Look <a href="https://help.ubuntu.com/community/CronHowto">here</a> for more information or refer to the cron and crontab manpage.</p>
