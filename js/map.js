@@ -6,6 +6,7 @@ var checkedStation;
 var selectedMarker;
 var results;
 var lanuvStationen;
+var spinner = new Spinner();
 
 var lanuv = L.icon({
     iconUrl: 'img/lanuv.png',
@@ -177,7 +178,7 @@ function addAQE(results)
 {
 	data = results.results;
 	
-	// console.log(data.length)
+	console.log(data.length)
 	
 	for(var i = 0; i < data.length; i++)
 	{
@@ -279,6 +280,7 @@ function updateTable(start,end)
 
 function addToDiagram(elems,start,end)
 {
+	spinner.spin(document.getElementById('chartContainer'));
 	query = "";
 	
 	//Build query string
@@ -355,7 +357,8 @@ function addToDiagram(elems,start,end)
 		    dataSeries.markerType = "circle";
 		    dataSeries.dataPoints = dataPoints;
 		    dataSeries.color = "LightSkyBlue";
-		    chart.options.axisY.title = data3.data[0].result.DataArray.field[1].name;
+
+		    chart.options.axisY.title = data3.data[0].result.DataArray.field[1].name +" ("+ data3.data[0].result.DataArray.field[1].uom+")";
 		    data.push(dataSeries);
 
 		    if(elems.length == 2)
@@ -363,11 +366,13 @@ function addToDiagram(elems,start,end)
 		    	dataSeries2.dataPoints = dataPoints2;
 		     	data.push(dataSeries2);
 		     	dataSeries2.color = "LightSeaGreen";
-		     	chart.options.axisY2.title = data3.data[0].result.DataArray.field[3].name; 
+		     	chart.options.axisY2.title = data3.data[0].result.DataArray.field[3].name +" ("+ data3.data[0].result.DataArray.field[3].uom+")"; 
 		    }
 
 		    chart.options.data = data;
 		    chart.render();
+
+		    spinner.stop();
         }
     });
 }

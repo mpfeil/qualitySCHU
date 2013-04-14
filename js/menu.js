@@ -85,7 +85,7 @@ $(".img-rounded").hover(
 	}
 )
 
-$(".img-rounded").click(function(){
+$(".img-rounded.sensorbar").click(function(){
 	if (!selectedService)
 	{
 		$('#hint').css("visibility", "visible");
